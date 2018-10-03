@@ -7,7 +7,7 @@ export const FETCH_SONGS_FAILURE = 'FETCH_SONGS_FAILURE';
 export const RESET_SONGS = 'RESET_SONGS';
 
 //const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:8080' : '/';
-const ROOT_URL = 'http://localhost:8080'
+const ROOT_URL = 'https://api-dot-sitsitsit-dev.appspot.com'
 export function fetchSongs() {
   const request = axios({
     method: 'get',
