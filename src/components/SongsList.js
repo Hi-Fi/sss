@@ -10,7 +10,7 @@ class SongsList extends Component {
     return songs.map((song) => {
       return (
         <li className="list-group-item" key={song.id}>
-          <Link style={{color:'black'}} to={"songs/" + song.id}>
+          <Link style={{color:'black'}} to={"/song/" + song.id}>
             <h3 className="list-group-item-heading">{song.title}</h3>
           </Link>
         </li>
