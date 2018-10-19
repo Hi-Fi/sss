@@ -27,10 +27,10 @@ export function fetchSongs() {
   };
 }
 
-export function fetchSongsSuccess(posts) {
+export function fetchSongsSuccess(songs) {
   return {
     type: FETCH_SONGS_SUCCESS,
-    payload: posts
+    payload: songs
   };
 }
 

@@ -14,7 +14,7 @@ class SongDetails extends Component {
   }
 
   componentDidMount() {
-    this.props.resetMe();
+    console.dir(this.props)
     this.props.fetchSong(this.props.songId);
   }
 

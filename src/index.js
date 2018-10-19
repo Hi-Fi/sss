@@ -2,19 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import SongsIndex from './pages/SongsIndex';
 import SongShow from './pages/SongShow';
-
+import 'typeface-roboto'
 import configureStore from './store/configureStore.js';
+import TabsContainer from './containers/TabsContainer'
+import history from './utils/history'
+
 const store = configureStore();
+
 
 ReactDOM.render(
 <Provider store={store}>
-<BrowserRouter>
+<Router history={history}>
   <div>
-    <Route exact path='/'component={SongsIndex} />
-    <Route path='/song/:id' component={SongShow} />
+    <Route exact path='/'component={TabsContainer} />
+    <Route path='/song/:id' component={TabsContainer} />
+    <Route path='/leaflet' component={TabsContainer} />
   </div>
-</BrowserRouter>
+</Router>
 </Provider>, document.getElementById('root'));
