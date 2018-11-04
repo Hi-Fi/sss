@@ -8,11 +8,35 @@ import Typography from '@material-ui/core/Typography';
 import SongsIndex from '../pages/SongsIndex';
 import { connect } from 'react-redux';
 import history from '../utils/history'
-import SongDetails from '../components/SongDetails';
 import SongsShow from '../pages/SongShow';
 import LeafletTabsContainer from './LeafletTabsContainer'
+import { addTab, closeTab, changeTab } from '../actions/tabs';
+import TabLabel from '../components/TabLabel'
 
 
+const mapStateToProps = (state) => {
+  return { 
+    openTabs: state.tabs.songTabs.tabs,
+    openTab: state.tabs.openTab
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTab: (id) => {
+      dispatch(addTab(id))
+    },
+    closeTab: (id) => {
+      dispatch(closeTab(id))
+    },
+    changeTab: (id) => {
+      dispatch(changeTab(id))
+    },
+    changeTabWithEvent: (event, id) => {
+      dispatch(changeTab(id))
+    }
+  }
+}
 
 function TabContainer(props) {
   return (
@@ -34,41 +58,36 @@ const styles = theme => ({
 });
 
 class TabsContainer extends React.Component {
-  state = {
-    value: (this.props.params && this.props.params.id) || this.props.location.pathname
-  };
-
-  handleChange = (event, value) => {
-    this.setState({ value });
-    history.push(value);
-  };
-
+  componentWillMount() {
+    //console.log(this.props.match.params.id)
+    if (this.props.match.params.id && this.props.match.url !== this.props.openTab) {
+      this.props.match.params.id && this.props.addTab(this.props.match.params.id)
+      this.props.changeTab(this.props.match.url)
+    } else {
+      history.push('/');
+      this.props.changeTab('/')
+    }
+  }
 
   render() {
-    const tabList  = [{id: "a6fb3e02-b4b8-46bf-92a0-afc9cb5c9ef8"},
-                {id: "cb48ca55-0687-41fe-b858-1fa2a596aabd"}, 
-                {id: "fdeeff05-bc5b-4f67-aea5-0b970184a438"}]
     const { classes } = this.props;
-    const { value } = this.state;
-    console.dir(this.props)
-    let calledUrl = this.props.match.url
-    let calledId = this.props.match.params.id
+    let value = this.props.openTab || this.props.match.params.id || '/'
     return (
       <div className={classes.root}>
         <AppBar position="static">
-          <Tabs value={value} onChange={this.handleChange}>
+          <Tabs value={this.props.openTab} onChange={this.props.changeTabWithEvent}>
             <Tab label="Song list" value="/"/>
             <Tab label="Add new song" disabled />
             <Tab label="Leaflet" value='/leaflet' disabled/>
-            {tabList.map((singleTab) =>
-                <Tab label={singleTab.id} value={"/song/"+singleTab.id} />)}
+            {this.props.openTabs.map((singleTab) =>
+                <Tab key={singleTab.id} label={<TabLabel name={singleTab.name} id={singleTab.id} closeFunction={() => this.props.closeTab(singleTab.id)}/>} value={"/song/"+singleTab.id} />)}
             });
           </Tabs>
         </AppBar>
         {value === '/' && <TabContainer><SongsIndex /></TabContainer>}
         {value === '/leaflet' && <TabContainer><LeafletTabsContainer /></TabContainer>}
-        {tabList.map((singleTab) =>
-            value === "/song/"+singleTab.id && <TabContainer><SongsShow id={singleTab.id}/></TabContainer>
+        {this.props.openTabs.map((singleTab) =>
+            value === "/song/"+singleTab.id && <TabContainer key={singleTab.id}><SongsShow id={singleTab.id}/></TabContainer>
         )}
       </div>
     );
@@ -79,4 +98,4 @@ TabsContainer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect()(withStyles(styles)(TabsContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TabsContainer));

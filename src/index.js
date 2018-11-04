@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
-import SongsIndex from './pages/SongsIndex';
-import SongShow from './pages/SongShow';
 import 'typeface-roboto'
 import configureStore from './store/configureStore.js';
 import TabsContainer from './containers/TabsContainer'

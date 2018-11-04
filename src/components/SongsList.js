@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 class SongsList extends Component {
   componentWillMount() {
-    console.dir(this.props);
     if (!(this.props.songsList && this.props.songsList.songs && this.props.songsList.songs.length > 0)) {
       this.props.fetchSongs();
     }

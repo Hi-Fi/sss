@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchSong, fetchSongSuccess, fetchSongFailure, resetActiveSong } from '../actions/songs';
 import SongDetails from '../components/SongDetails.js';
+import { renameTab } from '../actions/tabs';
 
 function mapStateToProps(globalState, ownProps) {
   return {
@@ -20,6 +21,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchSongFailure(result.payload.response.data));
           } else {
             dispatch(fetchSongSuccess(result.payload.data))
+            dispatch(renameTab(result.payload.data.id, result.payload.data.title))
           }
         })
     },
