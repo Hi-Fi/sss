@@ -10,8 +10,11 @@ import { connect } from 'react-redux';
 import history from '../utils/history'
 import SongsShow from '../pages/SongShow';
 import LeafletTabsContainer from './LeafletTabsContainer'
+//import SongEditContainer from './SongEditContainer'
+import SongEditForm from '../components/SongEdit'
 import { addTab, closeTab, changeTab } from '../actions/tabs';
 import TabLabel from '../components/TabLabel'
+import SongEditContainer from './SongEditContainer';
 
 
 const mapStateToProps = (state) => {
@@ -63,21 +66,18 @@ class TabsContainer extends React.Component {
     if (this.props.match.params.id && this.props.match.url !== this.props.openTab) {
       this.props.match.params.id && this.props.addTab(this.props.match.params.id)
       this.props.changeTab(this.props.match.url)
-    } else {
-      history.push('/');
-      this.props.changeTab('/')
-    }
+    } 
   }
 
   render() {
     const { classes } = this.props;
-    let value = this.props.openTab || this.props.match.params.id || '/'
+    let value = this.props.openTab || this.props.match.params.id || this.props.match.path
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs value={this.props.openTab} onChange={this.props.changeTabWithEvent}>
             <Tab label="Song list" value="/"/>
-            <Tab label="Add new song" disabled />
+            <Tab label="Add new song" value="/addSong" />
             <Tab label="Leaflet" value='/leaflet' disabled/>
             {this.props.openTabs.map((singleTab) =>
                 <Tab key={singleTab.id} label={<TabLabel name={singleTab.name} id={singleTab.id} closeFunction={() => this.props.closeTab(singleTab.id)}/>} value={"/song/"+singleTab.id} />)}
@@ -85,6 +85,7 @@ class TabsContainer extends React.Component {
           </Tabs>
         </AppBar>
         {value === '/' && <TabContainer><SongsIndex /></TabContainer>}
+        {value === '/addSong' && <TabContainer><SongEditContainer /></TabContainer>}
         {value === '/leaflet' && <TabContainer><LeafletTabsContainer /></TabContainer>}
         {this.props.openTabs.map((singleTab) =>
             value === "/song/"+singleTab.id && <TabContainer key={singleTab.id}><SongsShow id={singleTab.id}/></TabContainer>

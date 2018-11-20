@@ -1,6 +1,36 @@
 import React, { Component } from 'react';
 import {PropTypes} from 'prop-types'
 
+let verseStyle = {
+  whiteSpace: 'pre-wrap',
+  color: 'black',
+  marginBottom: '5px',
+  paddingBottom: '5px'
+}
+
+let extraStyle = {
+  fontStyle: 'italic',
+	clear:'both',
+	marginTop: '10px',
+	paddingTop: '10px'
+}
+
+let authorMelodyStyle = {
+  fontSize: '80%',
+	fontStyle: 'italic',
+	margin: '0px',
+	padding: '0px',
+}
+
+let titleStyle = {
+  fontSize: 'x-large',
+	marginBottom: '0px',
+	paddingBottom: '0px'
+}
+
+let authorStyle = {
+  paddingRight: "5px"
+}
 
 class SongDetails extends Component {
   static contextTypes = {
@@ -18,15 +48,33 @@ class SongDetails extends Component {
   }
 
   renderVerses(verses) {
+    let index=0
     return verses && verses.map((verse) => {
       return (
-        <li className="list-group-item" key={verse.id}>
-          <div style={{color:'black'}}>
+        <li style={verseStyle} key={index++}>
+          <div>
             {verse.lyrics}
           </div>
         </li>
       );
     });
+  }
+
+  renderAuthors(authors) {
+    let authorNames = []
+    authors.map((author) => {
+        authorNames.push(author.name)
+    })
+    return authorNames.join(", ")
+  }
+
+  renderTags(tags) {
+    let tagTags = []
+    console.dir(tags)
+    tags.map((tag) => {
+      tagTags.push(tag.tag)
+    })
+    return tagTags.join(", ")
   }
 
   render() {
@@ -41,10 +89,18 @@ class SongDetails extends Component {
 
     return (
       <div className="container">
-        <h3>{song.title}</h3>
-        <ol className="verses">
+        <h1 style={titleStyle}>{song.title}</h1>
+        <div style={authorMelodyStyle}>{song.melody.melody}</div>
+        <div style={authorMelodyStyle}>
+          {song.arrangers && <span style={authorStyle}>Arranger: {this.renderAuthors(song.arrangers)}</span>}
+          {song.composers && <span style={authorStyle}>Composer: {this.renderAuthors(song.composers)}</span>}
+          {song.lyricists && <span style={authorStyle}>Lyricist: {this.renderAuthors(song.lyricists)}</span>}
+        </div>
+        <ol>
           {this.renderVerses(song.verses)}
         </ol>
+        <div style={extraStyle}>{song.extraInfo}</div>
+        {song.tags && <div id="tags"><h2>Tags</h2><div className="tags">{this.renderTags(song.tags)}</div></div>}
       </div>
     );
   }

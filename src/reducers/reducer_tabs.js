@@ -2,14 +2,15 @@ import {ADD_TAB, CHANGE_TAB, CLOSE_TAB, RENAME_TAB} from '../actions/tabs'
 import history from '../utils/history'
 import { getIndex } from '../utils/helper';
 
-const INITIAL_STATE = { openTab: '/', songTabs: {tabs: []}}
+const INITIAL_STATE = { songTabs: {tabs: []}}
 
 
 const tabReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case CHANGE_TAB:
+    console.log(action.id)
       let newTab = action.id || '/'
-      if (state.songTabs.tabs.filter(function(tab) {return newTab.includes(tab.id)}).length === 0) {
+      if (action.id.includes("/song/") && state.songTabs.tabs.filter(function(tab) {return newTab.includes(tab.id)}).length === 0) {
         newTab = '/'
       }
       history.push(newTab)

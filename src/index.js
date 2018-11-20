@@ -16,6 +16,7 @@ ReactDOM.render(
 <Router history={history}>
   <div>
     <Route exact path='/'component={TabsContainer} />
+    <Route path='/addSong'component={TabsContainer} />
     <Route path='/song/:id' component={TabsContainer} />
     <Route path='/leaflet' component={TabsContainer} />
   </div>
