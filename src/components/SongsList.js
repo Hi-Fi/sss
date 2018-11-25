@@ -18,9 +18,33 @@ const columns = [
   { id: 'title', numeric: false, disablePadding: true, label: 'Song title'},
   { id: 'melody', numeric: false, disablePadding: false, label: 'Melody'},
   { id: 'extraInfo', numeric: false, disablePadding: false, label: 'Extra info'},
-  { id: 'created', numeric: false, disablePadding: false, label: 'Added'},
+  { id: 'dateCreated', numeric: false, disablePadding: false, label: 'Added'},
   { id: 'editButton', numeric: false, disablePadding: false, label: ''},
 ]
+
+function stableSort(array, cmp) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = cmp(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
+function getSorting(order, orderBy) {
+  return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+}
+
+function desc(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
 
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
@@ -113,8 +137,10 @@ class SongsList extends Component {
   };
   
   render() {
+    console.dir(this.props)
     const { songs, loading, error } = this.props.songsList;
-    const {rowsPerPage, page, selected, order, orderBy} = this.props;
+    const {selected} = this.props;
+    const {rowsPerPage, page, order, orderBy} = this.props.songList;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, songs.length - page * rowsPerPage);  
 
     if(loading) {
@@ -137,7 +163,7 @@ class SongsList extends Component {
               rowCount={songs.length}
             />
             <TableBody>
-              {songs.map(n => {
+              {stableSort(songs, getSorting(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                   const isSelected = this.isSelected(n.id);
                   return (
                     <TableRow
@@ -153,7 +179,9 @@ class SongsList extends Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {n.title}
+                        <Link style={{color:'black'}} to={"/song/" + n.id}>
+                          <h3 className="list-group-item-heading">{n.title}</h3>
+                        </Link>
                       </TableCell>
                       <TableCell>{n.melody && n.melody.melody}</TableCell>
                       <TableCell>{n.extraInfo}</TableCell>
@@ -181,8 +209,8 @@ class SongsList extends Component {
           nextIconButtonProps={{
             'aria-label': 'Next Page',
           }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          onChangePage={this.props.changePage}
+          onChangeRowsPerPage={this.props.setRowCount}
         />
       </div>
     );

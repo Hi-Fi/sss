@@ -92,10 +92,3 @@ export function selectAll() {
   }
 }
 
-export function sortSongs(property) {
-  return {
-    type: SORT_SONGS,
-    property: property
-  }
-}
-

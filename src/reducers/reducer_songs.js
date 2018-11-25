@@ -2,7 +2,6 @@ import {
   FETCH_SONGS, FETCH_SONGS_SUCCESS, FETCH_SONGS_FAILURE, RESET_SONGS,
   FETCH_SONG, FETCH_SONG_SUCCESS,  FETCH_SONG_FAILURE, RESET_ACTIVE_SONG,
   SELECT_SONG,
-  SORT_SONGS,
   SELECT_ALL_SONGS
 } from '../actions/songs';
 
@@ -50,12 +49,6 @@ export default function(state = INITIAL_STATE, action) {
         allSongSelection.push(song.id))
     }
     return { ...state, selected: allSongSelection }
-  case SORT_SONGS:
-    let order = 'asc'
-    if (state.songList.orderBy === action.property && state.songList.order === 'asc') {
-      order = 'desc'
-    }
-    return { ...state, songList: {...state.songList, order: order, orderBy: action.property}}
   default:
     return state;
   }

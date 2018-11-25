@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
-import { fetchSongs, fetchSongsSuccess, fetchSongsFailure, selectSong, sortSongs, selectAll } from '../actions/songs';
+import { fetchSongs, fetchSongsSuccess, fetchSongsFailure, selectSong, selectAll } from '../actions/songs';
 import SongsList from '../components/SongsList';
+import { sortSongs, setPage, setRows } from '../actions/songList';
 
 
 const mapStateToProps = (state) => {
+  console.dir(state)
   return { 
     songsList: state.songs.songsList,
     selected: state.songs.selected,
-    songList: state.songs.songList
+    songList: state.songList
   };
 }
 
@@ -21,11 +23,17 @@ const mapDispatchToProps = (dispatch) => {
     selectSong: (id) => {
       dispatch(selectSong(id));
     },
+    selectAll: (event) => {
+      dispatch(selectAll())
+    },
     sortList: (event, property) => {
       dispatch(sortSongs(property));
     },
-    selectAll: (event) => {
-      dispatch(selectAll())
+    changePage: (event, page) => {
+      dispatch(setPage(page))
+    },
+    setRowCount: (event) => {
+      dispatch(setRows(event.target.value))
     }
   }
 }
