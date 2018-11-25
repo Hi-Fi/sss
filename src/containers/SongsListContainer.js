@@ -5,7 +5,6 @@ import { sortSongs, setPage, setRows } from '../actions/songList';
 
 
 const mapStateToProps = (state) => {
-  console.dir(state)
   return { 
     songsList: state.songs.songsList,
     selected: state.songs.selected,

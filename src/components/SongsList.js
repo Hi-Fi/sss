@@ -105,7 +105,6 @@ EnhancedTableHead.propTypes = {
 
 class SongsList extends Component {
   componentWillMount() {
-    console.dir(this.props)
     if (!(this.props.songsList && this.props.songsList.songs && this.props.songsList.songs.length > 0)) {
       this.props.fetchSongs();
     }
@@ -137,7 +136,6 @@ class SongsList extends Component {
   };
   
   render() {
-    console.dir(this.props)
     const { songs, loading, error } = this.props.songsList;
     const {selected} = this.props;
     const {rowsPerPage, page, order, orderBy} = this.props.songList;
