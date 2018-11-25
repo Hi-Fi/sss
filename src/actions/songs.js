@@ -5,12 +5,17 @@ export const FETCH_SONGS = 'FETCH_SONGS';
 export const FETCH_SONGS_SUCCESS = 'FETCH_SONGS_SUCCESS';
 export const FETCH_SONGS_FAILURE = 'FETCH_SONGS_FAILURE';
 export const RESET_SONGS = 'RESET_SONGS';
+export const SORT_SONGS = 'SORT_SONGS'
 
 //Fetch post
 export const FETCH_SONG = 'FETCH_SONG';
 export const FETCH_SONG_SUCCESS = 'FETCH_SONG_SUCCESS';
 export const FETCH_SONG_FAILURE = 'FETCH_SONG_FAILURE';
 export const RESET_ACTIVE_SONG = 'RESET_ACTIVE_SONG';
+
+//Leaflet
+export const SELECT_SONG = 'SELECT_SONG'
+export const SELECT_ALL_SONGS = 'SELECT_ALL_SONGS'
 
 //const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:8080' : '/';
 const ROOT_URL = 'https://api-dot-sitsitsit-dev.appspot.com'
@@ -54,7 +59,6 @@ export function fetchSong(id) {
   };
 }
 
-
 export function fetchSongSuccess(activeSong) {
   return {
     type: FETCH_SONG_SUCCESS,
@@ -72,6 +76,26 @@ export function fetchSongFailure(error) {
 export function resetActiveSong() {
   return {
     type: RESET_ACTIVE_SONG
+  }
+}
+
+export function selectSong(id) {
+  return {
+    type: SELECT_SONG,
+    id: id
+  }
+}
+
+export function selectAll() {
+  return {
+    type: SELECT_ALL_SONGS
+  }
+}
+
+export function sortSongs(property) {
+  return {
+    type: SORT_SONGS,
+    property: property
   }
 }
 

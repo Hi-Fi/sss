@@ -8,7 +8,6 @@ const INITIAL_STATE = { songTabs: {tabs: []}}
 const tabReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case CHANGE_TAB:
-    console.log(action.id)
       let newTab = action.id || '/'
       if (action.id.includes("/song/") && state.songTabs.tabs.filter(function(tab) {return newTab.includes(tab.id)}).length === 0) {
         newTab = '/'

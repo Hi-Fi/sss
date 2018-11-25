@@ -90,7 +90,7 @@ class SongDetails extends Component {
     return (
       <div className="container">
         <h1 style={titleStyle}>{song.title}</h1>
-        <div style={authorMelodyStyle}>{song.melody.melody}</div>
+        <div style={authorMelodyStyle}>{song.melody && song.melody.melody}</div>
         <div style={authorMelodyStyle}>
           {song.arrangers && <span style={authorStyle}>Arranger: {this.renderAuthors(song.arrangers)}</span>}
           {song.composers && <span style={authorStyle}>Composer: {this.renderAuthors(song.composers)}</span>}

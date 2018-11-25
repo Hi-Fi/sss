@@ -1,10 +1,16 @@
 import {
   FETCH_SONGS, FETCH_SONGS_SUCCESS, FETCH_SONGS_FAILURE, RESET_SONGS,
-  FETCH_SONG, FETCH_SONG_SUCCESS,  FETCH_SONG_FAILURE, RESET_ACTIVE_SONG
+  FETCH_SONG, FETCH_SONG_SUCCESS,  FETCH_SONG_FAILURE, RESET_ACTIVE_SONG,
+  SELECT_SONG,
+  SORT_SONGS,
+  SELECT_ALL_SONGS
 } from '../actions/songs';
 
 const INITIAL_STATE = { songsList: {songs: [], error:null, loading: false},
-                        activeSong:{song:null, error:null, loading: false} }
+                        activeSong: {song:null, error:null, loading: false},                          
+                        selected: [],
+                        songList: {rowsPerPage: 5, page: 0, order: 'asc', orderBy: 'title'} 
+                      }
 
 export default function(state = INITIAL_STATE, action) {
   let error;
@@ -29,7 +35,27 @@ export default function(state = INITIAL_STATE, action) {
     return { ...state, activeSong: {song: null, error:error, loading:false}};
   case RESET_ACTIVE_SONG:
     return { ...state, activeSong: {song: null, error:null, loading: false}};
-  
+  case SELECT_SONG:
+    let selectedSongs = state.selected.slice(0)
+    if (selectedSongs.includes(action.id)) {
+      selectedSongs = selectedSongs.filter ( function(selectedSong) {return selectedSong !== action.id})
+    } else {
+      selectedSongs.push(action.id)
+    }
+    return { ...state, selected: selectedSongs }
+  case SELECT_ALL_SONGS:
+    let allSongSelection = []
+    if (state.songsList.songs.length !== state.selected.length) {
+      state.songsList.songs.forEach (song =>
+        allSongSelection.push(song.id))
+    }
+    return { ...state, selected: allSongSelection }
+  case SORT_SONGS:
+    let order = 'asc'
+    if (state.songList.orderBy === action.property && state.songList.order === 'asc') {
+      order = 'desc'
+    }
+    return { ...state, songList: {...state.songList, order: order, orderBy: action.property}}
   default:
     return state;
   }
