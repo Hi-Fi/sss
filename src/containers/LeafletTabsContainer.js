@@ -6,10 +6,13 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import history from '../utils/history'
+import SongsIndex from '../pages/SongsIndex';
+import SongEditContainer from './SongEditContainer';
+import LeafletInfo from '../pages/LeafletInfo';
 
 
 
-function LeafletTabsContainer(props) {
+function LeafletTabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
@@ -17,7 +20,7 @@ function LeafletTabsContainer(props) {
   );
 }
 
-LeafletTabsContainer.propTypes = {
+LeafletTabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
@@ -28,9 +31,9 @@ const styles = theme => ({
   },
 });
 
-class TabsContainer extends React.Component {
+class LeafletTabsContainer extends React.Component {
   state = {
-    value: 0
+    value: this.props.leaftletTabPath
   };
 
   handleChange = (event, value) => {
@@ -42,23 +45,25 @@ class TabsContainer extends React.Component {
   render() {
     const { classes } = this.props;
     const { value } = this.state;
-    console.log("Rendering second level")
     return (
       <div className={classes.root}>
           <Tabs value={value} onChange={this.handleChange}>
-            <Tab label="Songs selected to leaflet" value='/leaflet' disabled/>
-            <Tab label="Basic information" disabled />
-            <Tab label="Leaflet layout" disabled />
-            <Tab label="Leaflet preview" disabled />
+            <Tab label="Songs selected to leaflet" value='/leaflet'/>
+            <Tab label="Basic information" value="/leaflet/info" />
+            <Tab label="Leaflet layout" value="/leaflet/layout"/>
+            <Tab label="Leaflet preview" value="/leaflet/preview"/>
           </Tabs>
-        {<LeafletTabsContainer>Nothing yet...</LeafletTabsContainer>}
+          {value === '/leaflet/info' && <LeafletTabContainer><LeafletInfo /></LeafletTabContainer>}
+          {value === '/leaflet/layout' && <LeafletTabContainer><SongEditContainer /></LeafletTabContainer>}
+          {value === '/leaflet' && <LeafletTabContainer><SongsIndex /></LeafletTabContainer>}
       </div>
     );
   }
 }
 
-TabsContainer.propTypes = {
+LeafletTabsContainer.propTypes = {
   classes: PropTypes.object.isRequired,
+  leaftletTabPath: PropTypes.string.isRequired,
 };
 
 export default connect()(withStyles(styles)(LeafletTabsContainer));

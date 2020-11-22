@@ -2,7 +2,7 @@ import {
     SORT_SONGS, SET_PAGE, SET_ROWS
   } from '../actions/songList';
   
-  const INITIAL_STATE = { rowsPerPage: 5,
+  const INITIAL_STATE = { rowsPerPage: 10,
                           page: 0,
                           order: 'asc',
                           orderBy: 'title'

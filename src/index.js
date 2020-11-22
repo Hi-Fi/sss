@@ -18,7 +18,10 @@ ReactDOM.render(
     <Route exact path='/'component={TabsContainer} />
     <Route path='/addSong'component={TabsContainer} />
     <Route path='/song/:id' component={TabsContainer} />
-    <Route path='/leaflet' component={TabsContainer} />
+    <Route exact path='/leaflet' component={TabsContainer} />
+    <Route exact path='/leaflet/info' component={TabsContainer} />
+    <Route exact path='/leaflet/layout' component={TabsContainer} />
+    <Route exact path='/leaflet/preview' component={TabsContainer} />
   </div>
 </Router>
 </Provider>, document.getElementById('root'));

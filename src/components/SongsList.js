@@ -8,7 +8,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -68,7 +67,7 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={column.id}
-                numeric={column.numeric}
+                aligh={column.numeric ? "right" : "left"}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
@@ -104,7 +103,7 @@ EnhancedTableHead.propTypes = {
 };
 
 class SongsList extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!(this.props.songsList && this.props.songsList.songs && this.props.songsList.songs.length > 0)) {
       this.props.fetchSongs();
     }
