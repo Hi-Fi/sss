@@ -1,27 +1,17 @@
-import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
-import { Field, reduxForm } from 'redux-form'
+import React from 'react'
+import { connect } from 'react-redux'
+import { Field, reduxForm, propTypes, formValueSelector } from 'redux-form'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
 import Checkbox from '@material-ui/core/Checkbox'
-import MenuItem from '@material-ui/core/MenuItem';
-import SelectField from '@material-ui/core/Select';
-
-
-
-// const [state, setState] = React.useState({
-//   layout: "columns",
-//   columns: "4",
-//   fontSize: "10",
-//   saveEvent: false,
-//   coverImage: false,
-//   songsOnCover: false,
-//   songsOnBack: false,
-// });
+import Select from '@material-ui/core/Select';
 
 const layouts = [
-  { label: 'A4, landscape', template: 'columns' },
-  { label: 'A5 leaflet', template: 'booklet' },
-  { label: 'High leaflet', template: 'highBooklet' }
+  { label: 'A4, landscape', value: 'columns' },
+  { label: 'A5 leaflet', value: 'booklet' },
+  { label: 'High leaflet', value: 'highBooklet' }
 ]
 
 const columns = [
@@ -59,39 +49,48 @@ const renderCheckboxField = ({
   input,
   label
 }) => (
+  <FormControlLabel
+    control={
     <Checkbox
-      label={label}
       checked={input.value ? true : false}
       onChange={input.onChange}
+    />
+    }
+    label={label}
     />
   )
 
 const renderSelectField = (
   { input, label, meta: { touched, error }, values, ...custom },
 ) => (
-    <SelectField
+  <FormControl error={touched && error}>
+        <InputLabel>{label}</InputLabel>
+    <Select
+      native
       label={label}
+      name={name}
       error={touched && error}
       {...input}
-      onChange={(event, index, value) => input.onChange(value)}
-      children={values.map((option, index) => (
-        <MenuItem key={index} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
       {...custom}
-    />
+    >
+      {values.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
+    </FormControl>
   );
 
-// const handleChange = (event) => {
-//   console.dir(event)
-//   setState({ ...state, [event.target.name]: event.target.checked });
-// };
-
+const onSubmit = (event) => {
+  event.preventDefault()
+  console.log("Submit")
+  console.dir(event)
+}
 let LeafletInfo = props => {
-  const { handleSubmit } = props
+  const {reset, submitting, isColums, useCoverImage } = props
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <div>
         <h1>Leaflet basic information</h1>
         <div>
@@ -133,43 +132,84 @@ let LeafletInfo = props => {
             values={fontSizes}
           />
         </div>
-        <div>
-          <Field
-            name="columns"
-            component={renderSelectField}
-            label="Amount of columns"
-            values={columns}
-          />
-        </div>
-        <div>
-          <Field
-            name="useCoverImage"
-            component={renderCheckboxField}
-            label="Use cover image"
-          />
-        </div>
-        <div>
-          <Field
-            name="songsOnCover"
-            component={renderCheckboxField}
-            label="Put songs on the cover page"
-          />
-        </div>
-        <div>
-          <Field
-            name="songsOnBackPage"
-            component={renderCheckboxField}
-            label="Put songs on the back page"
-          />
-        </div>
+        {isColums &&
+          <div>
+            <Field
+              name="columns"
+              component={renderSelectField}
+              label="Amount of columns"
+              values={columns}
+            />
+          </div>
+        }
+        {!isColums &&
+          <div>
+            <div>
+              <Field
+                name="useCoverImage"
+                component={renderCheckboxField}
+                label="Use cover image"
+              />
+            </div>
+            {useCoverImage && 
+              <div>
+                <Field
+                  name="coverImage"
+                  component={renderTextField}
+                  label="Cover image"
+                  type="file"
+                  accept="image/*"
+                />
+              </div>
+            }
+            {!useCoverImage &&
+              <div>
+                <Field
+                  name="songsOnCover"
+                  component={renderCheckboxField}
+                  label="Put songs on the cover page"
+                />
+              </div>
+            }
+            <div>
+              <Field
+                name="songsOnBackPage"
+                component={renderCheckboxField}
+                label="Put songs on the back page"
+              />
+            </div>
+          </div>
+        }
+        <button type="submit" disabled={submitting}>
+          Generate leaflet
+        </button>
+        <button type="button" disabled={submitting} onClick={reset}>
+          Reset form
+        </button>
       </div>
     </form>
   )
 }
 
+LeafletInfo.propTypes = {
+  ...propTypes
+}
+
+const selector = formValueSelector("LeafletInfo")
+
 LeafletInfo = reduxForm({
+  destroyOnUnmount: false,
   // a unique name for the form
   form: 'LeafletInfo'
+})(LeafletInfo)
+
+LeafletInfo = connect(state => {
+  const isColums = selector(state, "style") == "columns"
+  const useCoverImage = selector(state, "useCoverImage")
+  return {
+    isColums,
+    useCoverImage
+  }
 })(LeafletInfo)
 
 export default LeafletInfo

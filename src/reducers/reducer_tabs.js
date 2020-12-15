@@ -7,17 +7,19 @@ const INITIAL_STATE = { songTabs: { tabs: [] } }
 
 const tabReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case CHANGE_TAB:
+    case CHANGE_TAB: {
       let newTab = action.id || '/'
       if (action.id.includes("/song/") && state.songTabs.tabs.filter(function (tab) { return newTab.includes(tab.id) }).length === 0) {
         newTab = '/'
       }
       history.push(newTab)
       return { ...state, openTab: newTab }
-    case CHANGE_TAB:
+    }
+    case CHANGE_LEAFLET_TAB: {
       let newLeafletTab = action.id || '/'
       history.push(newLeafletTab)
       return { ...state, openLeafletTab: newLeafletTab }
+    }
     case ADD_TAB:
       if (state.songTabs.tabs.filter(function (tab) { return tab.id === action.id }).length > 0) {
         return { ...state, openTab: action.id }
@@ -27,7 +29,7 @@ const tabReducer = (state = INITIAL_STATE, action) => {
     case CLOSE_TAB:
       history.push('/')
       return { ...state, openTab: '/', songTabs: { tabs: state.songTabs.tabs.filter(function (tab) { return tab.id !== action.id }) } }
-    case RENAME_TAB:
+    case RENAME_TAB: {
       let songIndex = getIndex(action.id, state.songTabs.tabs, 'id')
       if (state.songTabs.tabs[songIndex].name !== action.name) {
         let newSongTabs = state.songTabs.tabs.slice(0)
@@ -36,6 +38,7 @@ const tabReducer = (state = INITIAL_STATE, action) => {
       } else {
         return state
       }
+    }
     default:
       return state;
   }

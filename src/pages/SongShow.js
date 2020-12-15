@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SongDetailsContainer from '../containers/SongDetailsContainer.js';
 
 class SongsShow extends Component {
@@ -9,6 +10,10 @@ class SongsShow extends Component {
       </div>
     );
   }
+}
+
+SongsShow.propTypes = {
+  id: PropTypes.string.isRequired
 }
 
 export default SongsShow;

@@ -9,14 +9,14 @@ import {
                         }
   
   export default function(state = INITIAL_STATE, action) {
-    let error;
     switch(action.type) {
-      case SORT_SONGS:
+      case SORT_SONGS: {
         let order = 'asc'
         if (state.orderBy === action.property && state.order === 'asc') {
           order = 'desc'
         }
         return { ...state, order: order, orderBy: action.property}
+      }
       case SET_PAGE: 
         return { ...state, page: action.page}
       case SET_ROWS:

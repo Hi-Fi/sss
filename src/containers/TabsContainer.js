@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import SongsShow from '../pages/SongShow';
 import LeafletTabsContainer from './LeafletTabsContainer'
 //import SongEditContainer from './SongEditContainer'
-import SongEditForm from '../components/SongEdit'
+// import SongEditForm from '../components/SongEdit'
 import { addTab, closeTab, changeTab } from '../actions/tabs';
 import TabLabel from '../components/TabLabel'
 import SongEditContainer from './SongEditContainer';
@@ -61,7 +61,7 @@ const styles = theme => ({
 
 class TabsContainer extends React.Component {
   componentDidMount() {
-    //console.log(this.props.match.params.id)
+    // If coming directly to song, add tab to it and display tab
     if (this.props.match.params.id && this.props.match.url !== this.props.openTab) {
       this.props.match.params.id && this.props.addTab(this.props.match.params.id)
       this.props.changeTab(this.props.match.url)
@@ -102,6 +102,13 @@ class TabsContainer extends React.Component {
 
 TabsContainer.propTypes = {
   classes: PropTypes.object.isRequired,
+  match: PropTypes.object,
+  changeTab: PropTypes.func,
+  changeTabWithEvent: PropTypes.func,
+  openTabs: PropTypes.array,
+  openTab: PropTypes.string,
+  addTab: PropTypes.func,
+  closeTab: PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TabsContainer));

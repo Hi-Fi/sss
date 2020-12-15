@@ -16,6 +16,8 @@ export const RESET_ACTIVE_SONG = 'RESET_ACTIVE_SONG';
 //Leaflet
 export const SELECT_SONG = 'SELECT_SONG'
 export const SELECT_ALL_SONGS = 'SELECT_ALL_SONGS'
+export const REORDER_SELECTED_SONGS = 'REORDER_SELECTED_SONGS'
+export const REORDER_SELECTED_VERSES = 'REORDER_SELECTED_VERSES'
 
 //const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:8080' : '/';
 const ROOT_URL = 'https://api-dot-sitsitsit-dev.appspot.com'
@@ -92,3 +94,19 @@ export function selectAll() {
   }
 }
 
+export function reorderSelectedSongs(origin, target) {
+  return {
+    type: REORDER_SELECTED_SONGS,
+    origin: origin,
+    target: target
+  }
+}
+
+export function reorderSelectedVerses(songID, origin, target) {
+  return {
+    type: REORDER_SELECTED_VERSES,
+    songID: songID,
+    origin: origin,
+    target: target
+  }
+}

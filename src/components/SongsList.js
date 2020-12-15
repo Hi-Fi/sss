@@ -121,8 +121,6 @@ class SongsList extends Component {
     });
   }
 
-  isSelected = id => this.props && this.props.selected && this.props.selected.indexOf(id) !== -1;
-
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
@@ -136,7 +134,6 @@ class SongsList extends Component {
   
   render() {
     const { songs, loading, error } = this.props.songsList;
-    const {selected} = this.props;
     const {rowsPerPage, page, order, orderBy} = this.props.songList;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, songs.length - page * rowsPerPage);  
 
@@ -152,7 +149,7 @@ class SongsList extends Component {
         <div>
           <Table aria-labelledby="tableTitle">
           <EnhancedTableHead
-              numSelected={(selected && selected.length) || 0}
+              numSelected={songs.filter(song => song.selected).length || 0}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={this.props.selectAll}
@@ -161,11 +158,11 @@ class SongsList extends Component {
             />
             <TableBody>
               {stableSort(songs, getSorting(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-                  const isSelected = this.isSelected(n.id);
+                  const isSelected = n.selected;
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.props.selectSong(n.id)}
+                      onClick={() => this.props.selectSong(n.id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
@@ -214,5 +211,15 @@ class SongsList extends Component {
   }
 }
 
+SongsList.propTypes = {
+  songList: PropTypes.object,
+  songsList: PropTypes.object,
+  fetchSongs: PropTypes.func,
+  selectAll: PropTypes.func,
+  selectSong: PropTypes.func,
+  setRowCount: PropTypes.func,
+  sortList: PropTypes.func,
+  changePage: PropTypes.func,
+}
 
 export default SongsList;
