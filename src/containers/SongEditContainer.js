@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-import { fetchSong, fetchSongSuccess, fetchSongFailure, resetActiveSong } from '../actions/songs';
-import { renameTab } from '../actions/tabs';
+import { fetchSong, fetchSongSuccess, fetchSongFailure, saveSong, saveSongSuccess, saveSongFailure } from '../actions/songs';
+import { addTab, renameTab } from '../actions/tabs';
 import SongEdit from '../components/SongEdit';
 
 function mapStateToProps(globalState, ownProps) {
   return {
     activeSong: globalState.songs.activeSong,
-    songId: ownProps.id
+    songId: ownProps.id || "new",
+    errors: globalState.songs.songSubmitErrors
   };
 }
 
@@ -26,6 +27,21 @@ const mapDispatchToProps = (dispatch) => {
             }
           })
         }
+    },
+    saveSong: (song) => {
+      dispatch(saveSong(song))
+        .then((result) => {
+          console.dir(result)
+          if (result.payload.response && result.payload.response.status !== 200) {
+            dispatch(saveSongFailure(song.id, result.payload.response.data.message))
+          } else {
+            dispatch(saveSongSuccess(result.payload.data))
+            dispatch(addTab(result.payload.data.id))
+          }
+        })
+      .catch((error) => {
+        dispatch(saveSongFailure(song.id, error.message))
+      })
     }
   }
 }

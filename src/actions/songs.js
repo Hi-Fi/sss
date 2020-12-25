@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { cloneDeep } from 'lodash';
 
 //Song list
 export const FETCH_SONGS = 'FETCH_SONGS';
@@ -6,6 +7,9 @@ export const FETCH_SONGS_SUCCESS = 'FETCH_SONGS_SUCCESS';
 export const FETCH_SONGS_FAILURE = 'FETCH_SONGS_FAILURE';
 export const RESET_SONGS = 'RESET_SONGS';
 export const SORT_SONGS = 'SORT_SONGS'
+export const SAVE_SONG = 'SAVE_SONG'
+export const SAVE_SONG_SUCCESS = 'SAVE_SONG_SUCCESS';
+export const SAVE_SONG_FAILURE = 'SAVE_SONG_FAILURE';
 
 //Fetch post
 export const FETCH_SONG = 'FETCH_SONG';
@@ -21,6 +25,42 @@ export const REORDER_SELECTED_VERSES = 'REORDER_SELECTED_VERSES'
 
 //const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:8080' : '/';
 const ROOT_URL = 'https://api-dot-sitsitsit-dev.appspot.com'
+
+export function saveSong(song) {
+  const submitSong = cloneDeep(song)
+  // submitSong.composers = submitSong.composers?.map(composer => { return {name: composer}})
+  // submitSong.arrangers = submitSong.arrangers?.map(arranger => { return {name: arranger}})
+  // submitSong.lyricists = submitSong.lyricists?.map(lyricist => { return {name: lyricist}})
+  const request = axios({
+    method: 'post',
+    url: `${ROOT_URL}/song`,
+    data: submitSong,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  return {
+    type: SAVE_SONG,
+    payload: request,
+  }
+}
+
+export function saveSongSuccess(song) {
+  return {
+    type: SAVE_SONG_SUCCESS,
+    payload: song
+  };
+}
+
+export function saveSongFailure(id, error) {
+  id = id || "new"
+  return {
+    type: SAVE_SONG_FAILURE,
+    payload: error,
+    id: id
+  };
+}
+
 export function fetchSongs() {
   const request = axios({
     method: 'get',

@@ -140,7 +140,7 @@ class SongsList extends Component {
     if(loading) {
       return <div className="container"><h1>Songs</h1><h3>Loading...</h3></div>      
     } else if(error) {
-      return <div className="alert alert-danger">Error: {error.message}</div>
+      return <div className="alert alert-danger">Error: {error}</div>
     }
 
     return (

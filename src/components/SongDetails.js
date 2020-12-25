@@ -82,7 +82,7 @@ class SongDetails extends Component {
     if (loading) {
       return <div className="container">Loading...</div>;
     } else if(error) {
-      return  <div className="alert alert-danger">{error.message}</div>
+      return  <div className="alert alert-danger">{error}</div>
     } else if(!song) {
       return <span className="fromSongDetail" />
     }
@@ -104,6 +104,13 @@ class SongDetails extends Component {
       </div>
     );
   }
+}
+
+SongDetails.propTypes = {
+  resetMe: PropTypes.func,
+  fetchSong: PropTypes.func,
+  songId: PropTypes.string,
+  activeSong: PropTypes.object
 }
 
 export default SongDetails;
