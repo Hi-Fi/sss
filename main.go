@@ -30,5 +30,13 @@ func main() {
 			ctx.Data(http.StatusOK, "application/octet-stream", b.Bytes())
 		})
 	}
+	base := Router.Group("/")
+	{
+		base.GET("/", func(ctx *gin.Context) {
+			ctx.JSON(200, gin.H{
+				"message": "healthy",
+			})
+		})
+	}
 	Router.Run(":5000")
 }
