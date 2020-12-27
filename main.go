@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 	"sss/print/pkg/model"
 	"sss/print/pkg/pdf"
 	"time"
@@ -38,5 +40,10 @@ func main() {
 			})
 		})
 	}
-	Router.Run(":5000")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+		log.Printf("Defaulting to port %s", port)
+	}
+	Router.Run(":" + port)
 }
