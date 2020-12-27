@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -24,12 +25,18 @@ func main() {
 		})
 		api.POST("/print", func(ctx *gin.Context) {
 			var leafletData model.Model
-			ctx.BindJSON(&leafletData)
+			if err := ctx.BindJSON(&leafletData); err != nil {
+				fmt.Printf("%v\n", err)
+				ctx.AbortWithError(400, err).SetType(gin.ErrorTypeBind)
+				return
+			}
+			model.CalculatePageSize(&leafletData)
 			b := pdf.CreateLeaflet(leafletData)
-			downloadName := time.Now().UTC().Format("data-20060102150405.pdf")
+			downloadName := time.Now().UTC().Format("leaflet-20060102150405.pdf")
 			ctx.Header("Content-Description", "File Transfer")
 			ctx.Header("Content-Disposition", "attachment; filename="+downloadName)
 			ctx.Data(http.StatusOK, "application/octet-stream", b.Bytes())
+			return
 		})
 	}
 	base := Router.Group("/")

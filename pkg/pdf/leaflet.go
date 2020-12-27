@@ -10,17 +10,32 @@ import (
 
 func CreateLeaflet(data model.Model) (byteBuffer bytes.Buffer) {
 	const (
-		pageWd = 297.0 // A4 210.0 x 297.0
-		margin = 10.0
-		gutter = 4
+		margin = 10.0 * 2.835
+		gutter = 8
 	)
+
 	var (
-		y0       float64
-		crrntCol int
-		colNum   = data.Columns
-		colWd    = float64((pageWd - 2*margin - (colNum-1)*gutter) / colNum)
+		pageWd          = data.Page.Width
+		pageHt          = data.Page.Height
+		titleFontSize   = float64(data.FontSize) * 1.2
+		verseFontSize   = float64(data.FontSize)
+		titleLineHeight = titleFontSize * 1.1
+		verseLineHeight = verseFontSize * 1.1
+		y0              = margin
+		crrntCol        int
+		colNum          = data.Columns
+		colWd           = float64((pageWd - 2.0*margin - float64((colNum-1)*gutter)) / float64(colNum))
 	)
-	pdf := gofpdf.New("L", "mm", "A4", "")
+
+	init := gofpdf.InitType{
+		OrientationStr: data.Page.Orientation,
+		UnitStr:        data.Page.Unit,
+		Size: gofpdf.SizeType{
+			Wd: data.Page.Width,
+			Ht: data.Page.Height,
+		},
+	}
+	pdf := gofpdf.NewCustom(&init)
 	pdf.AddUTF8Font("dejavu", "", "fonts/DejaVuSansCondensed.ttf")
 	pdf.AddUTF8Font("dejavu", "B", "fonts/DejaVuSansCondensed-Bold.ttf")
 	pdf.AddUTF8Font("dejavu", "I", "fonts/DejaVuSansCondensed-Oblique.ttf")
@@ -42,26 +57,25 @@ func CreateLeaflet(data model.Model) (byteBuffer bytes.Buffer) {
 		return true
 	})
 	pdf.AddPage()
-	// combinedSongs := ""
 	for _, song := range data.Songs {
-		// combinedSongs = fmt.Sprintf("%s\n%s", combinedSongs, song.Title)
-		pdf.SetFont("dejavu", "B", 10)
-		pdf.MultiCell(colWd, 5, song.Title, "", "", false)
+		pdf.SetFont("dejavu", "B", float64(data.FontSize)*1.2)
+		titleHeightNeeded := getCellHeightNeeded(song.Title, colWd, titleLineHeight, titleFontSize) + float64(data.FontSize)
+		if len(song.Verses) > 0 && (pdf.GetY()+(titleHeightNeeded+getCellHeightNeeded(song.Verses[0].Lyrics, colWd, verseLineHeight, verseFontSize))) > (pageHt-margin) {
+			fmt.Println("Whole song to next column/page")
+			pdf.Ln(pageHt - pdf.GetY())
+		}
+		pdf.MultiCell(colWd, titleLineHeight, song.Title, "", "", false)
 		pdf.Ln(-1)
-		// pdf.CellFormat(0, 10, song.Title, "", 1, "", false, 0, "")
-		pdf.SetFont("dejavu", "", 8)
+		pdf.SetFont("dejavu", "", float64(data.FontSize))
 		for _, verse := range song.Verses {
-			// combinedSongs = fmt.Sprintf("%s\n%s", combinedSongs, verse.Lyrics)
-			pdf.MultiCell(colWd, 4, verse.Lyrics, "", "", false)
+			verseHeight := getCellHeightNeeded(verse.Lyrics, colWd, verseLineHeight, verseFontSize)
+			if pdf.GetY()+verseHeight > (pageHt - margin) {
+				pdf.Ln(pageHt - pdf.GetY())
+			}
+			pdf.MultiCell(colWd, verseLineHeight, verse.Lyrics, "", "", false)
 			pdf.Ln(-1)
-			// for _, line := range strings.Split(strings.TrimSuffix(verse.Lyrics, "\n"), "\n") {
-			// 	pdf.CellFormat(0, 10, line,
-			// 		"", 1, "", false, 0, "")
-			// }
-
 		}
 	}
-	// pdf.MultiCell(5, 60, combinedSongs, "", "", false)
 
 	err := pdf.Output(&byteBuffer)
 	fmt.Print(err)
