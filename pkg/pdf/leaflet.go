@@ -42,7 +42,7 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 			Ht: data.Page.Height,
 		},
 	}
-	pdf := initFPDF(init, "")
+	pdf := initFPDF(init)
 
 	setCol := func(col int) {
 		crrntCol = col

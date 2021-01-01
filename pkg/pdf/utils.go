@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"image"
 	"net/http"
-	"os"
-	"path/filepath"
 	"sss/print/pkg/model"
 
 	"github.com/phpdave11/gofpdf"
@@ -48,17 +46,13 @@ func getCellHeightNeeded(pdf *gofpdf.Fpdf, text string, lineWidth, lineHeight fl
 	return float64(lines) * lineHeight
 }
 
-func initFPDF(init *gofpdf.InitType, basePath string) (pdf *gofpdf.Fpdf) {
-	if len(basePath) == 0 {
-		basePath, _ = os.Getwd()
-	}
+func initFPDF(init *gofpdf.InitType) (pdf *gofpdf.Fpdf) {
 	pdf = gofpdf.NewCustom(init)
-	fmt.Println(os.Getwd())
 	fontsToLoad := []Font{
-		{Font: "dejavu", Style: "", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed.ttf")},
-		{Font: "dejavu", Style: "B", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-Bold.ttf")},
-		{Font: "dejavu", Style: "I", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-Oblique.ttf")},
-		{Font: "dejavu", Style: "BI", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-BoldOblique.ttf")},
+		{Font: "dejavu", Style: "", FilePath: "fonts/DejaVuSansCondensed.ttf"},
+		{Font: "dejavu", Style: "B", FilePath: "fonts/DejaVuSansCondensed-Bold.ttf"},
+		{Font: "dejavu", Style: "I", FilePath: "fonts/DejaVuSansCondensed-Oblique.ttf"},
+		{Font: "dejavu", Style: "BI", FilePath: "fonts/DejaVuSansCondensed-BoldOblique.ttf"},
 	}
 
 	for _, font := range fontsToLoad {

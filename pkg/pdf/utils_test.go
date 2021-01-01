@@ -2,6 +2,7 @@ package pdf
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/phpdave11/gofpdf"
@@ -18,7 +19,8 @@ func init() {
 			Ht: 297 * 2.835,
 		},
 	}
-	pdf = initFPDF(init, "../../")
+	os.Chdir("../../")
+	pdf = initFPDF(init)
 	pdf.SetFont("dejavu", "", 10)
 	fmt.Println("PDF init")
 }
