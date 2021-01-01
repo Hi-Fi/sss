@@ -8,11 +8,13 @@ const (
 
 type Model struct {
 	Event         string
+	Description   string
 	Style         string
 	Columns       int
 	UseCoverImage bool
 	EmptyBack     bool
-	CoverImage    []byte
+	SongsOnCover  bool
+	CoverImage    string
 	FontSize      int
 	Songs         []Song
 	Page          Page

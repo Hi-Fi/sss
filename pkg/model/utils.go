@@ -11,7 +11,6 @@ func CalculatePageSize(data *Model) {
 			Unit:        "point",
 		}
 	case LEAFLET:
-		data.Columns = 1
 		data.Page = Page{
 			Height:      210 * 2.835,
 			Width:       148.5 * 2.835,

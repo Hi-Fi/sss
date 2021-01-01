@@ -3,6 +3,11 @@ ifeq ($(USE_JSON_OUTPUT), 1)
 GOTEST_REPORT_FORMAT := -json
 endif
 
+ifndef $(GOPATH)
+    GOPATH=$(shell go env GOPATH)
+    export GOPATH
+endif
+
 .PHONY: clean deps test gofmt ensure run build build-image build-linux-amd64
 
 clean:
@@ -25,8 +30,8 @@ ensure:
 	GO111MODULE=on go mod tidy
 	GO111MODULE=on go mod vendor
 
-run: build
-	./bin/$(OPERATOR_NAME)
+run: ${GOPATH}/bin/gin
+	${GOPATH}/bin/gin -p 5000 main.go
 
 build-linux-amd64:
 	rm -rf bin/linux/$(OPERATOR_NAME)
@@ -38,3 +43,6 @@ build:
 
 build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
+
+${GOPATH}/bin/gin:
+	go get github.com/codegangsta/gin

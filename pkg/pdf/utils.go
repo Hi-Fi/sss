@@ -1,22 +1,101 @@
 package pdf
 
-import "strings"
+import (
+	"bytes"
+	"encoding/base64"
+	"fmt"
+	"image"
+	"net/http"
+	"os"
+	"path/filepath"
+	"sss/print/pkg/model"
 
-func getCellHeightNeeded(text string, lineWidth, lineHeight, fontSize float64) float64 {
-	words := strings.Fields(strings.TrimSpace(text))
-	if len(words) == 0 {
-		return lineHeight
-	}
-	wrapped := words[0]
-	spaceLeft := lineWidth - float64(len(wrapped))*fontSize
-	for _, word := range words[1:] {
-		if float64(len(word)+1)*fontSize > spaceLeft {
-			wrapped += "\n" + word
-			spaceLeft = lineWidth - float64(len(word))*fontSize
-		} else {
-			wrapped += " " + word
-			spaceLeft -= 1.0 + float64(len(word))*fontSize
+	"github.com/phpdave11/gofpdf"
+)
+
+var gofpdfDir string
+
+func addSongs(data model.Model, pdf *gofpdf.Fpdf, margin, colWd float64) {
+	var (
+		verseFontSize   = float64(data.FontSize)
+		titleFontSize   = verseFontSize * 1.2
+		titleLineHeight = titleFontSize * 1.1
+		verseLineHeight = verseFontSize * 1.1
+		pageHt          = data.Page.Height
+	)
+	for _, song := range data.Songs {
+		pdf.SetFont("dejavu", "B", titleFontSize)
+		titleHeightNeeded := getCellHeightNeeded(pdf, song.Title, colWd, titleLineHeight) + float64(data.FontSize)
+		if len(song.Verses) > 0 && (pdf.GetY()+(titleHeightNeeded+getCellHeightNeeded(pdf, song.Verses[0].Lyrics, colWd, verseLineHeight))) > (pageHt-margin) {
+			pdf.Ln(pageHt - pdf.GetY())
+		}
+		pdf.MultiCell(colWd, titleLineHeight, song.Title, "", "", false)
+		pdf.Ln(-1)
+		pdf.SetFont("dejavu", "", verseFontSize)
+		for _, verse := range song.Verses {
+			verseHeight := getCellHeightNeeded(pdf, verse.Lyrics, colWd, verseLineHeight)
+			if pdf.GetY()+verseHeight > (pageHt - margin) {
+				pdf.Ln(pageHt - pdf.GetY())
+			}
+			pdf.MultiCell(colWd, verseLineHeight, verse.Lyrics, "", "", false)
+			pdf.Ln(-1)
 		}
 	}
-	return float64(len(strings.Split(strings.TrimSuffix(wrapped, "\n"), "\n"))) * lineHeight
+}
+
+func getCellHeightNeeded(pdf *gofpdf.Fpdf, text string, lineWidth, lineHeight float64) float64 {
+	lines := len(pdf.SplitText(text, lineWidth))
+	return float64(lines) * lineHeight
+}
+
+func initFPDF(init *gofpdf.InitType, basePath string) (pdf *gofpdf.Fpdf) {
+	if len(basePath) == 0 {
+		basePath, _ = os.Getwd()
+	}
+	pdf = gofpdf.NewCustom(init)
+	fmt.Println(os.Getwd())
+	fontsToLoad := []Font{
+		{Font: "dejavu", Style: "", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed.ttf")},
+		{Font: "dejavu", Style: "B", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-Bold.ttf")},
+		{Font: "dejavu", Style: "I", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-Oblique.ttf")},
+		{Font: "dejavu", Style: "BI", FilePath: filepath.Join(basePath, "fonts/DejaVuSansCondensed-BoldOblique.ttf")},
+	}
+
+	for _, font := range fontsToLoad {
+		pdf.AddUTF8Font(font.Font, font.Style, font.FilePath)
+		if pdf.Error() != nil {
+			fmt.Printf("Font loading failed. Error: %v\n", pdf.Error())
+		}
+	}
+	return
+}
+
+func getImageType(image *Image) error {
+	switch imageType := http.DetectContentType(image.Data); imageType {
+	case "image/png":
+		image.Type = "PNG"
+	case "image/jpg":
+		image.Type = "JPG"
+	case "image/jpeg":
+		image.Type = "JPEG"
+	case "image/gif":
+		image.Type = "GIF"
+	default:
+		return fmt.Errorf("Not valid image")
+	}
+	return nil
+}
+
+func decodeBase64ToBytes(data string) (Image, error) {
+	decodedData, err := base64.StdEncoding.DecodeString(data)
+	return Image{Data: decodedData}, err
+}
+
+func getImageSize(imageData *Image) {
+	info, _, err := image.DecodeConfig(bytes.NewReader(imageData.Data))
+	if err != nil {
+		fmt.Printf("Error. %v", err)
+	}
+	imageData.Width = info.Width
+	imageData.Height = info.Height
 }
