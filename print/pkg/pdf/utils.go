@@ -13,7 +13,7 @@ import (
 
 var gofpdfDir string
 
-func addSongs(data model.Model, pdf *gofpdf.Fpdf, margin, colWd float64) {
+func addSongs(data model.Model, pdf *gofpdf.Fpdf, bottomMargin, colWd float64) {
 	var (
 		verseFontSize   = float64(data.FontSize)
 		titleFontSize   = verseFontSize * 1.2
@@ -21,18 +21,18 @@ func addSongs(data model.Model, pdf *gofpdf.Fpdf, margin, colWd float64) {
 		verseLineHeight = verseFontSize * 1.1
 		pageHt          = data.Page.Height
 	)
-	for _, song := range data.Songs {
+	for index, song := range data.Songs {
 		pdf.SetFont("dejavu", "B", titleFontSize)
 		titleHeightNeeded := getCellHeightNeeded(pdf, song.Title, colWd, titleLineHeight) + float64(data.FontSize)
-		if len(song.Verses) > 0 && (pdf.GetY()+(titleHeightNeeded+getCellHeightNeeded(pdf, song.Verses[0].Lyrics, colWd, verseLineHeight))) > (pageHt-margin) {
+		if len(song.Verses) > 0 && (pdf.GetY()+(titleHeightNeeded+getCellHeightNeeded(pdf, song.Verses[0].Lyrics, colWd, verseLineHeight))) > (pageHt-bottomMargin) {
 			pdf.Ln(pageHt - pdf.GetY())
 		}
-		pdf.MultiCell(colWd, titleLineHeight, song.Title, "", "", false)
+		pdf.MultiCell(colWd, titleLineHeight, fmt.Sprintf("%d - %s", index+1, song.Title), "", "", false)
 		pdf.Ln(-1)
 		pdf.SetFont("dejavu", "", verseFontSize)
 		for _, verse := range song.Verses {
 			verseHeight := getCellHeightNeeded(pdf, verse.Lyrics, colWd, verseLineHeight)
-			if pdf.GetY()+verseHeight > (pageHt - margin) {
+			if pdf.GetY()+verseHeight > (pageHt - bottomMargin) {
 				pdf.Ln(pageHt - pdf.GetY())
 			}
 			pdf.MultiCell(colWd, verseLineHeight, verse.Lyrics, "", "", false)

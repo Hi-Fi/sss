@@ -57,12 +57,20 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 			// Start new column, not new page
 			return false
 		}
+		y0 = margin
 		setCol(0)
 		return true
 	})
+	_, _, _, bottomMargin := pdf.GetMargins()
+
+	// Front page at leaflets
+	titlePageColumnWidth := colWd
+	if data.Style != model.COLUMNS {
+		titlePageColumnWidth = pageWd - 2.0*margin
+	}
 	pdf.AddPage()
 	pdf.SetFont("dejavu", "B", eventFontSize)
-	pdf.MultiCell(colWd, eventLineHeight, data.Event, "", "", false)
+	pdf.MultiCell(titlePageColumnWidth, eventLineHeight, data.Event, "", "C", false)
 	if data.Style != model.COLUMNS && data.UseCoverImage && len(data.CoverImage) > 0 {
 		imageData, err := decodeBase64ToBytes(data.CoverImage)
 		if err != nil {
@@ -75,16 +83,31 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 			}
 			pdf.RegisterImageOptionsReader("coverImage", imageOptions, bytes.NewReader(imageData.Data))
 			getImageSize(&imageData)
-			y := data.Page.Height/2 - (((pageWd-2.0*margin)/float64(imageData.Width))*float64(imageData.Height))/2.0
-			pdf.ImageOptions("coverImage", pdf.GetX(), y, pageWd-2.0*margin, 0, false, imageOptions, 0, "")
-			pdf.SetY(data.Page.Height - 2*margin - getCellHeightNeeded(pdf, data.Description, colWd, eventLineHeight))
+			if data.SongsOnCover {
+				y := pdf.GetY() + (((pageWd-2.0*margin)/float64(imageData.Width))*float64(imageData.Height))/2.0
+				pdf.ImageOptions("coverImage", pdf.GetX(), y, pageWd-2.0*margin, 0, true, imageOptions, 0, "")
+			} else {
+				y := data.Page.Height/2 - (((pageWd-2.0*margin)/float64(imageData.Width))*float64(imageData.Height))/2.0
+				pdf.ImageOptions("coverImage", pdf.GetX(), y, pageWd-2.0*margin, 0, false, imageOptions, 0, "")
+				// Needs to add a bit more to needed size to prevent page change
+				pdf.SetY(-bottomMargin - getCellHeightNeeded(pdf, data.Description, colWd, eventLineHeight) - .01)
+			}
+
 		}
 	}
-	pdf.MultiCell(colWd, eventLineHeight, data.Description, "", "", false)
+	pdf.MultiCell(titlePageColumnWidth, eventLineHeight, data.Description, "", "C", false)
+	if data.SongsOnCover {
+		pdf.Ln(-1)
+		y0 = pdf.GetY()
+	}
+
+	// Songs at cover need also honor column setting like ones at later pages
+
+	// Actual content
 	if !data.SongsOnCover {
 		pdf.AddPage()
 	}
-	addSongs(data, pdf, margin, colWd)
+	addSongs(data, pdf, bottomMargin, colWd)
 	if data.Style != model.COLUMNS && data.EmptyBack {
 		pdf.AddPage()
 	}

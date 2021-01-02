@@ -1,4 +1,4 @@
-module sss/print
+module github.com/hi-fi/sss/print
 
 go 1.15
 
