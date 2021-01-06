@@ -8,23 +8,20 @@ ifndef $(GOPATH)
     export GOPATH
 endif
 
-.PHONY: clean deps test gofmt ensure run build build-image build-linux-amd64
+.PHONY: clean test gofmt ensure run build build-image build-linux-amd64
 
 clean:
 	git clean -Xdf
 
-deps:
-	GO111MODULE=off go get -u golang.org/x/lint/golint
-
-test:
-	GO111MODULE=on go test ./cmd -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
-	GO111MODULE=off golint -set_exit_status ./cmd  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
-	GO111MODULE=on go vet -mod vendor ./cmd
-	./hack/gofmt.sh
+test: ${GOPATH}/bin/golint
+	GO111MODULE=on go test . -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
+	GO111MODULE=off ${GOPATH}/bin/golint -set_exit_status .  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
+	GO111MODULE=on go vet -mod vendor .
+	./.hack/gofmt.sh
 	git diff --exit-code go.mod go.sum
 
 gofmt:
-	./hack/gofmt.sh
+	./.hack/gofmt.sh
 
 ensure:
 	GO111MODULE=on go mod tidy
@@ -35,7 +32,7 @@ run: ${GOPATH}/bin/gin
 
 build-linux-amd64:
 	rm -rf bin/linux/$(OPERATOR_NAME)
-	GO111MODULE=on GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) ./cmd
+	GO111MODULE=on GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) .
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
@@ -45,4 +42,7 @@ build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
 
 ${GOPATH}/bin/gin:
-	go get github.com/codegangsta/gin
+	GO111MODULE=off go get -u github.com/codegangsta/gin
+
+${GOPATH}/bin/golint:
+	GO111MODULE=off go get -u golang.org/x/lint/golint

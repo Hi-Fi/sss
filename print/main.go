@@ -5,13 +5,15 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"sss/print/pkg/model"
-	"sss/print/pkg/pdf"
 	"time"
+
+	"github.com/hi-fi/sss/print/pkg/model"
+	"github.com/hi-fi/sss/print/pkg/pdf"
 
 	"github.com/gin-gonic/gin"
 )
 
+// Router gin router
 var Router *gin.Engine
 
 func main() {

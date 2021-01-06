@@ -3,7 +3,8 @@ package pdf
 import (
 	"bytes"
 	"fmt"
-	"sss/print/pkg/model"
+
+	"github.com/hi-fi/sss/print/pkg/model"
 
 	"github.com/phpdave11/gofpdf"
 )
