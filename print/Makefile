@@ -17,7 +17,7 @@ test: ${GOPATH}/bin/golint
 	GO111MODULE=on go test . -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
 	GO111MODULE=off ${GOPATH}/bin/golint -set_exit_status .  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
 	GO111MODULE=on go vet -mod vendor .
-	./.hack/gofmt.sh
+	../.hack/gofmt.sh
 	git diff --exit-code go.mod go.sum
 
 gofmt:
