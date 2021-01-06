@@ -26,3 +26,4 @@ jobs:
       - name: Build
         run: |
           make build
+        working-directory: ./print
