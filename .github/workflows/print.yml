@@ -5,6 +5,10 @@ on:
     paths:
       - "print/**"
 
+defaults:
+  run:
+    working-directory: ./print
+
 jobs:
   test-build:
     runs-on: ubuntu-latest
@@ -21,9 +25,7 @@ jobs:
         run: |
           make ensure
           make test
-        working-directory: ./print
 
       - name: Build
         run: |
           make build
-        working-directory: ./print
