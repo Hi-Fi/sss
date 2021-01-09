@@ -7,8 +7,10 @@ import 'typeface-roboto'
 import configureStore from './store/configureStore.js';
 import TabsContainer from './containers/TabsContainer'
 import history from './utils/history'
+import {loadFromLocalStorage, saveToLocalStorage} from './store/localStorage'
 
-const store = configureStore();
+const store = configureStore(loadFromLocalStorage());
+store.subscribe(() => saveToLocalStorage(store.getState()))
 
 
 ReactDOM.render(
