@@ -2,37 +2,40 @@ package model
 
 import (
 	"time"
+
+	"cloud.google.com/go/datastore"
 )
 
 type Song struct {
-	ID        string
-	Created   time.Time
-	Updated   time.Time
-	Creator   string
-	Updator   string
-	Title     string
-	Verses    []Verse
-	Melody    Melody
-	Arrangers []Maker
-	Composers []Maker
-	Lyricists []Maker
-	ExtraInfo string
-	Tags      []Tag
-	Deleted   bool
+	Key       *datastore.Key `json:"-" datastore:"__key__"`
+	ID        string         `json:"id" datastore:"-"`
+	Created   time.Time      `json:"dateCreated,omitempty" datastore:"dateCreated"`
+	Updated   time.Time      `json:"lastUpdated,omitempty" datastore:"lastUpdated"`
+	Creator   string         `json:"creator,omitempty" datastore:"creator,noindex"`
+	Modifier  string         `json:"modifier,omitempty" datastore:"modifier,noindex"`
+	Title     string         `json:"title" datastore:"title"`
+	Verses    []Verse        `json:"verses" datastore:"verses"`
+	Melody    Melody         `json:"melody,omitempty" datastore:"melody"`
+	Arrangers []Maker        `json:"arrangers,omitempty" datastore:"arrangers"`
+	Composers []Maker        `json:"composers,omitempty" datastore:"composers"`
+	Lyricists []Maker        `json:"lyricists,omitempty" datastore:"lyricists"`
+	ExtraInfo string         `json:"extraInfo,omitempty" datastore:"extraInfo,noindex"`
+	Tags      []Tag          `json:"tags,omitempty" datastore:"tags"`
+	Deleted   bool           `json:"deleted" datastore:"deleted"`
 }
 
 type Melody struct {
-	Melody string
+	Melody string `json:"melody" datastore:"melody"`
 }
 
 type Verse struct {
-	Lyrics string
+	Lyrics string `json:"lyrics" datastore:"lyrics,noindex"`
 }
 
 type Maker struct {
-	Name string
+	Name string `json:"name" datastore:"name"`
 }
 
 type Tag struct {
-	Tag string
+	Tag string `json:"tag" datastore:"tag"`
 }

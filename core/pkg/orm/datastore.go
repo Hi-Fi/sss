@@ -57,10 +57,13 @@ func SaveSongs(songs []model.Song) error {
 func GetSongs() (songs []model.Song, err error) {
 	cacheSongs := getAll("Song")
 	if len(cacheSongs) == 0 {
+		var datastoreSongs []*model.Song
 		query := datastore.NewQuery("Song")
-		_, err = client.GetAll(*ctx, query, &songs)
-		for _, song := range songs {
-			set("Song", song.ID, song)
+		_, err = client.GetAll(*ctx, query, &datastoreSongs)
+		for _, datastoreSong := range datastoreSongs {
+			datastoreSong.ID = datastoreSong.Key.Name
+			set("Song", datastoreSong.ID, *datastoreSong)
+			songs = append(songs, *datastoreSong)
 		}
 	} else {
 		for _, item := range cacheSongs {
@@ -75,20 +78,22 @@ func GetSong(id string) (song model.Song, err error) {
 	cachedSong := get("Song", id)
 	if cachedSong != nil {
 		return cachedSong.(model.Song), err
-	} else {
-		key := datastore.NameKey("Song", id, nil)
-		err = client.Get(*ctx, key, &song)
-		if err == nil {
-			set("Song", song.ID, song)
-		}
-		return song, err
 	}
+
+	key := datastore.NameKey("Song", id, nil)
+	err = client.Get(*ctx, key, &song)
+	if err == nil {
+		song.ID = song.Key.Name
+		set("Song", song.ID, song)
+	}
+	return song, err
 }
 
 func GetUpdatedSongs(fromTime time.Time) (songs []model.Song, err error) {
 	query := datastore.NewQuery("Song").Filter("Created >", fromTime)
 	_, err = client.GetAll(*ctx, query, &songs)
 	for _, song := range songs {
+		song.ID = song.Key.Name
 		set("Song", song.ID, song)
 	}
 	return songs, err
