@@ -26,7 +26,7 @@ var (
 
 func CreateClient() *datastore.Client {
 	dsCtx := context.Background()
-	dsClient, err := datastore.NewClient(dsCtx, "")
+	dsClient, err := datastore.NewClient(dsCtx, datastore.DetectProjectID)
 	if err != nil {
 		log.Println("Error Connecting to Datastore::", err)
 	}

@@ -18,6 +18,7 @@ type Song struct {
 	Lyricists []Maker
 	ExtraInfo string
 	Tags      []Tag
+	Deleted   bool
 }
 
 type Melody struct {
