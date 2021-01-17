@@ -8,7 +8,7 @@ ifndef $(GOPATH)
     export GOPATH
 endif
 
-.PHONY: clean test gofmt ensure run build build-image build-linux-amd64
+.PHONY: clean test gofmt ensure run build build-image build-linux-amd64 swagger
 
 clean:
 	git clean -Xdf
@@ -41,8 +41,14 @@ build:
 build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
 
+swagger: ${GOPATH}/bin/swag
+	${GOPATH}/bin/swag init --output pkg/api/docs
+
 ${GOPATH}/bin/gin:
 	GO111MODULE=off go get -u github.com/codegangsta/gin
 
 ${GOPATH}/bin/golint:
 	GO111MODULE=off go get -u golang.org/x/lint/golint
+
+${GOPATH}/bin/swag:
+	GO111MODULE=off go get -u github.com/swaggo/swag/cmd/swag

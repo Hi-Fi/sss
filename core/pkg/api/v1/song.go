@@ -10,8 +10,8 @@ import (
 
 // @Summary Get all songs
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} []model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/songs [get]
 func GetSongs(c *gin.Context) {
 	songs, _ := orm.GetSongs()
@@ -20,8 +20,8 @@ func GetSongs(c *gin.Context) {
 
 // @Summary Get updated songs
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} []model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/songs/updated/{time} [get]
 func GetUpdatedSongs(c *gin.Context) {
 	timeLayout := time.RFC3339Nano
@@ -39,8 +39,8 @@ func GetUpdatedSongs(c *gin.Context) {
 
 // @Summary Get single song
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/song/{id} [post]
 func GetSong(c *gin.Context) {
 	song, _ := orm.GetSong(c.Param("id"))
@@ -50,8 +50,8 @@ func GetSong(c *gin.Context) {
 
 // @Summary Create multiple songs at once
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} []model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/songs [post]
 func SaveSongs(c *gin.Context) {
 	songs := []*model.Song{}
@@ -65,8 +65,8 @@ func SaveSongs(c *gin.Context) {
 
 // @Summary Create song
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/song [post]
 func SaveSong(c *gin.Context) {
 	song := model.Song{}
@@ -78,8 +78,8 @@ func SaveSong(c *gin.Context) {
 
 // @Summary Update song
 // @Produce  json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
+// @Success 200 {object} model.Song
+// @Failure 500 {string} string
 // @Router /api/v1/song/{id} [put]
 func EditSong(c *gin.Context) {
 	song := model.Song{}

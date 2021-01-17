@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hi-fi/sss/core/pkg/api/docs"
 	v1 "github.com/hi-fi/sss/core/pkg/api/v1"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -9,6 +10,8 @@ import (
 
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
+	docs.SwaggerInfo.Title = "Sitsitsit API"
+
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
