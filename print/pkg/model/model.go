@@ -26,24 +26,3 @@ type Page struct {
 	Orientation string
 	Unit        string
 }
-
-type Song struct {
-	Title     string
-	Verses    []Verse
-	Melody    Melody
-	Arrangers []Maker
-	Composers []Maker
-	Lyricists []Maker
-}
-
-type Melody struct {
-	Melody string
-}
-
-type Verse struct {
-	Lyrics string
-}
-
-type Maker struct {
-	Name string
-}

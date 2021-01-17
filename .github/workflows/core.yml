@@ -1,0 +1,31 @@
+name: sss-core
+
+on:
+  push:
+    paths:
+      - "core/**"
+
+defaults:
+  run:
+    working-directory: ./core
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.15'
+
+      - name: Test
+        run: |
+          make ensure
+          make test
+
+      - name: Build
+        run: |
+          make build
