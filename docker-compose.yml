@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  datastore_emulator:
+    image: quay.io/gumo/datastore-emulator
+    environment:
+      DATASTORE_PROJECT_ID: dummy-emulator-datastore-project
+      DATASTORE_LISTEN_ADDRESS: 0.0.0.0:8081
+    ports:
+      - "8081:8081"
+    volumes:
+      - datastore-emulator-storage:/opt/data
+    # command: start-datastore --no-store-on-disk --consistency=1.0
+
+  datastore_viewer:
+    image: quay.io/gumo/datastore-viewer
+    environment:
+      DATASTORE_VIEWER_HOST: 0.0.0.0
+      DATASTORE_VIEWER_PORT: 18081
+      GOOGLE_CLOUD_PROJECT: dummy-emulator-datastore-project
+      DATASTORE_EMULATOR_HOST: datastore_emulator:8081
+    depends_on:
+      - datastore_emulator
+    ports:
+      - "18081:18081"
+
+  print:
+    build:
+      context: ./dev
+      dockerfile: go.Dockerfile
+    environment:
+      DEV: 1
+    volumes:
+      - ./print/:/opt/code
+    ports:
+      - "5001:5000"
+  core:
+    build:
+      context: ./dev
+      dockerfile: go.Dockerfile
+    environment:
+      DEV: 1
+    volumes:
+      - ./core/:/opt/code
+    ports:
+      - "5000:5000"
+    environment:
+      GOOGLE_CLOUD_PROJECT: dummy-emulator-datastore-project
+      DATASTORE_EMULATOR_HOST: datastore_emulator:8081
+  ui:
+    build:
+      context: ./dev
+      dockerfile: node.Dockerfile
+    environment:
+      REACT_APP_BACKEND_API_BASE_URL: http://localhost:5000
+      REACT_APP_PRINT_API_BASE_URL: http://localhost:5001
+    volumes:
+      - ./frontend/:/opt/code
+    ports:
+      - "3000:3000"
+
+volumes:
+  datastore-emulator-storage:
+    driver: local
+  print:
+  core:
+  ui:

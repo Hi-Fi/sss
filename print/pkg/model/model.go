@@ -1,5 +1,9 @@
 package model
 
+import (
+	"github.com/hi-fi/sss/pkg/model"
+)
+
 const (
 	COLUMNS      = "columns"
 	LEAFLET      = "leaflet"
@@ -16,7 +20,7 @@ type Model struct {
 	SongsOnCover  bool
 	CoverImage    string
 	FontSize      int
-	Songs         []Song
+	Songs         []model.Song
 	Page          Page
 }
 

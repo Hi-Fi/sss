@@ -28,7 +28,7 @@ ensure:
 	GO111MODULE=on go mod vendor
 
 run: ${GOPATH}/bin/gin
-	${GOPATH}/bin/gin -p 5000 main.go
+	${GOPATH}/bin/gin -i -p 5000 main.go
 
 build-linux-amd64:
 	rm -rf bin/linux/$(OPERATOR_NAME)

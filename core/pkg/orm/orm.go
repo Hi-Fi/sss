@@ -3,7 +3,7 @@ package orm
 import (
 	"time"
 
-	"github.com/hi-fi/sss/core/pkg/model"
+	"github.com/hi-fi/sss/pkg/model"
 )
 
 // SssData defines interface for data persistence on SSS

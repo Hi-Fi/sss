@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hi-fi/sss/core/pkg/api/docs"
 	v1 "github.com/hi-fi/sss/core/pkg/api/v1"
@@ -11,10 +12,16 @@ import (
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
 	docs.SwaggerInfo.Title = "Sitsitsit API"
-
 	r := gin.New()
+	r.Use(cors.Default())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	// if gin.Mode() == gin.DebugMode {
+	// }
+	// else {
+	// 	corsConfig := cors.DefaultConfig()
+	// 	r.Use(cors.New(corsConfig))
+	// }
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hi-fi/sss/core/pkg/model"
 	"github.com/hi-fi/sss/core/pkg/orm"
+	"github.com/hi-fi/sss/pkg/model"
 )
 
 // @Summary Get all songs
