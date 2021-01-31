@@ -5,7 +5,7 @@ import { sortSongs, setPage, setRows } from '../actions/songList';
 
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     songsList: state.songs.songsList,
     selected: state.songs.selected,
     songList: state.songList
@@ -20,8 +20,8 @@ const mapDispatchToProps = (dispatch) => {
           })
           .catch((error) => dispatch(fetchSongsFailure(error.message)))
     },
-    selectSong: (id) => {
-      dispatch(selectSong(id));
+    selectSong: (song) => {
+      dispatch(selectSong(song));
     },
     // eslint-disable-next-line no-unused-vars
     selectAll: (event) => {
