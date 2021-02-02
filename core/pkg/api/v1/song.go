@@ -43,8 +43,12 @@ func GetUpdatedSongs(c *gin.Context) {
 // @Failure 500 {string} string
 // @Router /api/v1/song/{id} [post]
 func GetSong(c *gin.Context) {
-	song, _ := orm.GetSong(c.Param("id"))
-	c.JSON(200, song)
+	song, err := orm.GetSong(c.Param("id"))
+	if err == nil {
+		c.JSON(200, song)
+	} else {
+		c.JSON(404, err)
+	}
 
 }
 

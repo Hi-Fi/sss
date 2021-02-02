@@ -48,9 +48,9 @@ class LeafletLayout extends Component {
     }
     this.props.reorderSelectedVerses(result.source.droppableId, result.source.index, result.destination.index)
   }
-  
+
   render() {
-    const { selected } = this.props;
+    const {  songs } = this.props;
 
     return (
       <div className="container">
@@ -62,7 +62,7 @@ class LeafletLayout extends Component {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {selected.map((song, index) => (
+                { songs.map((song, index) => (
                   <Draggable key={song.id} draggableId={song.id} index={index}>
                     {(provided, snapshot) => (
                       <div
@@ -122,7 +122,7 @@ class LeafletLayout extends Component {
 LeafletLayout.propTypes = {
   reorderSelectedSongs: PropTypes.func,
   reorderSelectedVerses: PropTypes.func,
-  selected: PropTypes.array,
+   songs: PropTypes.array,
 }
 
 export default LeafletLayout;

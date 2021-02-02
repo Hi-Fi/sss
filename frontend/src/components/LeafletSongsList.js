@@ -34,9 +34,9 @@ class LeafletSongsList extends Component {
 
     this.props.reorderSelectedSongs(result.source.index, result.destination.index)
   }
-  
+
   render() {
-    const { selected } = this.props;
+    const { songs } = this.props;
 
     return (
       <div className="container">
@@ -48,7 +48,7 @@ class LeafletSongsList extends Component {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {selected.map((song, index) => (
+                {songs.map((song, index) => (
                   <Draggable key={song.id} draggableId={song.id} index={index}>
                     {(provided, snapshot) => (
                       <div
@@ -77,7 +77,7 @@ class LeafletSongsList extends Component {
 
 LeafletSongsList.propTypes = {
   reorderSelectedSongs: PropTypes.func,
-  selected: PropTypes.array,
+  songs: PropTypes.array,
 }
 
 export default LeafletSongsList;
