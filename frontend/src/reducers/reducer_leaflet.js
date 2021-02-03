@@ -20,8 +20,7 @@ const INITIAL_STATE = {
   songs: [],
 }
 
-// eslint-disable-next-line
-export default function (state = INITIAL_STATE, action) {
+function leafletReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SELECT_SONG: {
       let selectedSongs = state.songs.slice(0)
@@ -60,3 +59,5 @@ export default function (state = INITIAL_STATE, action) {
       return state
   }
 }
+
+export default leafletReducer;

@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   allSelected: false,
 }
 
-export default function songsReducer(state = INITIAL_STATE, action) {
+function songsReducer(state = INITIAL_STATE, action) {
   let error;
   switch (action.type) {
     case FETCH_SONGS:// start fetching songs and set loading = true
@@ -73,3 +73,5 @@ export default function songsReducer(state = INITIAL_STATE, action) {
       return state;
   }
 }
+
+export default songsReducer;

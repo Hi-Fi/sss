@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { cloneDeep } from 'lodash';
 import { selectAll as leafletSelectAll, deselectAll as leafletDeselectAll } from '../actions/leaflet'
-import { renameTab, closeTab } from '../actions/tabs';
-import { openModal, ERROR_MODAL, INFO_MODAL } from './modal'
+import { renameTab } from '../actions/tabs';
+import { openModal, ERROR_MODAL } from './modal'
 
 
 

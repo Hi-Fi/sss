@@ -1,6 +1,6 @@
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modal'
 
-function modal(state = null, action) {
+function modalReducer(state = null, action) {
   switch (action.type) {
     case OPEN_MODAL:
       return action.data
@@ -11,4 +11,4 @@ function modal(state = null, action) {
   }
 }
 
-export default modal;
+export default modalReducer;

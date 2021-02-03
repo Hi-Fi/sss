@@ -62,7 +62,7 @@ class SongDetails extends Component {
 
   renderAuthors(authors) {
     let authorNames = []
-    authors.map((author) => {
+    authors.forEach((author) => {
         authorNames.push(author.name)
     })
     return authorNames.join(", ")
@@ -70,8 +70,7 @@ class SongDetails extends Component {
 
   renderTags(tags) {
     let tagTags = []
-    console.dir(tags)
-    tags.map((tag) => {
+    tags.forEach((tag) => {
       tagTags.push(tag.tag)
     })
     return tagTags.join(", ")

@@ -13,7 +13,7 @@ const ControlledAutocomplete = ({options, onChange, name, label, register, watch
 
   useEffect(() => {
     register({ name: name });
-  }, [register]);
+  }, [register, name]);
 
   return (
     <Autocomplete
@@ -173,7 +173,7 @@ export default function SongEdit(props) {
         <button type="button" disabled={submitting} onClick={reset}>
           Reset form
         </button>
-        {props.errors && props.errors[props.songId] && <div>Error at submit of form. Error message: {props.errors[props.songId]}</div>}      
+        {props.errors && props.errors[props.songId] && <div>Error at submit of form. Error message: {props.errors[props.songId]}</div>}
         </div>
     </form>
   )
