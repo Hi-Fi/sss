@@ -1,9 +1,11 @@
 name: sss-frontend
 
 on:
-  push:
+  pull_request:
     paths:
       - "frontend/**"
+      - ".github/workflows/core.yml"
+
 
 defaults:
   run:
