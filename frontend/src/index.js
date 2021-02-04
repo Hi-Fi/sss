@@ -6,12 +6,14 @@ import { Router, Route } from 'react-router-dom';
 import 'typeface-roboto'
 import configureStore from './store/configureStore.js';
 import TabsContainer from './containers/TabsContainer'
+import Backdrop from './containers/BackdropContainer'
+import Modal from './containers/ModalContainer'
+
 import history from './utils/history'
 import {loadFromLocalStorage, saveToLocalStorage} from './store/localStorage'
 
 const store = configureStore(loadFromLocalStorage());
 store.subscribe(() => saveToLocalStorage(store.getState()))
-
 
 ReactDOM.render(
   <Provider store={store}>
@@ -26,4 +28,6 @@ ReactDOM.render(
           <Route exact path='/leaflet/preview' component={TabsContainer} />
         </div>
       </Router>
+      <Backdrop />
+      <Modal />
   </Provider>, document.getElementById('root'));

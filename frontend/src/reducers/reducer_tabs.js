@@ -22,9 +22,9 @@ const tabReducer = (state = INITIAL_STATE, action) => {
     }
     case ADD_TAB:
       if (state.songTabs.tabs.filter(function (tab) { return tab.id === action.id }).length > 0) {
-        return { ...state, openTab: action.id }
+        return { ...state, openTab: "/song/"+action.id }
       } else {
-        return { ...state, openTab: action.id, songTabs: { tabs: [...state.songTabs.tabs, { id: action.id, name: 'Loading...' }] } }
+        return { ...state, openTab: "/song/"+action.id, songTabs: { tabs: [...state.songTabs.tabs, { id: action.id, name: 'Loading...' }] } }
       }
     case CLOSE_TAB:
       history.push('/')

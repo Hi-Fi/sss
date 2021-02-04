@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
-import { reorderSelectedSongs, reorderSelectedVerses } from '../actions/songs';
+import { reorderSelectedSongs, reorderSelectedVerses } from '../actions/leaflet';
 import LeafletLayout from '../components/LeafletLayout';
 
 
 const mapStateToProps = (state) => {
-  return { 
-    selected: state.songs.selected,
+  return {
+    songs: state.leaflet.songs,
   };
 }
 

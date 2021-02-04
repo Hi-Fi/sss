@@ -131,14 +131,14 @@ class SongsList extends Component {
 
     this.setState({ order, orderBy });
   };
-  
+
   render() {
     const { songs, loading, error } = this.props.songsList;
     const {rowsPerPage, page, order, orderBy} = this.props.songList;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, songs.length - page * rowsPerPage);  
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, songs.length - page * rowsPerPage);
 
     if(loading) {
-      return <div className="container"><h1>Songs</h1><h3>Loading...</h3></div>      
+      return <div className="container"><h1>Songs</h1><h3>Loading...</h3></div>
     } else if(error) {
       return <div className="alert alert-danger">Error: {error}</div>
     }
@@ -162,7 +162,7 @@ class SongsList extends Component {
                   return (
                     <TableRow
                       hover
-                      onClick={() => this.props.selectSong(n.id)}
+                      onClick={() => this.props.selectSong(n)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}

@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { cloneDeep } from 'lodash';
+import { selectAll as leafletSelectAll, deselectAll as leafletDeselectAll } from '../actions/leaflet'
+import { renameTab } from '../actions/tabs';
+import { openModal, ERROR_MODAL } from './modal'
+
+
 
 //Song list
 export const FETCH_SONGS = 'FETCH_SONGS';
@@ -20,11 +25,8 @@ export const RESET_ACTIVE_SONG = 'RESET_ACTIVE_SONG';
 //Leaflet
 export const SELECT_SONG = 'SELECT_SONG'
 export const SELECT_ALL_SONGS = 'SELECT_ALL_SONGS'
-export const REORDER_SELECTED_SONGS = 'REORDER_SELECTED_SONGS'
-export const REORDER_SELECTED_VERSES = 'REORDER_SELECTED_VERSES'
 
-//const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:8080' : '/';
-const ROOT_URL = 'https://api-dot-sitsitsit-dev.appspot.com'
+const ROOT_URL = process.env.REACT_APP_BACKEND_API_BASE_URL
 
 export function saveSong(song) {
   const submitSong = cloneDeep(song)
@@ -33,8 +35,9 @@ export function saveSong(song) {
   // submitSong.lyricists = submitSong.lyricists?.map(lyricist => { return {name: lyricist}})
   const request = axios({
     method: 'post',
-    url: `${ROOT_URL}/song`,
+    url: `${ROOT_URL}/api/v1/song`,
     data: submitSong,
+    crossDomain: true,
     headers: {
       'Content-Type': 'application/json',
     }
@@ -61,16 +64,26 @@ export function saveSongFailure(id, error) {
   };
 }
 
-export function fetchSongs() {
-  const request = axios({
-    method: 'get',
-    url: `${ROOT_URL}/songs`,
-    headers: []
-  });
+export async function fetchAllSongs(dispatch, getState) {
+  dispatch(fetchSongs())
+  let songs = getState().songs.songsList.songs
+  if (songs.length > 0) {
+    dispatch(fetchSongsSuccess(songs))
+  } else {
+    axios({
+      method: 'get',
+      url: `${ROOT_URL}/api/v1/songs`,
+      crossDomain: true,
+      headers: []
+    }).then((response) => {
+      !response.error ? dispatch(fetchSongsSuccess(response.data)) : dispatch(fetchSongsFailure(response.data.message));
+    }).catch((error) => dispatch(fetchSongsFailure(error.message)))
+  }
+}
 
+export function fetchSongs() {
   return {
-    type: FETCH_SONGS,
-    payload: request
+    type: FETCH_SONGS
   };
 }
 
@@ -89,16 +102,33 @@ export function fetchSongsFailure(error) {
 }
 
 export function fetchSong(id) {
-  const request = axios({
-    method: 'get',
-    url: `${ROOT_URL}/song/${id}`,
-    headers:[]
-  });
-
-  return {
-    type: FETCH_SONG,
-    payload: request
-  };
+  return async function fetchSong(dispatch, getState) {
+    dispatch({type: FETCH_SONG})
+    let song = getState().songs.songsList.songs.find(song => song.id === id)
+    if (song !== undefined ) {
+      dispatch(fetchSongSuccess(song))
+      dispatch(renameTab(song.id, song.title))
+    } else {
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/v1/song/${id}`,
+        crossDomain: true,
+      }).then((response) => {
+        if (!response.error) {
+          dispatch(fetchSongsSuccess(response.data))
+          dispatch(renameTab(response.data.id, response.data.title))
+        } else {
+          dispatch(fetchSongsFailure(response.data.message))
+          // dispatch(closeTab(id))
+          dispatch(openModal(ERROR_MODAL, "Couldn't load song", response.data.message, id))
+        }
+      }).catch((error) => {
+        dispatch(fetchSongsFailure(error.message))
+        // dispatch(closeTab(id))
+        dispatch(openModal(ERROR_MODAL, "Couldn't load song", error.message, id))
+      })
+    }
+  }
 }
 
 export function fetchSongSuccess(activeSong) {
@@ -121,32 +151,21 @@ export function resetActiveSong() {
   }
 }
 
-export function selectSong(id) {
+export function selectSong(song) {
   return {
     type: SELECT_SONG,
-    id: id
+    song: song
   }
 }
 
-export function selectAll() {
-  return {
+export async function selectAllSongs(dispatch, getState) {
+  let songs = getState().songs.songsList.songs
+  if (getState().songs.allSelected) {
+    dispatch(leafletDeselectAll())
+  } else {
+    dispatch(leafletSelectAll(songs))
+  }
+  dispatch({
     type: SELECT_ALL_SONGS
-  }
-}
-
-export function reorderSelectedSongs(origin, target) {
-  return {
-    type: REORDER_SELECTED_SONGS,
-    origin: origin,
-    target: target
-  }
-}
-
-export function reorderSelectedVerses(songID, origin, target) {
-  return {
-    type: REORDER_SELECTED_VERSES,
-    songID: songID,
-    origin: origin,
-    target: target
-  }
+  })
 }

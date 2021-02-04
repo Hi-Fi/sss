@@ -1,13 +1,12 @@
 import { connect } from 'react-redux'
-import { fetchSongs, fetchSongsSuccess, fetchSongsFailure, selectSong, selectAll } from '../actions/songs';
+import { selectSong, selectAllSongs, fetchAllSongs } from '../actions/songs';
 import SongsList from '../components/SongsList';
 import { sortSongs, setPage, setRows } from '../actions/songList';
 
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     songsList: state.songs.songsList,
-    selected: state.songs.selected,
     songList: state.songList
   };
 }
@@ -15,17 +14,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchSongs: () => {
-      dispatch(fetchSongs()).then((response) => {
-            !response.error ? dispatch(fetchSongsSuccess(response.payload.data)) : dispatch(fetchSongsFailure(response.payload.data.message));
-          })
-          .catch((error) => dispatch(fetchSongsFailure(error.message)))
+      dispatch(fetchAllSongs)
     },
-    selectSong: (id) => {
-      dispatch(selectSong(id));
+    selectSong: (song) => {
+      dispatch(selectSong(song));
     },
     // eslint-disable-next-line no-unused-vars
     selectAll: (event) => {
-      dispatch(selectAll())
+      dispatch(selectAllSongs)
     },
     // eslint-disable-next-line no-unused-vars
     sortList: (event, property) => {

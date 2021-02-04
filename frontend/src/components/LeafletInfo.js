@@ -226,7 +226,7 @@ export default function LeafletInfo() {
           Reset form
         </button>
         </div>
-        
+
       </div>
     </form>
   )

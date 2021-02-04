@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/datastore"
-	"github.com/hi-fi/sss/core/pkg/model"
+	"github.com/hi-fi/sss/pkg/model"
 )
 
 type Cache map[string]map[string]*CacheItem
