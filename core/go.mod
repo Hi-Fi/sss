@@ -3,7 +3,7 @@ module github.com/hi-fi/sss/core
 go 1.15
 
 require (
-	cloud.google.com/go/datastore v1.4.0
+	cloud.google.com/go/datastore v1.5.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
