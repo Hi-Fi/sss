@@ -10,15 +10,20 @@ import (
 	"github.com/hi-fi/sss/print/pkg/model"
 	"github.com/hi-fi/sss/print/pkg/pdf"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-// Router gin router
-var Router *gin.Engine
+// router gin router
+var router *gin.Engine
 
 func main() {
-	Router = gin.Default()
-	api := Router.Group("/api")
+	router = gin.New()
+	router.Use(cors.Default())
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
+	api := router.Group("/api")
 	{
 		api.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{
@@ -41,7 +46,7 @@ func main() {
 			return
 		})
 	}
-	base := Router.Group("/")
+	base := router.Group("/")
 	{
 		base.GET("/", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{
@@ -54,5 +59,5 @@ func main() {
 		port = "5000"
 		log.Printf("Defaulting to port %s", port)
 	}
-	Router.Run(":" + port)
+	router.Run(":" + port)
 }
