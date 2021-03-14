@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"image"
 	"net/http"
+	"strings"
 
 	"github.com/hi-fi/sss/print/pkg/model"
 
@@ -82,7 +83,7 @@ func getImageType(image *Image) error {
 }
 
 func decodeBase64ToBytes(data string) (Image, error) {
-	decodedData, err := base64.StdEncoding.DecodeString(data)
+	decodedData, err := base64.StdEncoding.DecodeString(data[strings.IndexByte(data, ',')+1:])
 	return Image{Data: decodedData}, err
 }
 

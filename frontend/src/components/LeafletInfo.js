@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form"
 import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from "@material-ui/core/FormControlLabel"
 import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
 import Checkbox from '@material-ui/core/Checkbox'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import { isEqual } from 'lodash'
 
 
 const layouts = [
   { label: 'A4, landscape', value: 'columns' },
-  { label: 'A5 leaflet', value: 'booklet' },
-  { label: 'High leaflet', value: 'highBooklet' }
+  { label: 'A5 leaflet', value: 'leaflet' },
+  { label: 'High leaflet', value: 'highLeaflet' }
 ]
 
 const columns = [
-  { label: '1 column', value: '1' },
-  { label: '2 columns', value: '2' },
-  { label: '3 columns', value: '3' },
-  { label: '4 columns', value: '4' },
-  { label: '5 columns', value: '5' }
+  { label: '1 column', value: 1 },
+  { label: '2 columns', value: 2 },
+  { label: '3 columns', value: 3 },
+  { label: '4 columns', value: 4 },
+  { label: '5 columns', value: 5 }
 ]
 
 const fontSizes = [
-  { label: '8 pts', value: '8' },
-  { label: '10 pts', value: '10' },
-  { label: '12 pts', value: '12' },
-  { label: '14 pts', value: '14' },
-  { label: '16 pts', value: '16' }
+  { label: '8 pts', value: 8 },
+  { label: '10 pts', value: 10 },
+  { label: '12 pts', value: 12 },
+  { label: '14 pts', value: 14 },
+  { label: '16 pts', value: 16 }
 ];
 
 const ControlledSelect = ({
@@ -69,37 +70,96 @@ ControlledSelect.propTypes = {
 const ControlledCheckbox = ({
   name,
   label,
-  register
+  control
 }) => {
+  const labelId = `${name}-label`;
   return (
-    <FormControlLabel
-      control={<Checkbox />}
-      label={label}
-      name={name}
-      inputRef={register}
-    />
+    <section id={name}>
+      <label htmlFor={labelId}>{label}</label>
+      <Controller
+        name={name}
+        control={control}
+        render={(props) => (
+          <Checkbox
+            {...props}
+            id={labelId}
+            checked={props.value}
+            onChange={(e) => props.onChange(e.target.checked)}
+          />
+        )}
+      />
+    </section>
+  )
+}
+
+const ControlledFileUpload = ({
+  name,
+  register,
+  updateCoverFunc,
+  currentImage,
+  ...props
+}) => {
+  const labelId = `${name}-label`;
+  const imageSet = currentImage.data && currentImage.data.length > 0
+  return (
+    <FormControl {...props}>
+      <input
+        accept="image/*"
+        name={name}
+        id={labelId}
+        hidden
+        type="file"
+        onChange={updateCoverFunc}
+      />
+      <label htmlFor={labelId}>
+        <Button variant="contained" color="primary" component="span">
+          Upload cover image
+        </Button>
+        { imageSet &&
+        <div>
+          Current image: <img alt={currentImage.name} src={currentImage.data} className="w3-left w3-circle w3-margin-right" width="60px" height="100%" />
+        </div>
+        }
+      </label>
+    </FormControl>
   )
 }
 
 ControlledCheckbox.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  register: PropTypes.func,
+  control: PropTypes.object,
 }
 
-export default function LeafletInfo() {
-
-  const { handleSubmit, control, register, submitting, reset, watch } = useForm({
-    defaultValues: {
-      style: layouts[0].value,
-      fontSize: 10,
-      columns: 4
-    }
+export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeaflet, updateCoverImage }) {
+  const formDefaultValues = {
+    style: "columns",
+    columns: 4,
+    fontSize: 10,
+    saveEvent: false,
+    useCoverImage: false,
+    coverImage: "",
+    coverImageName: "",
+    songsOnCover: false,
+    emptyBack: false,
+  }
+  const { handleSubmit, control, register, submitting, watch, reset } = useForm({
+    defaultValues: formDefaultValues
   });
 
+  let value = watch()
+  useEffect(() => {
+    if (!isEqual(value, leafletInfo)) {
+      const delayDebounceFn = setTimeout(() => {
+        storeLeafletInfo(value)
+      }, 3000)
+      return () => clearTimeout(delayDebounceFn)
+    }
+  }, [value, leafletInfo, storeLeafletInfo])
+
   const onSubmit = data => {
-    //props.saveSong(data)
-    console.dir(data)
+    storeLeafletInfo(data)
+    printLeaflet()
   };
 
   const isColums = watch("style") === "columns"
@@ -122,12 +182,12 @@ export default function LeafletInfo() {
           <ControlledCheckbox
             name="saveEvent"
             label="Save event to included songs"
-            register={register}
+            control={control}
           />
         </div>
         <div>
           <Controller
-            name="desription"
+            name="description"
             as={TextField}
             control={control}
             label="Description (e.g. date)"
@@ -184,20 +244,16 @@ export default function LeafletInfo() {
               <ControlledCheckbox
                 name="useCoverImage"
                 label="Use cover image"
-                register={register}
+                control={control}
               />
             </div>
             {useCoverImage &&
               <div>
-                <Controller
-                  name="coverImage"
-                  as={TextField}
-                  control={control}
-                  label="Cover image"
-                  type="file"
-                  accept="image/*"
-                  defaultValue=""
-                />
+                <ControlledFileUpload
+                name="coverImageFile"
+                register={register}
+                updateCoverFunc={updateCoverImage}
+                currentImage={{name: leafletInfo.coverImageName, data: leafletInfo.coverImage}}/>
               </div>
             }
             {!useCoverImage &&
@@ -205,15 +261,15 @@ export default function LeafletInfo() {
                 <ControlledCheckbox
                   name="songsOnCover"
                   label="Put songs on the cover page"
-                  register={register}
+                  control={control}
                 />
               </div>
             }
             <div>
               <ControlledCheckbox
-                name="songsOnBackPage"
+                name="emptyBack"
                 label="Put songs on the back page"
-                register={register}
+                control={control}
               />
             </div>
           </div>
@@ -222,7 +278,7 @@ export default function LeafletInfo() {
         <button type="submit" disabled={submitting}>
           Generate leaflet
         </button>
-        <button type="button" disabled={submitting} onClick={reset}>
+        <button type="button" disabled={submitting} onClick={() => reset(formDefaultValues)}>
           Reset form
         </button>
         </div>
@@ -233,4 +289,6 @@ export default function LeafletInfo() {
 }
 
 LeafletInfo.propTypes = {
+  printLeaflet: PropTypes.func,
+  storeLeafletInfo: PropTypes.func
 }

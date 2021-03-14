@@ -29,14 +29,13 @@ const mapDispatchToProps = (dispatch) => {
         }
     },
     saveSong: (song) => {
-      dispatch(saveSong(song))
+      dispatch(saveSong(song)).payload
         .then((result) => {
-          console.dir(result)
-          if (result.payload.response && result.payload.response.status !== 200) {
-            dispatch(saveSongFailure(song.id, result.payload.response.data.message))
+          if (result.status !== 200) {
+            dispatch(saveSongFailure(song.id, result.data.message))
           } else {
-            dispatch(saveSongSuccess(result.payload.data))
-            dispatch(addTab(result.payload.data.id))
+            dispatch(saveSongSuccess(result.data))
+            dispatch(addTab(result.data.id))
           }
         })
       .catch((error) => {
