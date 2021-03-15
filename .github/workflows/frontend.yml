@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "frontend/**"
-      - ".github/workflows/core.yml"
+      - ".github/workflows/frontend.yml"
 
 
 defaults:
@@ -46,3 +46,18 @@ jobs:
       - name: Build
         run: |
           yarn build
+
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: test-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy review
+        uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./frontend
+          version: pr-${{ github.event.pull_request.number }}
+          promote: false
