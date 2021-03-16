@@ -54,6 +54,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Build UI
+        run: |
+          yarn
+          yarn build
+
       - name: Deploy review
         uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
         with:
