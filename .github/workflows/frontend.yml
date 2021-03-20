@@ -4,7 +4,10 @@ on:
   pull_request:
     paths:
       - "frontend/**"
-      - ".github/workflows/core.yml"
+      - ".github/workflows/frontend.yml"
+  push:
+    branches:
+      - main
 
 
 defaults:
@@ -46,3 +49,58 @@ jobs:
       - name: Build
         run: |
           yarn build
+
+  deploy-test:
+    env:
+      REACT_APP_BACKEND_API_BASE_URL: https://api-dot-sitsitsit-dev.ey.r.appspot.com
+      REACT_APP_PRINT_API_BASE_URL: https://print-dot-sitsitsit-dev.ey.r.appspot.com
+    runs-on: ubuntu-latest
+    needs: test-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+        id: changed-core
+        with:
+          paths: core .github/workflows/core.yml
+
+      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+        id: changed-print
+        with:
+          paths: print .github/workflows/print.yml
+
+      - name: Set PR core URL
+        if: steps.changed-core.outputs.changed == 'true' && github.event_name == 'pull_request'
+        run: |
+          echo "REACT_APP_BACKEND_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-api-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+
+      - name: Set PR print URL
+        if: steps.changed-print.outputs.changed == 'true' && github.event_name == 'pull_request'
+        run: |
+          echo "REACT_APP_PRINT_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-print-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+
+      - name: Build UI
+        run: |
+          yarn
+          yarn build
+
+      - name: Deploy review
+        uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
+        if: github.event_name == 'pull_request'
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./frontend
+          version: pr-${{ github.event.pull_request.number }}
+          promote: false
+
+      - name: Deploy production
+        if: github.event_name == 'push'
+        uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./frontend
+          version: ${{ env.GITHUB_SHA }}
+          promote: true
