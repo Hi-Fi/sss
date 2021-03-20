@@ -5,6 +5,9 @@ on:
     paths:
       - "core/**"
       - ".github/workflows/core.yml"
+  push:
+    branches:
+      - main
 
 defaults:
   run:
@@ -46,9 +49,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy review
+        if: github.event_name == 'pull_request'
         uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
         with:
           credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./core
           version: pr-${{ github.event.pull_request.number }}
           promote: false
+
+      - name: Deploy production
+        if: github.event_name == 'push'
+        uses: google-github-actions/deploy-appengine@32c708ac578033217aed2f2822d5ddd60999612e #0.3.0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./core
+          version: ${{ env.GITHUB_SHA }}
+          promote: true

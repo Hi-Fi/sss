@@ -1,0 +1,18 @@
+name: Stop Review
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  stop_review:
+    runs-on: ubuntu-latest
+    name: Stop Review
+    steps:
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@daadedc81d5f9d3c06d2c92f49202a3cc2b919ba # 0.2.1
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Remove review version
+        run: gcloud app versions delete pr-${{ github.event.pull_request.number }}
