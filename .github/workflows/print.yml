@@ -63,6 +63,6 @@ jobs:
         with:
           credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./print
-          version: ${{ env.GITHUB_SHA }}
+          version: ${{ github.sha }}
           promote: true
 

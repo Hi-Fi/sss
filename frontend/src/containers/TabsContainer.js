@@ -17,7 +17,7 @@ import SongEditContainer from './SongEditContainer';
 
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     openTabs: state.tabs.songTabs.tabs,
     openTab: state.tabs.openTab
   };
@@ -62,15 +62,15 @@ const styles = theme => ({
 class TabsContainer extends React.Component {
   componentDidMount() {
     // If coming directly to song, add tab to it and display tab
-    if (this.props.match.params.id && this.props.match.url !== this.props.openTab) {
+    if (this.props.match.url !== this.props.openTab) {
       this.props.match.params.id && this.props.addTab(this.props.match.params.id)
       this.props.changeTab(this.props.match.url)
-    } 
+    }
   }
 
   render() {
     const { classes } = this.props;
-    const value = this.props.openTab || this.props.match.params.id || this.props.match.path
+    const value = this.props.openTab || this.props.match.path
     let currentTab = value
     if (value.startsWith("/leaflet")) {
       currentTab = "/leaflet"
