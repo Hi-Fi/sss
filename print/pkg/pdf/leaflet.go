@@ -109,7 +109,7 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 		pdf.AddPage()
 	}
 	addSongs(data, pdf, bottomMargin, colWd)
-	if data.Style != model.COLUMNS && data.EmptyBack {
+	if data.Style != model.COLUMNS && !data.SongsOnBack {
 		pdf.AddPage()
 	}
 	err := pdf.Output(&byteBuffer)

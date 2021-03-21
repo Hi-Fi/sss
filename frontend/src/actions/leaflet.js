@@ -51,6 +51,9 @@ export function printLeaflet() {
       type: PRINT_LEAFLET
     })
     const currentState = getState().leaflet
+    if (currentState.info.style === 'leaflet') {
+      currentState.info.columns = currentState.info.a5columns
+    }
     try {
       const response = await axios({
         method: 'post',
