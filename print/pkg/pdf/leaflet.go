@@ -105,11 +105,11 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 	// Songs at cover need also honor column setting like ones at later pages
 
 	// Actual content
-	if !data.SongsOnCover {
+	if data.Style != model.COLUMNS && !data.SongsOnCover {
 		pdf.AddPage()
 	}
 	addSongs(data, pdf, bottomMargin, colWd)
-	if data.Style != model.COLUMNS && data.EmptyBack {
+	if data.Style != model.COLUMNS && !data.SongsOnBack {
 		pdf.AddPage()
 	}
 	err := pdf.Output(&byteBuffer)

@@ -26,3 +26,5 @@
 
 # Dependency directories
 vendor/
+# Compiled app
+bin/

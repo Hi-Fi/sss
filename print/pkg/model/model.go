@@ -16,7 +16,7 @@ type Model struct {
 	Style         string
 	Columns       int
 	UseCoverImage bool
-	EmptyBack     bool
+	SongsOnBack   bool
 	SongsOnCover  bool
 	CoverImage    string
 	FontSize      int

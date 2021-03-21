@@ -25,6 +25,11 @@ const columns = [
   { label: '5 columns', value: 5 }
 ]
 
+const a5columns = [
+  { label: '1 column', value: 1 },
+  { label: '2 columns', value: 2 }
+]
+
 const fontSizes = [
   { label: '8 pts', value: 8 },
   { label: '10 pts', value: 10 },
@@ -135,13 +140,14 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
   const formDefaultValues = {
     style: "columns",
     columns: 4,
+    a5columns: 2,
     fontSize: 10,
     saveEvent: false,
     useCoverImage: false,
     coverImage: "",
     coverImageName: "",
     songsOnCover: false,
-    emptyBack: false,
+    songsOnBack: false,
   }
   const { handleSubmit, control, register, submitting, watch, reset } = useForm({
     defaultValues: formDefaultValues
@@ -157,12 +163,15 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
     }
   }, [value, leafletInfo, storeLeafletInfo])
 
+  const isA5 = watch("style") === "leaflet"
+
   const onSubmit = data => {
     storeLeafletInfo(data)
     printLeaflet()
   };
 
   const isColums = watch("style") === "columns"
+
   const useCoverImage = watch("useCoverImage")
 
   return (
@@ -238,6 +247,22 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
           </div>
         }
         {
+          isA5 &&
+          <div>
+            <ControlledSelect
+              name="a5columns"
+              label="Amount of columns"
+              control={control}
+            >
+              {a5columns.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </ControlledSelect>
+          </div>
+        }
+        {
           !isColums &&
           <div>
             <div>
@@ -267,7 +292,7 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
             }
             <div>
               <ControlledCheckbox
-                name="emptyBack"
+                name="songsOnBack"
                 label="Put songs on the back page"
                 control={control}
               />
