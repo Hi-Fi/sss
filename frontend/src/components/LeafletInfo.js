@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash'
+import { INITIAL_STATE } from '../reducers/reducer_leaflet.js'
 
 
 const layouts = [
@@ -137,20 +138,10 @@ ControlledCheckbox.propTypes = {
 }
 
 export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeaflet, updateCoverImage }) {
-  const formDefaultValues = {
-    style: "columns",
-    columns: 4,
-    a5columns: 2,
-    fontSize: 10,
-    saveEvent: false,
-    useCoverImage: false,
-    coverImage: "",
-    coverImageName: "",
-    songsOnCover: false,
-    songsOnBack: false,
-  }
+  const formDefaultValues = INITIAL_STATE.info
+
   const { handleSubmit, control, register, submitting, watch, reset } = useForm({
-    defaultValues: formDefaultValues
+    defaultValues: leafletInfo,
   });
 
   let value = watch()
@@ -169,6 +160,11 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
     storeLeafletInfo(data)
     printLeaflet()
   };
+
+  const resetForm = () => {
+    reset(formDefaultValues)
+    storeLeafletInfo(formDefaultValues)
+  }
 
   const isColums = watch("style") === "columns"
 
@@ -303,7 +299,7 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
         <button type="submit" disabled={submitting}>
           Generate leaflet
         </button>
-        <button type="button" disabled={submitting} onClick={() => reset(formDefaultValues)}>
+        <button type="button" disabled={submitting} onClick={() => resetForm()}>
           Reset form
         </button>
         </div>

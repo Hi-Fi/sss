@@ -16,8 +16,21 @@ import { cloneDeep, isEqual } from 'lodash'
 import { saveAs } from 'file-saver';
 
 
-const INITIAL_STATE = {
-  info: {},
+export const INITIAL_STATE = {
+  info: {
+    event: "",
+    description: "",
+    style: "columns",
+    columns: 4,
+    a5columns: 2,
+    fontSize: 10,
+    saveEvent: false,
+    useCoverImage: false,
+    coverImage: "",
+    coverImageName: "",
+    songsOnCover: false,
+    songsOnBack: false,
+  },
   songs: [],
 }
 
