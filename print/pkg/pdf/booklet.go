@@ -12,15 +12,19 @@ import (
 func makePrintableBooklet(pages *bytes.Buffer) (printablePages bytes.Buffer) {
 	config := pdfcpu.NewDefaultConfiguration()
 	pageCount, _ := api.PageCount(bytes.NewReader(pages.Bytes()), config)
-	for i := 0; i < (4 - pageCount%4); i++ {
-		printablePages.Reset()
-		err := api.InsertPages(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), []string{fmt.Sprintf("%d", pageCount)}, false, config)
-		if err != nil {
-			fmt.Printf("Error: %v", err)
+	// Add empty pages to make leaflet to be printable
+	if pageCount%4 > 0 {
+		for i := 0; i < (4 - pageCount%4); i++ {
+			printablePages.Reset()
+			err := api.InsertPages(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), []string{fmt.Sprintf("%d", pageCount)}, false, config)
+			if err != nil {
+				fmt.Printf("Error: %v", err)
+			}
+			*pages = printablePages
 		}
-		*pages = printablePages
 	}
 	pageCount, _ = api.PageCount(bytes.NewReader(pages.Bytes()), config)
+
 	printablePages.Reset()
 	api.Collect(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), calculatePageOrder(pageCount), config)
 	*pages = printablePages
