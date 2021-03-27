@@ -1,3 +1,5 @@
+/*eslint no-unused-vars: [2, { "args": "none" }]*/
+
 import axios from 'axios';
 import { toBase64 } from '../utils/helper'
 export const LEAFLET_SELECT_ALL_SONGS = 'LEAFLET_SELECT_ALL_SONGS'

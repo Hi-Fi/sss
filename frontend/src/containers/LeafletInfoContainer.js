@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LeafletInfo from '../components/LeafletInfo';
-import {printLeaflet, storeLeafletInfo, updateCoverImage} from '../actions/leaflet'
+import {printLeaflet, storeLeafletInfo} from '../actions/leaflet'
 
 function mapStateToProps(state) {
   return {
@@ -13,9 +13,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     storeLeafletInfo: (content) => {
       dispatch(storeLeafletInfo(content))
-    },
-    updateCoverImage: (event) => {
-      dispatch(updateCoverImage(event))
     },
     printLeaflet: () => {
       dispatch(printLeaflet())
