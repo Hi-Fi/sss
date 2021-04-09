@@ -6,8 +6,7 @@ require (
 	cloud.google.com/go v0.79.0 // indirect
 	cloud.google.com/go/datastore v1.5.0 // indirect
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-gonic/gin v1.6.3
-	github.com/go-playground/validator/v10 v10.4.1 // indirect
+	github.com/gin-gonic/gin v1.7.1
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/hi-fi/sss v0.0.0-20210314192901-8e1348afa98a
 	github.com/json-iterator/go v1.1.10 // indirect
