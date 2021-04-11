@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash'
 import { INITIAL_STATE } from '../reducers/reducer_leaflet.js'
+import { toBase64 } from '../utils/helper'
 
 
 const layouts = [
@@ -52,8 +53,8 @@ const ControlledSelect = ({
     <FormControl {...props}>
       <InputLabel id={labelId}>{label}</InputLabel>
       <Controller
-        as={
-          <Select labelId={labelId} label={label}>
+        render={({ field }) =>
+          <Select labelId={labelId} label={label} {...field}>
             {children}
           </Select>
         }
@@ -85,12 +86,12 @@ const ControlledCheckbox = ({
       <Controller
         name={name}
         control={control}
-        render={(props) => (
+        render={({ field }) => (
           <Checkbox
-            {...props}
+            {...field}
             id={labelId}
-            checked={props.value}
-            onChange={(e) => props.onChange(e.target.checked)}
+            checked={field.value}
+            onChange={(e) => field.onChange(e.target.checked)}
           />
         )}
       />
@@ -100,7 +101,6 @@ const ControlledCheckbox = ({
 
 const ControlledFileUpload = ({
   name,
-  register,
   updateCoverFunc,
   currentImage,
   ...props
@@ -137,10 +137,17 @@ ControlledCheckbox.propTypes = {
   control: PropTypes.object,
 }
 
-export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeaflet, updateCoverImage }) {
+ControlledFileUpload.propTypes = {
+  name: PropTypes.string.isRequired,
+  updateCoverFunc: PropTypes.func,
+  currentImage: PropTypes.object,
+  props: PropTypes.object,
+}
+
+export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeaflet }) {
   const formDefaultValues = INITIAL_STATE.info
 
-  const { handleSubmit, control, register, submitting, watch, reset } = useForm({
+  const { handleSubmit, control, submitting, watch, reset, setValue, getValues } = useForm({
     defaultValues: leafletInfo,
   });
 
@@ -170,6 +177,21 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
 
   const useCoverImage = watch("useCoverImage")
 
+  async function updateCoverImage (event) {
+    try {
+      const coverFile = event.target.files[0]
+      const coverImageData = await toBase64(coverFile)
+      // Base64 data URL starts always with data:
+      if (coverImageData && coverImageData.length > 5 ) {
+        setValue("coverImageName", coverFile.name)
+        setValue("coverImage", coverImageData)
+        storeLeafletInfo(getValues())
+      }
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
@@ -177,9 +199,8 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
         <div>
           <Controller
             name="event"
-            as={TextField}
+            render={({ field }) => <TextField label="Event" {...field} />}
             control={control}
-            label="Event"
             defaultValue=""
           />
         </div>
@@ -193,9 +214,8 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
         <div>
           <Controller
             name="description"
-            as={TextField}
+            render={({ field }) => <TextField label="Description (e.g. date)" {...field} />}
             control={control}
-            label="Description (e.g. date)"
             defaultValue=""
           />
         </div>
@@ -272,7 +292,6 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
               <div>
                 <ControlledFileUpload
                 name="coverImageFile"
-                register={register}
                 updateCoverFunc={updateCoverImage}
                 currentImage={{name: leafletInfo.coverImageName, data: leafletInfo.coverImage}}/>
               </div>
@@ -311,5 +330,7 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
 
 LeafletInfo.propTypes = {
   printLeaflet: PropTypes.func,
-  storeLeafletInfo: PropTypes.func
+  storeLeafletInfo: PropTypes.func,
+  leafletInfo: PropTypes.object,
+  updateCoverImage: PropTypes.func,
 }

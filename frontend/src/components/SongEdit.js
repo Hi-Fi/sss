@@ -12,7 +12,7 @@ const ControlledAutocomplete = ({options, onChange, name, label, register, watch
 
 
   useEffect(() => {
-    register({ name: name });
+    register(name);
   }, [register, name]);
 
   return (
@@ -72,9 +72,8 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="title"
-            as={TextField}
+            render={({ field }) => <TextField label="Song Name" {...field} />}
             control={control}
-            label="Song Name"
             defaultValue=""
           />
         </div>
@@ -87,7 +86,7 @@ export default function SongEdit(props) {
               <Controller
                 name={`verses[${index}].lyrics`}
                 control={control}
-                as={TextField}
+                render={({ field }) => <TextField {...field} />}
                 multiline
                 defaultValue=""
               />
@@ -109,9 +108,8 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="extraInfo"
-            as={TextField}
+            render={({ field }) => <TextField label="Extra Info" {...field} />}
             control={control}
-            label="Extra Info"
             multiline
             defaultValue=""
           />
@@ -120,9 +118,8 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="melody.melody"
-            as={TextField}
+            render={({ field }) => <TextField label="Melody" {...field} />}
             control={control}
-            label="Melody"
             defaultValue=""
           />
         </div>
