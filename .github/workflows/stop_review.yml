@@ -18,3 +18,24 @@ jobs:
         env:
           CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT }}
         run: gcloud app versions delete pr-${{ github.event.pull_request.number }} -q
+
+      - name: Disable frontend review environment
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: PR-${{ github.event.pull_request.number }}
+          onlyRemoveDeployments: true
+
+      - name: Disable print review environment
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: PR-${{ github.event.pull_request.number }}-print
+          onlyRemoveDeployments: true
+
+      - name: Disable core review environment
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: PR-${{ github.event.pull_request.number }}-core
+          onlyRemoveDeployments: true
