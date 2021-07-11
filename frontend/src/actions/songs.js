@@ -16,7 +16,7 @@ export const SAVE_SONG = 'SAVE_SONG'
 export const SAVE_SONG_SUCCESS = 'SAVE_SONG_SUCCESS';
 export const SAVE_SONG_FAILURE = 'SAVE_SONG_FAILURE';
 
-//Fetch post
+//Fetch song
 export const FETCH_SONG = 'FETCH_SONG';
 export const FETCH_SONG_SUCCESS = 'FETCH_SONG_SUCCESS';
 export const FETCH_SONG_FAILURE = 'FETCH_SONG_FAILURE';

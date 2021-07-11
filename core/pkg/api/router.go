@@ -11,9 +11,14 @@ import (
 
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowCredentials = true
+	corsConfig.AddAllowMethods("OPTIONS")
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowHeaders = []string{"Authorization", "content-type"}
 	docs.SwaggerInfo.Title = "Sitsitsit API"
 	r := gin.New()
-	r.Use(cors.Default())
+	r.Use(cors.New(corsConfig))
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	// if gin.Mode() == gin.DebugMode {

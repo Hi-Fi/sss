@@ -233,3 +233,11 @@ color:#fff;
     text-align: center;
     vertical-align: bottom;
 }
+
+.header {
+    text-align: right;
+}
+
+.header .button {
+    margin: 10px;
+}

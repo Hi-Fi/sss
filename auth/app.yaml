@@ -1,0 +1,5 @@
+runtime: go115
+service: auth
+
+env_variables:
+  GIN_MODE: "release"

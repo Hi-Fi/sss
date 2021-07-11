@@ -24,7 +24,6 @@ type CacheItem struct {
 var (
 	cache  = Cache{}
 	lock   = sync.Mutex{}
-	once   sync.Once
 	client *datastore.Client
 	ctx    *context.Context
 )
