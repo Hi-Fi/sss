@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/datastore v1.5.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-gonic/gin v1.7.2
+	github.com/gin-gonic/gin v1.7.3
 	github.com/go-openapi/spec v0.20.3 // indirect
 	github.com/google/uuid v1.2.0
 	github.com/hi-fi/sss v0.0.0-20210314192901-8e1348afa98a
