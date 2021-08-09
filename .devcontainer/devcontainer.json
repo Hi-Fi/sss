@@ -38,6 +38,9 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "go version",
 
+  "containerEnv": {
+    "GIT_EDITOR": "vi"
+  },
   // Docker from docker
   "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
   "overrideCommand": false,

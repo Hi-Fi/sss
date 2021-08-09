@@ -43,7 +43,7 @@ jobs:
 
   deploy-pr:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
     needs: test-build
     environment:
       name: PR-${{ github.event.pull_request.number }}-core

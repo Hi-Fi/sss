@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useForm, Controller } from "react-hook-form"
 import TextField from '@material-ui/core/TextField'
 import { Button } from '@material-ui/core';
@@ -9,7 +10,7 @@ const defaultValues = {
   email: ""
 }
 
-const RegisterUser = ({ registration, registerUser, registrationErrors }) => {
+const RegisterUser = ({ registerUser, registrationErrors }) => {
   const { handleSubmit, control, reset, submitting, formState: { errors } } = useForm(defaultValues);
 
   return (
@@ -64,5 +65,10 @@ const RegisterUser = ({ registration, registerUser, registrationErrors }) => {
     </div>
   )
 };
+
+RegisterUser.propTypes = {
+  registerUser: PropTypes.func,
+  registrationErrors: PropTypes.object
+}
 
 export default RegisterUser;

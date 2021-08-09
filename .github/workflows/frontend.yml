@@ -57,7 +57,7 @@ jobs:
 
   deploy-pr:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
     needs: test-build
     environment:
       name: PR-${{ github.event.pull_request.number }}
@@ -79,7 +79,7 @@ jobs:
           paths: print .github/workflows/print.yml
 
       - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
-        id: changed-print
+        id: changed-auth
         with:
           paths: auth .github/workflows/auth.yml
 

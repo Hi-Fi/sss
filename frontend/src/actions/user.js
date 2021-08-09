@@ -1,5 +1,5 @@
 import axios from "axios";
-import { closeModal, INFO_MODAL, openCustomModal, openModal } from "./modal";
+import { closeModal, openCustomModal } from "./modal";
 
 //User actions
 export const LOGIN_USER = 'LOGIN_USER';
@@ -15,6 +15,7 @@ export const REGISTER_USER_FAILED = 'REGISTER_USER_FAILED';
 const ROOT_URL = process.env.REACT_APP_AUTH_API_BASE_URL
 
 export function loginUser(username, password) {
+  // eslint-disable-next-line no-unused-vars
   return async function loginUserThunk(dispatch, getState) {
     dispatch({
       type: LOGIN_USER
@@ -66,6 +67,7 @@ export function logoutUser() {
 }
 
 export function registerUser(data) {
+  // eslint-disable-next-line no-unused-vars
   return async function registerUserThunk(dispatch, getState) {
     dispatch({
       type: REGISTER_USER
