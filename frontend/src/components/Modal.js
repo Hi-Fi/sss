@@ -1,13 +1,13 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { CUSTOM_MODAL } from '../actions/modal'
-import User from '../pages/User';
+import Button from '@material-ui/core/Button';
 
 const modalContent = (modal, closeModal) => (
   <div className="modal">
-    <div className={`title ${modal.type}`} >{modal.title}</div>
+    <div className={`title ${modal.type}`} >{modal.title} <Button onClick={() => closeModal(modal.id)}>X</Button></div>
     {modal && (modal.type == CUSTOM_MODAL && modal.custom || <div className="description">{modal.text}</div>)}
-    <button className="button" onClick={() => closeModal(modal.id)}>Close</button>
+    {modal && (modal.type != CUSTOM_MODAL && <Button onClick={() => closeModal(modal.id)}>Close</Button>)}
   </div>
 )
 
@@ -17,7 +17,6 @@ const Modal = ({ modal, closeModal }) => {
   if (!modalOK) {
     closeModal()
   }
-  modal && console.log(modal.type, CUSTOM_MODAL)
   return modalOK && createPortal(modalContent(modal, closeModal), modalRoot);
 };
 

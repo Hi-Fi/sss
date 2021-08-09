@@ -1,11 +1,19 @@
+import { Button } from '@material-ui/core';
 import React from 'react';
+import RegisterContainer from '../containers/RegisterContainer';
 import UserContainer from '../containers/UserContainer'
 
 const Header = ({ user, loginForm, registerForm, logoutUser }) => (
   <div className="header">
-    {!user && <button className="button" onClick={() => loginForm(<UserContainer />)}>Login</button>}
-    {user && <button className="button" onClick={() => logoutUser()}>Logout</button>}
-    <button className="button" onClick={() => registerForm()}>Register</button>
+    {user && (
+      <Button className="button" onClick={() => logoutUser()}>Logout</Button>
+    )}
+    {!user &&
+      <div>
+        <Button className="button" onClick={() => loginForm(<UserContainer />)}>Login</Button>
+        <Button className="button" onClick={() => registerForm(<RegisterContainer />)}>Register</Button>
+      </div>
+    }
   </div>
 );
 

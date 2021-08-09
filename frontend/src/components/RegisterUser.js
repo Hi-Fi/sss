@@ -5,39 +5,55 @@ import { Button } from '@material-ui/core';
 
 const defaultValues = {
   username: "",
-  password: ""
+  password: "",
+  email: ""
 }
 
-const loginPage = (user, loginUser) => {
+const RegisterUser = ({ registration, registerUser, registrationErrors }) => {
   const { handleSubmit, control, reset, submitting, formState: { errors } } = useForm(defaultValues);
+
   return (
     <div className="user">
-      <form onSubmit={handleSubmit(loginUser)}>
+      <form onSubmit={handleSubmit(registerUser)}>
         <div>
           <div>
             <Controller
               name="username"
               render={({ field }) => <TextField label="Username" {...field} />}
               control={control}
-              rules={{ required: true}}
+              rules={{ required: true }}
               defaultValue=""
             />
             {errors.username && <div>Username is required</div>}
+
           </div>
           <div>
             <Controller
               name="password"
               render={({ field }) => <TextField label="Password" type="password" {...field} />}
               control={control}
-              rules={{ required: true}}
+              rules={{ required: true }}
               defaultValue=""
             />
             {errors.password && <div>Password is required</div>}
+
+          </div>
+          <div>
+            <Controller
+              name="email"
+              render={({ field }) => <TextField label="Email" {...field} />}
+              control={control}
+              rules={{ required: true }}
+              defaultValue=""
+            />
+            {errors.email && <div>Email is required</div>}
+
           </div>
 
-          <div>{user.userLoginErrors}</div>
+          <div>{registrationErrors}</div>
+
           <Button type="submit" disabled={submitting}>
-            Login
+            Register
           </Button>
           <Button type="button" disabled={submitting} onClick={() => reset(defaultValues)}>
             Reset
@@ -47,16 +63,6 @@ const loginPage = (user, loginUser) => {
       </form>
     </div>
   )
-}
-
-const loggedInPage = (user) => (
-  <div className="user">
-    <div>user {user.user.username}</div>
-  </div>
-)
-
-const User = ({ user, loginUser }) => {
-  return !user.user && loginPage(user, loginUser) || loggedInPage(user)
 };
 
-export default User;
+export default RegisterUser;

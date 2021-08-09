@@ -6,6 +6,5 @@ export function setToken(token) {
 }
 
 export function removeToken() {
-  console.log("Removing token")
   delete axios.defaults.headers.common['Authorization'];
 }

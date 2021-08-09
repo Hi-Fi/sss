@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import Header from '../components/Header.js';
-import { registerUser, loginForm, logoutUser } from '../actions/user.js';
+import { registerForm, loginForm, logoutUser } from '../actions/user.js';
 
 const mapStateToProps = (state) => {
   return {
@@ -10,8 +10,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    registerForm: () => {
-      dispatch(registerUser())
+    registerForm: (content) => {
+      dispatch(registerForm(content))
     },
     loginForm: (content) => {
       dispatch(loginForm(content))
