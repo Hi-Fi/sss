@@ -17,6 +17,7 @@ defaults:
 env:
   REACT_APP_BACKEND_API_BASE_URL: https://api-dot-sitsitsit-dev.ey.r.appspot.com
   REACT_APP_PRINT_API_BASE_URL: https://print-dot-sitsitsit-dev.ey.r.appspot.com
+  REACT_APP_AUTH_API_BASE_URL: https://auth-dot-sitsitsit-dev.ey.r.appspot.com
 
 jobs:
   test-build:
@@ -56,7 +57,7 @@ jobs:
 
   deploy-pr:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
     needs: test-build
     environment:
       name: PR-${{ github.event.pull_request.number }}
@@ -77,6 +78,11 @@ jobs:
         with:
           paths: print .github/workflows/print.yml
 
+      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+        id: changed-auth
+        with:
+          paths: auth .github/workflows/auth.yml
+
       - name: Set PR core URL
         if: steps.changed-core.outputs.changed == 'true' && github.event_name == 'pull_request'
         run: |
@@ -86,6 +92,11 @@ jobs:
         if: steps.changed-print.outputs.changed == 'true' && github.event_name == 'pull_request'
         run: |
           echo "REACT_APP_PRINT_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-print-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+
+      - name: Set PR auth URL
+        if: steps.changed-auth.outputs.changed == 'true' && github.event_name == 'pull_request'
+        run: |
+          echo "REACT_APP_AUTH_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-auth-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
 
       - name: Build UI
         run: |
@@ -108,7 +119,7 @@ jobs:
     environment:
       name: Production
       url: ${{ steps.deploy_prod.outputs.url }}
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
 

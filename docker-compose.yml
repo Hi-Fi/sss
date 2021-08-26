@@ -31,7 +31,7 @@ services:
     environment:
       DEV: 1
     volumes:
-      - ./print/:/opt/code
+      - ${LOCAL_WORKSPACE_FOLDER}/print/:/opt/code
     ports:
       - "5001:5000"
   core:
@@ -41,12 +41,27 @@ services:
     environment:
       DEV: 1
     volumes:
-      - ./core/:/opt/code
+      - ${LOCAL_WORKSPACE_FOLDER}/core/:/opt/code
     ports:
       - "5000:5000"
     environment:
       GOOGLE_CLOUD_PROJECT: dummy-emulator-datastore-project
       DATASTORE_EMULATOR_HOST: datastore_emulator:8081
+
+  auth:
+    build:
+      context: ./dev
+      dockerfile: go.Dockerfile
+    environment:
+      DEV: 1
+    volumes:
+      - ${LOCAL_WORKSPACE_FOLDER}/auth/:/opt/code
+    ports:
+      - "5002:5000"
+    environment:
+      GOOGLE_CLOUD_PROJECT: dummy-emulator-datastore-project
+      DATASTORE_EMULATOR_HOST: datastore_emulator:8081
+
   ui:
     build:
       context: ./dev
@@ -54,8 +69,9 @@ services:
     environment:
       REACT_APP_BACKEND_API_BASE_URL: http://localhost:5000
       REACT_APP_PRINT_API_BASE_URL: http://localhost:5001
+      REACT_APP_AUTH_API_BASE_URL: http://localhost:5002
     volumes:
-      - ./frontend/:/opt/code
+      - ${LOCAL_WORKSPACE_FOLDER}/frontend/:/opt/code
     ports:
       - "3000:3000"
 

@@ -18,8 +18,13 @@ import (
 var router *gin.Engine
 
 func main() {
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowCredentials = true
+	corsConfig.AddAllowMethods("OPTIONS")
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowHeaders = []string{"Authorization", "content-type"}
 	router = gin.New()
-	router.Use(cors.Default())
+	router.Use(cors.New(corsConfig))
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 

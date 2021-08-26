@@ -1,0 +1,82 @@
+name: sss-auth
+
+on:
+  pull_request:
+    paths:
+      - "auth/**"
+      - ".github/workflows/auth.yml"
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: ./auth
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Test
+        run: |
+          make ensure
+          make test
+
+      - name: Build
+        run: |
+          make build
+
+  deploy-pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    needs: test-build
+    environment:
+      name: PR-${{ github.event.pull_request.number }}-auth
+      url: ${{ steps.deploy_review.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy review
+        id: deploy_review
+        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./auth
+          version: pr-${{ github.event.pull_request.number }}
+          promote: false
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: test-build
+    if: github.event_name == 'push'
+    environment:
+      name: Production-auth
+      url: ${{ steps.deploy_prod.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy production
+        id: deploy_prod
+        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          working_directory: ./auth
+          version: ${{ github.sha }}
+          promote: true

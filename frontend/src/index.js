@@ -8,6 +8,7 @@ import configureStore from './store/configureStore.js';
 import TabsContainer from './containers/TabsContainer'
 import Backdrop from './containers/BackdropContainer'
 import Modal from './containers/ModalContainer'
+import Header from './containers/HeaderContainer'
 
 import history from './utils/history'
 import {loadFromLocalStorage, saveToLocalStorage} from './store/localStorage'
@@ -17,6 +18,7 @@ store.subscribe(() => saveToLocalStorage(store.getState()))
 
 ReactDOM.render(
   <Provider store={store}>
+      <Header />
       <Router history={history}>
         <div>
           <Route exact path='/' component={TabsContainer} />
