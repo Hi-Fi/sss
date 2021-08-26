@@ -1,6 +1,6 @@
 module github.com/hi-fi/sss
 
-go 1.15
+go 1.16
 
 require (
 	cloud.google.com/go/datastore v1.4.0

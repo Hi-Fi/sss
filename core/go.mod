@@ -1,6 +1,6 @@
 module github.com/hi-fi/sss/core
 
-go 1.15
+go 1.16
 
 require (
 	cloud.google.com/go v0.93.3 // indirect
