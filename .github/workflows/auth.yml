@@ -52,6 +52,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Add secrets
+        working-directory: ./auth
+        run: yq e -i '.env_variables.JWT_SECRET_KEY = "testsecret"' app.yaml
+
       - name: Deploy review
         id: deploy_review
         uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
@@ -71,6 +75,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Add secrets
+        working-directory: ./auth
+        run: yq e -i '.env_variables.JWT_SECRET_KEY = "${{ secrets.DEV_JWT_SECRET_KEY }}"' app.yaml
 
       - name: Deploy production
         id: deploy_prod

@@ -2,4 +2,4 @@ runtime: go116
 service: auth
 
 env_variables:
-  GIN_MODE: "release"
+  GIN_MODE: release

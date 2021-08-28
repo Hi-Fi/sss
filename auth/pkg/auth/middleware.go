@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hi-fi/sss/auth/pkg/model"
-	"google.golang.org/appengine"
 )
 
 func extractToken(r *http.Request) string {
@@ -20,7 +19,7 @@ func extractToken(r *http.Request) string {
 
 func ParseTokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, claims, _ := ValidateToken(appengine.NewContext(c.Request), extractToken(c.Request))
+		_, claims, _ := ValidateToken(extractToken(c.Request))
 		c.Set("claims", claims)
 		c.Next()
 	}
