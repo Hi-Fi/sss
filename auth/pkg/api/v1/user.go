@@ -5,7 +5,6 @@ import (
 	"github.com/hi-fi/sss/auth/pkg/auth"
 	"github.com/hi-fi/sss/auth/pkg/model"
 	"github.com/hi-fi/sss/auth/pkg/orm"
-	"google.golang.org/appengine"
 )
 
 // @Summary Get information of current user
@@ -39,7 +38,7 @@ func CurrentUser(c *gin.Context) {
 func Validate(c *gin.Context) {
 	token, err := c.Cookie("token")
 	if err == nil {
-		_, _, err = auth.ValidateToken(appengine.NewContext(c.Request), token)
+		_, _, err = auth.ValidateToken(token)
 	}
 
 	if err != nil {
@@ -58,7 +57,7 @@ func Register(c *gin.Context) {
 	var callingUser model.User
 	token, err := c.Cookie("token")
 	if err == nil {
-		callingUser, _ = auth.ValidateUser(appengine.NewContext(c.Request), token)
+		callingUser, _ = auth.ValidateUser(token)
 	}
 	user := model.User{}
 	c.BindJSON(&user)
@@ -82,7 +81,7 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	credentials := model.Credentials{}
 	c.BindJSON(&credentials)
-	user, err := auth.Login(appengine.NewContext(c.Request), credentials)
+	user, err := auth.Login(credentials)
 	if err == nil {
 		c.JSON(200, user)
 	} else {

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/datastore"
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
 type User struct {
