@@ -19,7 +19,7 @@ func extractToken(r *http.Request) string {
 
 func ParseTokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, claims, _ := ValidateToken(extractToken(c.Request))
+		_, claims, _ := ValidateToken(c, extractToken(c.Request))
 		c.Set("claims", claims)
 		c.Next()
 	}

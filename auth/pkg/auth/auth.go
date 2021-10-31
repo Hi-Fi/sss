@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -9,13 +10,19 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/hi-fi/sss/auth/pkg/model"
 	"github.com/hi-fi/sss/auth/pkg/orm"
+	"go.opentelemetry.io/otel"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
+var (
+	jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
+	tracer = otel.GetTracerProvider().Tracer("auth")
+)
 
-func ValidateToken(tokenString string) (tokenValidation model.Validation, claims model.Claims, err error) {
+func ValidateToken(ctx context.Context, tokenString string) (tokenValidation model.Validation, claims model.Claims, err error) {
 	var token *jwt.Token
+	_, span := tracer.Start(ctx, "ValidateToken")
+	defer span.End()
 	token, err = jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
@@ -31,22 +38,26 @@ func ValidateToken(tokenString string) (tokenValidation model.Validation, claims
 	return
 }
 
-func ValidateUser(tokenString string) (user model.User, err error) {
-	tokenValidation, claims, err := ValidateToken(tokenString)
+func ValidateUser(ctx context.Context, tokenString string) (user model.User, err error) {
+	spanCtx, span := tracer.Start(ctx, "ValidateUser")
+	defer span.End()
+	tokenValidation, claims, err := ValidateToken(spanCtx, tokenString)
 	if tokenValidation.TokenValid {
-		user, err = orm.GetUserWithId(claims.ID)
+		user, err = orm.GetUserWithId(spanCtx, claims.ID)
 	}
 	return
 }
 
-func Login(credentials model.Credentials) (user model.User, err error) {
+func Login(ctx context.Context, credentials model.Credentials) (user model.User, err error) {
 	// https://github.com/golang/go/issues/9859
 	var token model.Token
-	user, err = orm.GetUser(model.User{Credentials: model.Credentials{Username: credentials.Username}})
+	spanCtx, span := tracer.Start(ctx, "Login")
+	defer span.End()
+	user, err = orm.GetUser(spanCtx, model.User{Credentials: model.Credentials{Username: credentials.Username}})
 	if err == nil {
 		err = bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(credentials.Password))
 		if err == nil {
-			token, err = generateJwtToken(user)
+			token, err = generateJwtToken(spanCtx, user)
 		}
 	} else {
 		log.Printf("Failed to get user. Error: %v", err)
@@ -56,9 +67,11 @@ func Login(credentials model.Credentials) (user model.User, err error) {
 	return
 }
 
-func generateJwtToken(user model.User) (token model.Token, err error) {
+func generateJwtToken(ctx context.Context, user model.User) (token model.Token, err error) {
 	var tokenValue *jwt.Token
 	var tokenString string
+	_, span := tracer.Start(ctx, "generateJwtToken")
+	defer span.End()
 	expirationTime := time.Now().Add(5 * time.Minute)
 	claims := &model.Claims{
 		ID:       user.ID,

@@ -14,7 +14,7 @@ import (
 // @Failure 500 {string} string
 // @Router /api/v1/songs [get]
 func GetSongs(c *gin.Context) {
-	songs, _ := orm.GetSongs()
+	songs, _ := orm.GetSongs(c.Request.Context())
 	c.JSON(200, songs)
 }
 
@@ -29,7 +29,7 @@ func GetUpdatedSongs(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(500, err)
 	}
-	songs, err := orm.GetUpdatedSongs(fromTime)
+	songs, err := orm.GetUpdatedSongs(c.Request.Context(), fromTime)
 	if err != nil {
 		c.AbortWithError(500, err)
 	}
@@ -43,7 +43,8 @@ func GetUpdatedSongs(c *gin.Context) {
 // @Failure 500 {string} string
 // @Router /api/v1/song/{id} [post]
 func GetSong(c *gin.Context) {
-	song, err := orm.GetSong(c.Param("id"))
+
+	song, err := orm.GetSong(c.Request.Context(), c.Param("id"))
 	if err == nil {
 		c.JSON(200, song)
 	} else {
@@ -76,7 +77,7 @@ func SaveSong(c *gin.Context) {
 	song := model.Song{}
 	c.BindJSON(&song)
 	song.Enrich()
-	orm.SaveSong(&song)
+	orm.SaveSong(c.Request.Context(), &song)
 	c.JSON(200, song)
 }
 
@@ -89,6 +90,6 @@ func EditSong(c *gin.Context) {
 	song := model.Song{}
 	c.BindJSON(&song)
 	song.Enrich()
-	orm.SaveSong(&song)
+	orm.SaveSong(c.Request.Context(), &song)
 	c.JSON(200, song)
 }

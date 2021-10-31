@@ -1,24 +1,29 @@
 package pdf
 
 import (
-	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"go.opentelemetry.io/otel"
 )
 
-func makePrintableBooklet(pages *bytes.Buffer) (printablePages bytes.Buffer) {
+var bookletTracer = otel.GetTracerProvider().Tracer("booklet")
+
+func makePrintableBooklet(ctx context.Context, pages *bytes.Buffer) (printablePages bytes.Buffer, err error) {
+	_, span := bookletTracer.Start(ctx, "makePrintableBooklet")
+	defer span.End()
 	config := pdfcpu.NewDefaultConfiguration()
 	pageCount, _ := api.PageCount(bytes.NewReader(pages.Bytes()), config)
 	// Add empty pages to make leaflet to be printable
 	if pageCount%4 > 0 {
 		for i := 0; i < (4 - pageCount%4); i++ {
 			printablePages.Reset()
-			err := api.InsertPages(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), []string{fmt.Sprintf("%d", pageCount)}, false, config)
+			err := api.InsertPages(bytes.NewReader(pages.Bytes()), &printablePages, []string{fmt.Sprintf("%d", pageCount)}, false, config)
 			if err != nil {
-				fmt.Printf("Error: %v", err)
+				fmt.Printf("Error at InsertPages: %v\n", err)
 			}
 			*pages = printablePages
 		}
@@ -26,14 +31,20 @@ func makePrintableBooklet(pages *bytes.Buffer) (printablePages bytes.Buffer) {
 	pageCount, _ = api.PageCount(bytes.NewReader(pages.Bytes()), config)
 
 	printablePages.Reset()
-	api.Collect(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), calculatePageOrder(pageCount), config)
+	err = api.Collect(bytes.NewReader(pages.Bytes()), &printablePages, calculatePageOrder(pageCount), config)
+	if err != nil {
+		fmt.Printf("Error at Collect: %v\n", err)
+	}
 	*pages = printablePages
 	printablePages.Reset()
 	nupConfig, err := pdfcpu.PDFGridConfig(1, 2, "")
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Printf("Error at PDFGridConfig: %v\n", err)
 	}
-	api.NUp(bytes.NewReader(pages.Bytes()), bufio.NewWriter(&printablePages), nil, nil, nupConfig, config)
+	err = api.NUp(bytes.NewReader(pages.Bytes()), &printablePages, nil, nil, nupConfig, config)
+	if err != nil {
+		fmt.Printf("Error at NUp: %v\n", err)
+	}
 	return
 }
 

@@ -14,9 +14,9 @@ clean:
 	git clean -Xdf
 
 test: ${GOPATH}/bin/golint
-	GO111MODULE=on go test . -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
-	GO111MODULE=off ${GOPATH}/bin/golint -set_exit_status .  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
-	GO111MODULE=on go vet -mod vendor .
+	go test . -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
+	${GOPATH}/bin/golint -set_exit_status .  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
+	go vet -mod vendor .
 	../.hack/gofmt.sh
 	git diff --exit-code go.mod go.sum
 
@@ -24,19 +24,19 @@ gofmt:
 	./.hack/gofmt.sh
 
 ensure:
-	GO111MODULE=on go mod tidy
-	GO111MODULE=on go mod vendor
+	go mod tidy
+	go mod vendor
 
 run: ${GOPATH}/bin/gin
 	${GOPATH}/bin/gin -i -p 5000 main.go
 
 build-linux-amd64:
 	rm -rf bin/linux/$(OPERATOR_NAME)
-	GO111MODULE=on GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) .
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
-	GO111MODULE=on go build -v -i -o bin/$(OPERATOR_NAME) .
+	go build -v -i -o bin/$(OPERATOR_NAME) .
 
 build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
@@ -45,10 +45,10 @@ swagger: ${GOPATH}/bin/swag
 	${GOPATH}/bin/swag init --output pkg/api/docs
 
 ${GOPATH}/bin/gin:
-	GO111MODULE=off go get -u github.com/codegangsta/gin
+	go install github.com/codegangsta/gin@latest
 
 ${GOPATH}/bin/golint:
-	GO111MODULE=off go get -u golang.org/x/lint/golint
+	go install golang.org/x/lint/golint@latest
 
 ${GOPATH}/bin/swag:
-	GO111MODULE=off go get -u github.com/swaggo/swag/cmd/swag
+	go install github.com/swaggo/swag/cmd/swag@latest

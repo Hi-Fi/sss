@@ -20,7 +20,7 @@ func CurrentUser(c *gin.Context) {
 	claims, exists := c.Get("claims")
 
 	if exists {
-		user, err = orm.GetUserWithId(claims.(model.Claims).ID)
+		user, err = orm.GetUserWithId(c, claims.(model.Claims).ID)
 		if err == nil {
 			c.JSON(200, user)
 			return
@@ -38,7 +38,7 @@ func CurrentUser(c *gin.Context) {
 func Validate(c *gin.Context) {
 	token, err := c.Cookie("token")
 	if err == nil {
-		_, _, err = auth.ValidateToken(token)
+		_, _, err = auth.ValidateToken(c, token)
 	}
 
 	if err != nil {
@@ -57,7 +57,7 @@ func Register(c *gin.Context) {
 	var callingUser model.User
 	token, err := c.Cookie("token")
 	if err == nil {
-		callingUser, _ = auth.ValidateUser(token)
+		callingUser, _ = auth.ValidateUser(c, token)
 	}
 	user := model.User{}
 	c.BindJSON(&user)
@@ -65,7 +65,7 @@ func Register(c *gin.Context) {
 	if !callingUser.IsAdmin {
 		user.IsAdmin = false
 	}
-	err = orm.SaveUser(&user)
+	err = orm.SaveUser(c, &user)
 	if err == nil {
 		c.JSON(200, user)
 	} else {
@@ -81,7 +81,7 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	credentials := model.Credentials{}
 	c.BindJSON(&credentials)
-	user, err := auth.Login(credentials)
+	user, err := auth.Login(c, credentials)
 	if err == nil {
 		c.JSON(200, user)
 	} else {

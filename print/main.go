@@ -9,6 +9,8 @@ import (
 
 	"github.com/hi-fi/sss/print/pkg/model"
 	"github.com/hi-fi/sss/print/pkg/pdf"
+	"github.com/hi-fi/sss/print/pkg/trace"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -18,12 +20,16 @@ import (
 var router *gin.Engine
 
 func main() {
+	trace.EnableTracing()
+	defer trace.StopTracing()
+
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowCredentials = true
 	corsConfig.AddAllowMethods("OPTIONS")
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowHeaders = []string{"Authorization", "content-type"}
 	router = gin.New()
+	router.Use(otelgin.Middleware("print"))
 	router.Use(cors.New(corsConfig))
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
@@ -43,7 +49,7 @@ func main() {
 				return
 			}
 			model.CalculatePageSize(&leafletData)
-			b := pdf.CreateLeaflet(leafletData)
+			b := pdf.CreateLeaflet(ctx.Request.Context(), leafletData)
 			downloadName := time.Now().UTC().Format("leaflet-20060102150405.pdf")
 			ctx.Header("Content-Description", "File Transfer")
 			ctx.Header("Content-Disposition", "attachment; filename="+downloadName)

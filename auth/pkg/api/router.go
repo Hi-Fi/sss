@@ -8,12 +8,14 @@ import (
 	"github.com/hi-fi/sss/auth/pkg/auth"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
 	docs.SwaggerInfo.Title = "Sitsitsit Authentication and Authorization API"
 	r := gin.New()
+	r.Use(otelgin.Middleware("auth"))
 	r.Use(cors.Default())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
