@@ -16,7 +16,7 @@
         "patch"
       ],
       "groupName": "go non-major dependencies",
-      "groupSlug": "go-non-minor-patch"
+      "groupSlug": "go-minor-patch"
     },
     {
       "matchDatasources": [
@@ -27,7 +27,30 @@
         "patch"
       ],
       "groupName": "npm non-major dependencies",
-      "groupSlug": "npm-non-minor-patch"
+      "groupSlug": "npm-minor-patch"
+    },
+    {
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "npm non-major devDependencies",
+      "groupSlug": "npm-dev-minor-patch"
+    },
+    {
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "npm major devDependencies",
+      "groupSlug": "npm-dev-major"
     },
     {
       "matchUpdateTypes": [
@@ -42,6 +65,13 @@
       ],
       "groupName": "github actions",
       "groupSlug": "gha-update"
+    },
+    {
+      "matchPackageNames": [
+        "github.com/hi-fi/sss"
+      ],
+      "groupName": "Disable own master updates to prevent update loop",
+      "enabled": false
     }
   ]
 }

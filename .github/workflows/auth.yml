@@ -56,11 +56,16 @@ jobs:
         working-directory: ./auth
         run: yq e -i '.env_variables.JWT_SECRET_KEY = "testsecret"' app.yaml
 
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
         with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./auth
           version: pr-${{ github.event.pull_request.number }}
           promote: false
@@ -80,11 +85,16 @@ jobs:
         working-directory: ./auth
         run: yq e -i '.env_variables.JWT_SECRET_KEY = "${{ secrets.DEV_JWT_SECRET_KEY }}"' app.yaml
 
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
         with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./auth
           version: ${{ github.sha }}
           promote: true
