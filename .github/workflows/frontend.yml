@@ -68,17 +68,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+      - uses: marceloprado/has-changed-path@8a75b456df5a44a8110dcaa3111c9acc6249ed15
         id: changed-core
         with:
           paths: core .github/workflows/core.yml
 
-      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+      - uses: marceloprado/has-changed-path@8a75b456df5a44a8110dcaa3111c9acc6249ed15
         id: changed-print
         with:
           paths: print .github/workflows/print.yml
 
-      - uses: marceloprado/has-changed-path@0ffbcfc95a9a2976ba454d8e8687bb49f989f721 # v1.0
+      - uses: marceloprado/has-changed-path@8a75b456df5a44a8110dcaa3111c9acc6249ed15
         id: changed-auth
         with:
           paths: auth .github/workflows/auth.yml
@@ -103,11 +103,16 @@ jobs:
           yarn
           yarn build
 
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
         with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./frontend
           version: pr-${{ github.event.pull_request.number }}
           promote: false
@@ -128,11 +133,16 @@ jobs:
           yarn
           yarn build
 
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@e3009e47609565a194033fbac6b6df2fd71fb6bf #0.4.0
+        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
         with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
           working_directory: ./frontend
           version: ${{ github.sha }}
           promote: true

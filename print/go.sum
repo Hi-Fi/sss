@@ -177,8 +177,8 @@ github.com/hhrutter/lzw v0.0.0-20190829144645-6f07a24e8650 h1:1yY/RQWNSBjJe2GDCI
 github.com/hhrutter/lzw v0.0.0-20190829144645-6f07a24e8650/go.mod h1:yJBvOcu1wLQ9q9XZmfiPfur+3dQJuIhYQsMGLYcItZk=
 github.com/hhrutter/tiff v0.0.0-20190829141212-736cae8d0bc7 h1:o1wMw7uTNyA58IlEdDpxIrtFHTgnvYzA8sCQz8luv94=
 github.com/hhrutter/tiff v0.0.0-20190829141212-736cae8d0bc7/go.mod h1:WkUxfS2JUu3qPo6tRld7ISb8HiC0gVSU91kooBMDVok=
-github.com/hi-fi/sss v0.0.0-20210605192203-7ac807842543 h1:vXKPqpwLmfqzbaZPKZJAq4YraHIRAMN03qKGCyTmBsM=
-github.com/hi-fi/sss v0.0.0-20210605192203-7ac807842543/go.mod h1:SuThjqhXiz6Ca8wTobvoMXNI2Mpra0BnzNMUgfLUasY=
+github.com/hi-fi/sss v0.0.0-20220226110340-9e145cdec7aa h1:DLzA8p8HMM+IWYlHMkYJGbr2g92fpX6k6zdu8hPFuVQ=
+github.com/hi-fi/sss v0.0.0-20220226110340-9e145cdec7aa/go.mod h1:3N/GOCIaDPoVdQkMmQfAU9yToZNu6ZRTSu3D2iYVER4=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/json-iterator/go v1.1.7/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
