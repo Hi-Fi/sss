@@ -1,5 +1,6 @@
 {
   "extends": [
+    ":preserveSemverRanges",
     "config:base",
     "group:allNonMajor",
     "helpers:pinGitHubActionDigests",
@@ -27,6 +28,20 @@
       ],
       "groupName": "npm non-major dependencies",
       "groupSlug": "npm-non-minor-patch"
+    },
+    {
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "groupName": "digest referred dependencies",
+      "groupSlug": "digest-patch"
+    },
+    {
+      "matchUpdateTypes": [
+        "action"
+      ],
+      "groupName": "github actions",
+      "groupSlug": "gha-update"
     }
   ]
 }
