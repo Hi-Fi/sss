@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    "helpers:pinGitHubActionDigests",
+    "preview:dockerCompose"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "go"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "go non-major dependencies",
+      "groupSlug": "go-non-minor-patch"
+    },
+    {
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "npm non-major dependencies",
+      "groupSlug": "npm-non-minor-patch"
+    }
+  ]
+}
