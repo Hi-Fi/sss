@@ -9,7 +9,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/google/uuid v1.3.0
-	github.com/hi-fi/sss v0.0.0-20210605192203-7ac807842543
+	github.com/hi-fi/sss v0.0.0-20220226083449-22fd4366d661
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
