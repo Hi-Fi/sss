@@ -16,5 +16,4 @@ require (
 	github.com/swaggo/swag v1.8.0
 	github.com/ugorji/go v1.2.6 // indirect
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
-	google.golang.org/api v0.54.0 // indirect
 )
