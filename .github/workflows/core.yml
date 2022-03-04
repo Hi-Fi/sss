@@ -60,7 +60,7 @@ jobs:
 
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
+        uses: google-github-actions/deploy-appengine@93da55cdbaf1d5ed5abf4167bea6eb6fa2ce5b98
         with:
           working_directory: ./core
           version: pr-${{ github.event.pull_request.number }}
@@ -85,7 +85,7 @@ jobs:
 
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@e93940cb8e265ec9024aec36ecd56b794b8192e7
+        uses: google-github-actions/deploy-appengine@93da55cdbaf1d5ed5abf4167bea6eb6fa2ce5b98
         with:
           working_directory: ./core
           version: ${{ github.sha }}
