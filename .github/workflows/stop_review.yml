@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Stop Review
     steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@c66a06cb89c6c4ceab6ae8cb679bc07b689c243d
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Remove review version
         env:
@@ -21,21 +21,21 @@ jobs:
         run: gcloud app versions delete pr-${{ github.event.pull_request.number }} -q
 
       - name: Disable frontend review environment
-        uses: strumwolf/delete-deployment-environment@8c399c0d0b63616fd8a5b94c7e6e3e052136555e
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ github.event.pull_request.number }}
           onlyRemoveDeployments: true
 
       - name: Disable print review environment
-        uses: strumwolf/delete-deployment-environment@8c399c0d0b63616fd8a5b94c7e6e3e052136555e
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ github.event.pull_request.number }}-print
           onlyRemoveDeployments: true
 
       - name: Disable core review environment
-        uses: strumwolf/delete-deployment-environment@8c399c0d0b63616fd8a5b94c7e6e3e052136555e
+        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ github.event.pull_request.number }}-core
