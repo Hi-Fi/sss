@@ -2,24 +2,32 @@ package pdf
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 
 	"github.com/hi-fi/sss/print/pkg/model"
+	"go.opentelemetry.io/otel"
 
 	"github.com/phpdave11/gofpdf"
 )
 
-func CreateLeaflet(data model.Model) bytes.Buffer {
-	pages := createLeafletPages(data)
+var leafletTracer = otel.GetTracerProvider().Tracer("leaflet")
+
+func CreateLeaflet(ctx context.Context, data model.Model) bytes.Buffer {
+	spanCtx, span := leafletTracer.Start(ctx, "CreateLeaflet")
+	defer span.End()
+	pages := createLeafletPages(spanCtx, data)
 	switch style := data.Style; style {
 	case model.COLUMNS:
 	case model.LEAFLET, model.HIGH_LEAFLET:
-		pages = makePrintableBooklet(&pages)
+		pages, _ = makePrintableBooklet(spanCtx, &pages)
 	}
 	return pages
 }
 
-func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
+func createLeafletPages(ctx context.Context, data model.Model) (byteBuffer bytes.Buffer) {
+	_, span := leafletTracer.Start(ctx, "createLeafletPages")
+	defer span.End()
 	const (
 		margin = float64(10.0 * 2.835)
 		gutter = 8
@@ -113,6 +121,8 @@ func createLeafletPages(data model.Model) (byteBuffer bytes.Buffer) {
 		pdf.AddPage()
 	}
 	err := pdf.Output(&byteBuffer)
-	fmt.Print(err)
+	if err != nil {
+		fmt.Printf("error at Output %v\n", err)
+	}
 	return byteBuffer
 }
