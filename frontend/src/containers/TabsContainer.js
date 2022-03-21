@@ -14,6 +14,7 @@ import LeafletTabsContainer from './LeafletTabsContainer'
 import { addTab, closeTab, changeTab } from '../actions/tabs';
 import TabLabel from '../components/TabLabel'
 import SongEditContainer from './SongEditContainer';
+import { withRouter } from '../utils/router'
 
 
 const mapStateToProps = (state) => {
@@ -62,15 +63,21 @@ const styles = theme => ({
 class TabsContainer extends React.Component {
   componentDidMount() {
     // If coming directly to song, add tab to it and display tab
-    if (this.props.match.url !== this.props.openTab) {
-      this.props.match.params.id && this.props.addTab(this.props.match.params.id)
-      this.props.changeTab(this.props.match.url)
+    console.dir(this);
+    console.dir(this.props);
+    console.dir(this.router);
+    if (this.props.router.location.pathname !== this.props.openTab) {
+      this.props.router.params.id && this.props.addTab(this.props.router.params.id)
+      this.props.changeTab(this.props.router.location.pathname)
     }
   }
 
   render() {
+    console.dir(this);
+    console.dir(this.props);
+    console.dir(this.router);
     const { classes } = this.props;
-    const value = this.props.openTab || this.props.match.path
+    const value = this.props.openTab || this.props.router.location.pathname
     let currentTab = value
     if (value.startsWith("/leaflet")) {
       currentTab = "/leaflet"
@@ -111,4 +118,4 @@ TabsContainer.propTypes = {
   closeTab: PropTypes.func
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TabsContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(TabsContainer)));

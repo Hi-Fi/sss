@@ -68,7 +68,7 @@ class EnhancedTableHead extends React.Component {
               <TableCell
                 key={column.id}
                 aligh={column.numeric ? "right" : "left"}
-                padding={column.disablePadding ? 'none' : 'default'}
+                padding={column.disablePadding ? 'none' : 'normal'}
                 sortDirection={orderBy === column.id ? order : false}
               >
                 <Tooltip
@@ -203,8 +203,8 @@ class SongsList extends Component {
           nextIconButtonProps={{
             'aria-label': 'Next Page',
           }}
-          onChangePage={this.props.changePage}
-          onChangeRowsPerPage={this.props.setRowCount}
+          onPageChange={this.props.changePage}
+          onRowsPerPageChange={this.props.setRowCount}
         />
       </div>
     );
