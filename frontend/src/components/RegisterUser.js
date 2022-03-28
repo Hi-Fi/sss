@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from "react-hook-form"
 import TextField from '@material-ui/core/TextField'
 import { Button } from '@material-ui/core';
+import { registerUser as registerUserAction } from '../actions/user'
+
 
 const defaultValues = {
   username: "",
@@ -10,8 +13,12 @@ const defaultValues = {
   email: ""
 }
 
-const RegisterUser = ({ registerUser, registrationErrors }) => {
+export const RegisterUser = () => {
   const { handleSubmit, control, reset, submitting, formState: { errors } } = useForm(defaultValues);
+  const registrationErrors = useSelector((state) => state.user.userRegistrationErrors);
+  const dispatch = useDispatch();
+  const registerUser = (data) => dispatch(registerUserAction(data))
+
 
   return (
     <div className="user">
@@ -70,5 +77,3 @@ RegisterUser.propTypes = {
   registerUser: PropTypes.func,
   registrationErrors: PropTypes.object
 }
-
-export default RegisterUser;

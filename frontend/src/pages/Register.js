@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import RegisterContainer from '../containers/RegisterContainer';
+import { RegisterUser } from '../components/RegisterUser';
 
 class RegisterPage extends Component {
   render() {
     return (
       <div className='container'>
-        <RegisterContainer />
+        <RegisterUser />
       </div>
     );
   }
