@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { CUSTOM_MODAL } from '../actions/modal'
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal as closeModalAction } from '../actions/modal'
 

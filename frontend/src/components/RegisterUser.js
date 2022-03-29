@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from "react-hook-form"
-import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core';
+import TextField from '@mui/material/TextField'
+import { Button } from '@mui/material';
 import { registerUser as registerUserAction } from '../actions/user'
 
 
@@ -27,7 +27,7 @@ export const RegisterUser = () => {
           <div>
             <Controller
               name="username"
-              render={({ field }) => <TextField label="Username" {...field} />}
+              render={({ field }) => <TextField label="Username" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""
@@ -38,7 +38,7 @@ export const RegisterUser = () => {
           <div>
             <Controller
               name="password"
-              render={({ field }) => <TextField label="Password" type="password" {...field} />}
+              render={({ field }) => <TextField label="Password" type="password" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""
@@ -49,7 +49,7 @@ export const RegisterUser = () => {
           <div>
             <Controller
               name="email"
-              render={({ field }) => <TextField label="Email" {...field} />}
+              render={({ field }) => <TextField label="Email" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""

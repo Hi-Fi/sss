@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm, useFieldArray, Controller } from "react-hook-form"
-import TextField from '@material-ui/core/TextField'
-import Chip from '@material-ui/core/Chip'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Chip from '@mui/material/Chip'
+import Autocomplete from '@mui/material/Autocomplete'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
@@ -31,7 +31,7 @@ const ControlledAutocomplete = ({options, onChange, name, label, register, watch
         ))
       }
       renderInput={(params) => (
-        <TextField {...params} name={name} label={label}/>
+        <TextField {...params} name={name} label={label} variant="standard"/>
       )}
     />
   )
@@ -72,7 +72,7 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="title"
-            render={({ field }) => <TextField label="Song Name" {...field} />}
+            render={({ field }) => <TextField label="Song Name" variant="standard" {...field} />}
             control={control}
             defaultValue=""
           />
@@ -86,7 +86,7 @@ export default function SongEdit(props) {
               <Controller
                 name={`verses[${index}].lyrics`}
                 control={control}
-                render={({ field }) => <TextField {...field} />}
+                render={({ field }) => <TextField variant="standard" {...field} />}
                 multiline
                 defaultValue=""
               />
@@ -108,7 +108,7 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="extraInfo"
-            render={({ field }) => <TextField label="Extra Info" {...field} />}
+            render={({ field }) => <TextField label="Extra Info" variant="standard" {...field} />}
             control={control}
             multiline
             defaultValue=""
@@ -118,7 +118,7 @@ export default function SongEdit(props) {
         <div>
           <Controller
             name="melody.melody"
-            render={({ field }) => <TextField label="Melody" {...field} />}
+            render={({ field }) => <TextField label="Melody" variant="standard" {...field} />}
             control={control}
             defaultValue=""
           />

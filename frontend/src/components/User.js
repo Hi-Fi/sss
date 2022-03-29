@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form"
-import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core';
+import TextField from '@mui/material/TextField'
+import { Button } from '@mui/material';
 
 const defaultValues = {
   username: "",
@@ -17,7 +17,7 @@ const loginPage = (user, loginUser) => {
           <div>
             <Controller
               name="username"
-              render={({ field }) => <TextField label="Username" {...field} />}
+              render={({ field }) => <TextField label="Username" variant="standard" {...field} />}
               control={control}
               rules={{ required: true}}
               defaultValue=""
@@ -27,7 +27,7 @@ const loginPage = (user, loginUser) => {
           <div>
             <Controller
               name="password"
-              render={({ field }) => <TextField label="Password" type="password" {...field} />}
+              render={({ field }) => <TextField label="Password" type="password" variant="standard" {...field} />}
               control={control}
               rules={{ required: true}}
               defaultValue=""

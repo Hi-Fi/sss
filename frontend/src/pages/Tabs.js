@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import { default as MuiTabs } from '@material-ui/core/Tabs';
-import { default as MuiTab } from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import AppBar from '@mui/material/AppBar';
+import { default as MuiTabs } from '@mui/material/Tabs';
+import { default as MuiTab } from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 import SongsIndex from '../pages/SongsIndex';
 import { useDispatch, useSelector } from 'react-redux';
 import SongsShow from '../pages/SongShow';
@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 import SongEditContainer from '../containers/SongEditContainer';
 import LeafletTabsContainer from '../containers/LeafletTabsContainer';
 
-const AppTab = (props) => {
+const Tab = (props) => {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
@@ -26,7 +26,7 @@ const AppTab = (props) => {
   );
 }
 
-AppTab.propTypes = {
+Tab.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
@@ -58,7 +58,12 @@ export const Tabs = () => {
   return (
     <div>
       <AppBar position="static">
-        <MuiTabs value={currentTab} onChange={changeTabWithEvent}>
+        <MuiTabs
+          value={currentTab}
+          onChange={changeTabWithEvent}
+          indicatorColor="secondary"
+          textColor="inherit"
+        >
           <MuiTab label="Song list" value="/" />
           <MuiTab label="Add new song" value="/addSong" />
           <MuiTab label="Leaflet" value='/leaflet' />
@@ -67,13 +72,13 @@ export const Tabs = () => {
           };
         </MuiTabs>
       </AppBar>
-      {value === '/' && <AppTab><SongsIndex /></AppTab>}
-      {value === '/addSong' && <AppTab><SongEditContainer /></AppTab>}
-      {value.startsWith('/leaflet') && <AppTab><LeafletTabsContainer leaftletTabPath={value} /></AppTab>}
+      {value === '/' && <Tab><SongsIndex /></Tab>}
+      {value === '/addSong' && <Tab><SongEditContainer /></Tab>}
+      {value.startsWith('/leaflet') && <Tab><LeafletTabsContainer leaftletTabPath={value} /></Tab>}
 
 
       {openTabs.map((singleTab) =>
-        value === "/song/" + singleTab.id && <AppTab key={singleTab.id}><SongsShow id={singleTab.id} /></AppTab>
+        value === "/song/" + singleTab.id && <Tab key={singleTab.id}><SongsShow id={singleTab.id} /></Tab>
       )}
     </div>
   );

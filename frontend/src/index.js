@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { ThemeProvider, createTheme  } from '@mui/material/styles';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'typeface-roboto'
@@ -16,8 +17,12 @@ import { Tabs } from './pages/Tabs';
 const store = configureStore(loadFromLocalStorage());
 store.subscribe(() => saveToLocalStorage(store.getState()))
 
+const theme = createTheme();
+
+
 ReactDOM.render(
   <Provider store={store}>
+    <ThemeProvider theme={theme}>
       <Header />
       <BrowserRouter history={history}>
         <Routes>
@@ -32,4 +37,5 @@ ReactDOM.render(
       </BrowserRouter>
       <Backdrop />
       <Modal />
+      </ThemeProvider>
   </Provider>, document.getElementById('root'));
