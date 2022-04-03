@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux'
 import { useForm, Controller } from "react-hook-form"
-import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core';
+import TextField from '@mui/material/TextField'
+import { Button } from '@mui/material';
+import { registerUser as registerUserAction } from '../actions/user'
+
 
 const defaultValues = {
   username: "",
@@ -10,8 +13,12 @@ const defaultValues = {
   email: ""
 }
 
-const RegisterUser = ({ registerUser, registrationErrors }) => {
+export const RegisterUser = () => {
   const { handleSubmit, control, reset, submitting, formState: { errors } } = useForm(defaultValues);
+  const registrationErrors = useSelector((state) => state.user.userRegistrationErrors);
+  const dispatch = useDispatch();
+  const registerUser = (data) => dispatch(registerUserAction(data))
+
 
   return (
     <div className="user">
@@ -20,7 +27,7 @@ const RegisterUser = ({ registerUser, registrationErrors }) => {
           <div>
             <Controller
               name="username"
-              render={({ field }) => <TextField label="Username" {...field} />}
+              render={({ field }) => <TextField label="Username" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""
@@ -31,7 +38,7 @@ const RegisterUser = ({ registerUser, registrationErrors }) => {
           <div>
             <Controller
               name="password"
-              render={({ field }) => <TextField label="Password" type="password" {...field} />}
+              render={({ field }) => <TextField label="Password" type="password" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""
@@ -42,7 +49,7 @@ const RegisterUser = ({ registerUser, registrationErrors }) => {
           <div>
             <Controller
               name="email"
-              render={({ field }) => <TextField label="Email" {...field} />}
+              render={({ field }) => <TextField label="Email" variant="standard" {...field} />}
               control={control}
               rules={{ required: true }}
               defaultValue=""
@@ -70,5 +77,3 @@ RegisterUser.propTypes = {
   registerUser: PropTypes.func,
   registrationErrors: PropTypes.object
 }
-
-export default RegisterUser;

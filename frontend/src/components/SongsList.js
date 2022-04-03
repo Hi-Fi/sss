@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Checkbox from '@mui/material/Checkbox';
 import PropTypes from 'prop-types';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -68,7 +68,7 @@ class EnhancedTableHead extends React.Component {
               <TableCell
                 key={column.id}
                 aligh={column.numeric ? "right" : "left"}
-                padding={column.disablePadding ? 'none' : 'default'}
+                padding={column.disablePadding ? 'none' : 'normal'}
                 sortDirection={orderBy === column.id ? order : false}
               >
                 <Tooltip
@@ -203,8 +203,8 @@ class SongsList extends Component {
           nextIconButtonProps={{
             'aria-label': 'Next Page',
           }}
-          onChangePage={this.props.changePage}
-          onChangeRowsPerPage={this.props.setRowCount}
+          onPageChange={this.props.changePage}
+          onRowsPerPageChange={this.props.setRowCount}
         />
       </div>
     );

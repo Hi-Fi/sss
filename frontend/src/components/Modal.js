@@ -1,7 +1,10 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { CUSTOM_MODAL } from '../actions/modal'
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
+import { useDispatch, useSelector } from 'react-redux'
+import { closeModal as closeModalAction } from '../actions/modal'
+
 
 const modalContent = (modal, closeModal) => (
   <div className="modal">
@@ -11,7 +14,10 @@ const modalContent = (modal, closeModal) => (
   </div>
 )
 
-const Modal = ({ modal, closeModal }) => {
+export const Modal = () => {
+  const modal = useSelector((state) => state.modal)
+  const dispatch = useDispatch();
+  const closeModal = (id) => dispatch({ type: 'CLOSE_MODAL', id: id})
   const modalRoot = document.getElementById('modal');
   const modalOK = modal && modal.custom && modal.custom.$$typeof || modal && !modal.custom
   if (!modalOK) {
@@ -19,5 +25,3 @@ const Modal = ({ modal, closeModal }) => {
   }
   return modalOK && createPortal(modalContent(modal, closeModal), modalRoot);
 };
-
-export default Modal;

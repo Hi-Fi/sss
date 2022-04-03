@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form"
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import TextField from '@material-ui/core/TextField'
-import Checkbox from '@material-ui/core/Checkbox'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
-import Button from '@material-ui/core/Button';
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import TextField from '@mui/material/TextField'
+import Checkbox from '@mui/material/Checkbox'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash'
 import { INITIAL_STATE } from '../reducers/reducer_leaflet.js'
@@ -51,10 +51,10 @@ const ControlledSelect = ({
   const labelId = `${name}-label`;
   return (
     <FormControl {...props}>
-      <InputLabel id={labelId}>{label}</InputLabel>
+      <InputLabel id={labelId} variant="standard">{label}</InputLabel>
       <Controller
         render={({ field }) =>
-          <Select labelId={labelId} label={label} {...field}>
+          <Select labelId={labelId} label={label} variant="standard" {...field}>
             {children}
           </Select>
         }
@@ -199,7 +199,7 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
         <div>
           <Controller
             name="event"
-            render={({ field }) => <TextField label="Event" {...field} />}
+            render={({ field }) => <TextField label="Event" variant="standard" {...field} />}
             control={control}
             defaultValue=""
           />
@@ -214,7 +214,7 @@ export default function LeafletInfo({ leafletInfo, storeLeafletInfo, printLeafle
         <div>
           <Controller
             name="description"
-            render={({ field }) => <TextField label="Description (e.g. date)" {...field} />}
+            render={({ field }) => <TextField label="Description (e.g. date)" variant="standard" {...field} />}
             control={control}
             defaultValue=""
           />
