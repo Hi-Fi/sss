@@ -11,14 +11,16 @@ RUN apk add -U --no-cache ca-certificates
 ############################
 FROM scratch
 
+
+ARG APPLICATION_FILE_PATH
 ENV GIN_MODE=release
-ARG APPLICATION_BINARY_PATH
 
 # Add ca-certificates
 COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# Copy our static executable.
-ADD ${APPLICATION_BINARY_PATH} /opt/application
+ADD ${APPLICATION_FILE_PATH} /opt/
+
+WORKDIR /opt
 
 # Run the application binary.
 ENTRYPOINT ["/opt/application"]

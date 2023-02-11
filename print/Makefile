@@ -33,8 +33,9 @@ debug: ${GOPATH}/bin/dlv
 	${GOPATH}/bin/dlv attach `pgrep -f /go/bin/gin` --headless --listen=:2345 --api-version=2
 
 build-linux-amd64:
-	rm -rf bin/linux/$(OPERATOR_NAME)
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) .
+	rm -rf bin/linux
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/application .
+	cp -r fonts bin/linux/fonts
 
 build:
 	rm -f bin/$(OPERATOR_NAME)

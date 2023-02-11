@@ -52,7 +52,7 @@ jobs:
       - name: Build and push image
         run: |
           gcloud auth configure-docker europe-north1-docker.pkg.dev
-          docker image build -t ${IMAGE_NAME}:${IMAGE_TAG} --build-arg APPLICATION_BINARY_PATH=bin/linux/sss-${{ inputs.application-name }} -f ../docker/go_release.Dockerfile .
+          docker image build -t ${IMAGE_NAME}:${IMAGE_TAG} --build-arg APPLICATION_FILE_PATH=bin/linux -f ../docker/go_release.Dockerfile .
           docker image push ${IMAGE_NAME}:${IMAGE_TAG}
 
   deploy-pr:

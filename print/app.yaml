@@ -1,5 +1,0 @@
-runtime: go116
-service: print
-
-env_variables:
-  GIN_MODE: "release"

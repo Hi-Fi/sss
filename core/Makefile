@@ -30,8 +30,8 @@ run: ${GOPATH}/bin/gin
 	${GOPATH}/bin/gin -i -p 5000 main.go
 
 build-linux-amd64:
-	rm -rf bin/linux/$(OPERATOR_NAME)
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/$(OPERATOR_NAME) .
+	rm -rf bin/linux
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/application .
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
