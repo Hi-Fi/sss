@@ -108,7 +108,7 @@ jobs:
 
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-appengine@1220a282a2655267c86ae5377412a30c56ecfb0b # v1.1.0
         with:
           working_directory: ./frontend
           version: pr-${{ github.event.pull_request.number }}
@@ -145,7 +145,7 @@ jobs:
 
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-appengine@1220a282a2655267c86ae5377412a30c56ecfb0b # v1.1.0
         with:
           working_directory: ./frontend
           version: ${{ github.sha }}
