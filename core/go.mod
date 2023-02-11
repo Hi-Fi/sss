@@ -1,7 +1,6 @@
 module github.com/hi-fi/sss/core
 
-go 1.16
-
+go 1.19
 require (
 	cloud.google.com/go/datastore v1.6.0
 	cloud.google.com/go/trace v1.2.0 // indirect

@@ -1,7 +1,6 @@
 module github.com/hi-fi/sss/print
 
-go 1.16
-
+go 1.19
 require (
 	cloud.google.com/go/trace v1.2.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.3.0

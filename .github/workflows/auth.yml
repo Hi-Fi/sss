@@ -9,6 +9,10 @@ on:
     branches:
       - main
 
+env:
+  IMAGE_NAME: europe-north1-docker.pkg.dev/sitsitsit-dev/sss/auth
+  IMAGE_TAG: ${{ github.event_name == 'push' && github.sha || format('pr-{0}', github.event.pull_request.number) }}
+
 defaults:
   run:
     working-directory: ./auth
@@ -23,7 +27,7 @@ jobs:
       - name: Set up golang
         uses: actions/setup-go@f6164bd8c8acb4a71fb2791a8b6c4024ff038dab # tag=v3
         with:
-          go-version: '1.16'
+          go-version: '1.19'
 
       - uses: actions/cache@4b0cf6cc4619e737324ddfcec08fff2413359514 # tag=v3
         with:
@@ -39,7 +43,19 @@ jobs:
 
       - name: Build
         run: |
-          make build
+          make build-linux-amd64
+
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Build and push image
+        run: |
+          gcloud auth configure-docker europe-north1-docker.pkg.dev
+          docker image build -t ${IMAGE_NAME}:${IMAGE_TAG} --build-arg APPLICATION_BINARY_PATH=bin/linux/sss-auth -f ../docker/go_release.Dockerfile .
+          docker image push ${IMAGE_NAME}:${IMAGE_TAG}
 
   deploy-pr:
     runs-on: ubuntu-latest
@@ -52,10 +68,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
 
-      - name: Add secrets
-        working-directory: ./auth
-        run: yq e -i '.env_variables.JWT_SECRET_KEY = "testsecret"' app.yaml
-
       - name: Authenticate to GCP
         id: auth
         uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
@@ -64,11 +76,15 @@ jobs:
 
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
         with:
-          working_directory: ./auth
-          version: pr-${{ github.event.pull_request.number }}
-          promote: false
+          service: auth
+          image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+          no_traffic: true
+          region: europe-north1
+          suffix: ${{env.IMAGE_TAG}}
+          env_vars: |
+            JWT_SECRET_KEY=testsecret
 
   deploy-prod:
     runs-on: ubuntu-latest
@@ -81,10 +97,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
 
-      - name: Add secrets
-        working-directory: ./auth
-        run: yq e -i '.env_variables.JWT_SECRET_KEY = "${{ secrets.DEV_JWT_SECRET_KEY }}"' app.yaml
-
       - name: Authenticate to GCP
         id: auth
         uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
@@ -93,8 +105,11 @@ jobs:
 
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
         with:
-          working_directory: ./auth
-          version: ${{ github.sha }}
-          promote: true
+          service: auth
+          image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+          region: europe-north1
+          suffix: ${{env.IMAGE_TAG}}
+          env_vars: |
+            JWT_SECRET_KEY=${{ secrets.DEV_JWT_SECRET_KEY }}

@@ -16,7 +16,7 @@ clean:
 test: ${GOPATH}/bin/golint
 	go test . -v -coverprofile=gotest-coverage.out $(GOTEST_REPORT_FORMAT) > gotest-report.out && cat gotest-report.out || (cat gotest-report.out; exit 1)
 	${GOPATH}/bin/golint -set_exit_status .  > golint-report.out && cat golint-report.out || (cat golint-report.out; exit 1)
-	go vet -mod vendor .
+	go vet .
 	../.hack/gofmt.sh
 	git diff --exit-code go.mod go.sum
 
@@ -25,7 +25,6 @@ gofmt:
 
 ensure:
 	go mod tidy
-	go mod vendor
 
 run: ${GOPATH}/bin/gin
 	${GOPATH}/bin/gin -i -p 5000 main.go
