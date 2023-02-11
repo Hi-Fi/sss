@@ -26,7 +26,7 @@ services:
 
   print:
     build:
-      context: ./dev
+      context: ./docker
       dockerfile: go.Dockerfile
     environment:
       DEV: 1
@@ -37,7 +37,7 @@ services:
       - "5001:5000"
   core:
     build:
-      context: ./dev
+      context: ./docker
       dockerfile: go.Dockerfile
     environment:
       DEV: 1
@@ -51,7 +51,7 @@ services:
 
   auth:
     build:
-      context: ./dev
+      context: ./docker
       dockerfile: go.Dockerfile
     environment:
       DEV: 1
@@ -65,7 +65,7 @@ services:
 
   ui:
     build:
-      context: ./dev
+      context: ./docker
       dockerfile: node.Dockerfile
     environment:
       REACT_APP_BACKEND_API_BASE_URL: http://localhost:5000

@@ -15,9 +15,9 @@ defaults:
     working-directory: ./frontend
 
 env:
-  REACT_APP_BACKEND_API_BASE_URL: https://api-dot-sitsitsit-dev.ey.r.appspot.com
-  REACT_APP_PRINT_API_BASE_URL: https://print-dot-sitsitsit-dev.ey.r.appspot.com
-  REACT_APP_AUTH_API_BASE_URL: https://auth-dot-sitsitsit-dev.ey.r.appspot.com
+  REACT_APP_BACKEND_API_BASE_URL: https://core-edzfduyf6q-lz.a.run.app
+  REACT_APP_PRINT_API_BASE_URL: https://print-edzfduyf6q-lz.a.run.app
+  REACT_APP_AUTH_API_BASE_URL: https://auth-edzfduyf6q-lz.a.run.app
 
 jobs:
   test-build:
@@ -76,17 +76,17 @@ jobs:
       - name: Set PR core URL
         if: steps.changed-core.outputs.changed == 'true' && github.event_name == 'pull_request'
         run: |
-          echo "REACT_APP_BACKEND_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-api-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+          echo "REACT_APP_BACKEND_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}---core-edzfduyf6q-lz.a.run.app" >> $GITHUB_ENV
 
       - name: Set PR print URL
         if: steps.changed-print.outputs.changed == 'true' && github.event_name == 'pull_request'
         run: |
-          echo "REACT_APP_PRINT_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-print-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+          echo "REACT_APP_PRINT_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}---print-edzfduyf6q-lz.a.run.app" >> $GITHUB_ENV
 
       - name: Set PR auth URL
         if: steps.changed-auth.outputs.changed == 'true' && github.event_name == 'pull_request'
         run: |
-          echo "REACT_APP_AUTH_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}-dot-auth-dot-sitsitsit-dev.ey.r.appspot.com" >> $GITHUB_ENV
+          echo "REACT_APP_AUTH_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}---auth-edzfduyf6q-lz.a.run.app" >> $GITHUB_ENV
 
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
