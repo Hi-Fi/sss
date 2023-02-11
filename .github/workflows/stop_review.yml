@@ -3,6 +3,9 @@ on:
   pull_request:
     types: [closed]
 
+env:
+  IMAGE_NAME_PREFIX: europe-north1-docker.pkg.dev/sitsitsit-dev/sss/
+
 jobs:
   stop_review:
     if:  github.actor != 'dependabot[bot]'
@@ -15,10 +18,16 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Remove review version
-        env:
-          CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT }}
-        run: gcloud app versions delete pr-${{ github.event.pull_request.number }} -q
+      - name: Untag PR environment images
+        run: |
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}print:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}auth:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}core:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
+
+      - name: Remove review revisions
+        run: |
+          gcloud run revisions list --region europe-north1 --format json |  jq -r '.[] | select(.metadata.annotations."client.knative.dev/user-image" | contains("${{ github.event.pull_request.number }}")) | .metadata.name' | xargs -n1 gcloud run revisions delete
+          gcloud app versions delete pr-${{ github.event.pull_request.number }} -q
 
       - name: Disable frontend review environment
         uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
