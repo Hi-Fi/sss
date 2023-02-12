@@ -72,6 +72,13 @@
       ],
       "groupName": "Disable own master updates to prevent update loop",
       "enabled": false
+    },
+    // Lock gofpdf to v1 as v2 in fork is broken
+    {
+      "matchPackageNames": [
+        "github.com/phpdave11/gofpdf"
+      ],
+      "allowedVersions": "v1.4.2"
     }
   ]
 }

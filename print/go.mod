@@ -7,7 +7,7 @@ require (
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/hi-fi/sss v0.0.0-20230211202919-a99aef19b957
-	github.com/pdfcpu/pdfcpu v0.3.13
+	github.com/pdfcpu/pdfcpu v0.3.14-0.20221101223428-07d97625e3fa
 	github.com/phpdave11/gofpdf v1.4.2
 	github.com/stretchr/testify v1.8.1
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.39.0
