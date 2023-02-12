@@ -124,6 +124,13 @@ jobs:
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
           region: europe-north1
           suffix: ${{env.IMAGE_TAG}}
-          revision_traffic: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}=100
           env_vars: |
             JWT_SECRET_KEY=${{ secrets.DEV_JWT_SECRET_KEY }}
+
+      - name: Move traffic to new revision
+        id: migrate_traffic_prod
+        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
+        with:
+          region: europe-north1
+          service: ${{ inputs.application-name }}
+          revision_traffic: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}=100
