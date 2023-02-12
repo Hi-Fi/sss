@@ -80,12 +80,22 @@
       ],
       "allowedVersions": "v1.4.2"
     },
-    // Keep node version at own control as tag gives latest updates to that major
+    // Keep node and golang version at own control as tag gives latest updates to that major
     {
+      "matchDatasources": ["docker"],
       "matchPackageNames": [
         "node"
       ],
-      "allowedVersions": "16-alpine"
+      "versioning": "loose",
+      "allowedVersions": "18-alpine"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "golang"
+      ],
+      "versioning": "loose",
+      "allowedVersions": "1.19-alpine"
     }
   ]
 }
