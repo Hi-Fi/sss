@@ -1,4 +1,4 @@
-import axios from "axios";
+import { fetcher } from '../utils/api';
 import { closeModal, openCustomModal } from "./modal";
 
 //User actions
@@ -21,14 +21,12 @@ export function loginUser(username, password) {
       type: LOGIN_USER
     })
     try {
-      const response = await axios({
-        method: 'post',
-        url: `${ROOT_URL}/api/v1/login`,
-        data: {
+      const response = await fetcher(`${ROOT_URL}/api/v1/login`, {
+        method: 'POST',
+        body: JSON.stringify({
           "username": username,
           "password": password
-        },
-        crossDomain: true,
+        }),
         headers: {
           'Content-Type': 'application/json',
         }
@@ -36,12 +34,12 @@ export function loginUser(username, password) {
       if (response.status !== 200) {
         dispatch({
           type: LOGIN_USER_FAILED,
-          result: response.data.message
+          result: response.statusText || `Request failed with status ${response.status}`
         })
       } else {
         dispatch({
           type: LOGIN_USER_SUCCESS,
-          result: response.data
+          result: await response.json()
         })
         dispatch(closeModal())
       }
@@ -67,30 +65,30 @@ export function logoutUser() {
 }
 
 export function registerUser(data) {
+  const body = JSON.stringify(data);
   // eslint-disable-next-line no-unused-vars
   return async function registerUserThunk(dispatch, getState) {
     dispatch({
       type: REGISTER_USER
     })
     try {
-      const response = await axios({
-        method: 'post',
-        url: `${ROOT_URL}/api/v1/register`,
-        data,
-        crossDomain: true,
+      const response = await fetcher(`${ROOT_URL}/api/v1/register`, {
+        method: 'POST',
+        body,
         headers: {
           'Content-Type': 'application/json',
         }
       })
+      const data = await response.json()
       if (response.status !== 200) {
         dispatch({
           type: REGISTER_USER_FAILED,
-          result: response.data.message
+          result: data.error || response.statusText || `Request failed with status ${response.status}`
         })
       } else {
         dispatch({
           type: REGISTER_USER_SUCCESS,
-          result: response.data
+          result: data
         })
         dispatch(closeModal())
       }
@@ -116,21 +114,3 @@ export function loginForm(content) {
 export function registerForm(content) {
   return openCustomModal("Register user", content)
 }
-
-export function saveUser(user) {
-  const request = axios({
-    method: 'post',
-    url: `${ROOT_URL}/api/v1/register`,
-    data: user,
-    crossDomain: true,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  return {
-    type: REGISTER_USER,
-    payload: request,
-  }
-}
-
-

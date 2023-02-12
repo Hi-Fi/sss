@@ -1,7 +1,7 @@
 /*eslint no-unused-vars: [2, { "args": "none" }]*/
 
-import axios from 'axios';
 import { toBase64 } from '../utils/helper'
+import { fetcher } from '../utils/api';
 export const LEAFLET_SELECT_ALL_SONGS = 'LEAFLET_SELECT_ALL_SONGS'
 export const LEAFLET_DESELECT_ALL_SONGS = 'LEAFLET_DESELECT_ALL_SONGS'
 export const REORDER_SELECTED_SONGS = 'REORDER_SELECTED_SONGS'
@@ -57,15 +57,12 @@ export function printLeaflet() {
       currentState.info.columns = currentState.info.a5columns
     }
     try {
-      const response = await axios({
-        method: 'post',
-        url: `${ROOT_URL}/api/print`,
-        data: { ...currentState.info, songs: currentState.songs },
-        crossDomain: true,
-        responseType: 'blob',
-        headers: {
-          'Content-Type': 'application/json',
-        }
+      const response = await fetcher(`${ROOT_URL}/api/print`, {
+          method: 'POST',
+          body: JSON.stringify({ ...currentState.info, songs: currentState.songs }),
+          headers: {
+            'Content-Type': 'application/json',
+          }
       })
       if (response.status !== 200) {
         dispatch({
@@ -75,7 +72,7 @@ export function printLeaflet() {
       } else {
         dispatch({
           type: PRINT_LEAFLET_SUCCESS,
-          result: response.data
+          result: await response.blob()
         })
       }
     } catch (error) {

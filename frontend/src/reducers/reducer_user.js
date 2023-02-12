@@ -13,7 +13,7 @@ const INITIAL_STATE = {
 const tabReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOGIN_USER: {
-      return { ...state, userLoggingIn: true };
+      return { ...state, userLoggingIn: true, userLoginErrors: "" };
     }
     case LOGIN_USER_FAILED: {
       return { ...state, userLoggingIn: false, userLoginErrors: action.result };
@@ -27,16 +27,16 @@ const tabReducer = (state = INITIAL_STATE, action) => {
       return { ...state, ...INITIAL_STATE };
     }
     case REGISTER_USER: {
-      return { ...state, userLoggingIn: true };
+      return { ...state, userLoggingIn: true, userRegistrationErrors: "" };
     }
     case REGISTER_USER_FAILED: {
-      return { ...state, userLoggingIn: false, userLoginErrors: action.result };
+      return { ...state, userLoggingIn: false, userRegistrationErrors: action.result };
     }
     case REGISTER_USER_SUCCESS: {
       return { ...state, userLoggingIn: false, user: action.result };
     }
     default:
-      return state;
+      return { ...state, userLoginErrors: "", userRegistrationErrors: "" };
   }
 }
 export default tabReducer;

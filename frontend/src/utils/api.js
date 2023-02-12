@@ -1,10 +1,19 @@
-import axios from 'axios';
+export function fetcher(url, options) {
+  const update = { ...options };
+  if (localStorage.getItem('AUTHORIZATION')) {
+    update.headers = {
+      ...update.headers,
+      Authorization: `Bearer ${localStorage.getItem('AUTHORIZATION')}`,
+    };
+  }
+
+  return fetch(url, update);
+}
 
 export function setToken(token) {
-  axios.defaults.headers.common['Authorization'] =
-      `Bearer ${token}`;
+  localStorage.setItem('AUTHORIZATION', token)
 }
 
 export function removeToken() {
-  delete axios.defaults.headers.common['Authorization'];
+  localStorage.removeItem('AUTHORIZATION');
 }

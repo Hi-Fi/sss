@@ -30,12 +30,13 @@ const mapDispatchToProps = (dispatch) => {
     },
     saveSong: (song) => {
       dispatch(saveSong(song)).payload
-        .then((result) => {
+        .then(async (result) => {
           if (result.status !== 200) {
-            dispatch(saveSongFailure(song.id, result.data.message))
+            dispatch(saveSongFailure(song.id, result.statusText))
           } else {
-            dispatch(saveSongSuccess(result.data))
-            dispatch(addTab(result.data.id))
+            const response = await result.json();
+            dispatch(saveSongSuccess(response))
+            dispatch(addTab(response.id))
           }
         })
       .catch((error) => {
