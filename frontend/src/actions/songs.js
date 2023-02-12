@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { fetcher } from '../utils/api';
 import { cloneDeep } from 'lodash';
 import { selectAll as leafletSelectAll, deselectAll as leafletDeselectAll } from '../actions/leaflet'
 import { renameTab } from '../actions/tabs';
@@ -33,11 +33,9 @@ export function saveSong(song) {
   // submitSong.composers = submitSong.composers?.map(composer => { return {name: composer}})
   // submitSong.arrangers = submitSong.arrangers?.map(arranger => { return {name: arranger}})
   // submitSong.lyricists = submitSong.lyricists?.map(lyricist => { return {name: lyricist}})
-  const request = axios({
-    method: 'post',
-    url: `${ROOT_URL}/api/v1/song`,
-    data: submitSong,
-    crossDomain: true,
+  const request = fetcher(`${ROOT_URL}/api/v1/song`, {
+    method: 'POST',
+    body: JSON.stringify(submitSong),
     headers: {
       'Content-Type': 'application/json',
     }
@@ -70,13 +68,10 @@ export async function fetchAllSongs(dispatch, getState) {
   if (songs.length > 0) {
     dispatch(fetchSongsSuccess(songs))
   } else {
-    axios({
-      method: 'get',
-      url: `${ROOT_URL}/api/v1/songs`,
-      crossDomain: true,
-      headers: []
-    }).then((response) => {
-      !response.error ? dispatch(fetchSongsSuccess(response.data)) : dispatch(fetchSongsFailure(response.data.message));
+    fetcher(`${ROOT_URL}/api/v1/songs`, {
+      method: 'GET',
+    }).then(async (response) => {
+      !response.error ? dispatch(fetchSongsSuccess(await response.json())) : dispatch(fetchSongsFailure(response.statusText));
     }).catch((error) => dispatch(fetchSongsFailure(error.message)))
   }
 }
@@ -109,21 +104,18 @@ export function fetchSong(id) {
       dispatch(fetchSongSuccess(song))
       dispatch(renameTab(song.id, song.title))
     } else {
-      axios({
-        method: 'get',
-        url: `${ROOT_URL}/api/v1/song/${id}`,
-        crossDomain: true,
-      }).then((response) => {
+      fetcher(`${ROOT_URL}/api/v1/song/${id}`).then(async (response) => {
+        const fetchedSong = await response.json();
         if (!response.error) {
-          dispatch(fetchSongsSuccess(response.data))
-          dispatch(renameTab(response.data.id, response.data.title))
+          dispatch(fetchSongSuccess(fetchedSong))
+          dispatch(renameTab(fetchedSong.id, fetchedSong.title))
         } else {
-          dispatch(fetchSongsFailure(response.data.message))
+          dispatch(fetchSongFailure(fetchedSong.message))
           // dispatch(closeTab(id))
-          dispatch(openModal(ERROR_MODAL, "Couldn't load song", response.data.message, id))
+          dispatch(openModal(ERROR_MODAL, "Couldn't load song", fetchedSong.message, id))
         }
       }).catch((error) => {
-        dispatch(fetchSongsFailure(error.message))
+        dispatch(fetchSongFailure(error.message))
         // dispatch(closeTab(id))
         dispatch(openModal(ERROR_MODAL, "Couldn't load song", error.message, id))
       })
