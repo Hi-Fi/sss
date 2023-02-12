@@ -1,69 +1,36 @@
 definitions:
-  model.Maker:
+  model.User:
     properties:
-      name:
-        type: string
-    type: object
-  model.Melody:
-    properties:
-      melody:
-        type: string
-    type: object
-  model.Song:
-    properties:
-      arrangers:
-        items:
-          $ref: '#/definitions/model.Maker'
-        type: array
-      composers:
-        items:
-          $ref: '#/definitions/model.Maker'
-        type: array
       creator:
         type: string
       dateCreated:
         type: string
-      deleted:
-        type: boolean
-      extraInfo:
+      email:
         type: string
       id:
         type: string
+      isAdmin:
+        type: boolean
       lastUpdated:
         type: string
-      lyricists:
-        items:
-          $ref: '#/definitions/model.Maker'
-        type: array
-      melody:
-        $ref: '#/definitions/model.Melody'
       modifier:
         type: string
-      tags:
-        items:
-          $ref: '#/definitions/model.Tag'
-        type: array
-      title:
+      password:
         type: string
-      verses:
-        items:
-          $ref: '#/definitions/model.Verse'
-        type: array
-    type: object
-  model.Tag:
-    properties:
-      tag:
+      token:
+        type: string
+      username:
         type: string
     type: object
-  model.Verse:
+  model.Validation:
     properties:
-      lyrics:
-        type: string
+      valid:
+        type: boolean
     type: object
 info:
   contact: {}
 paths:
-  /api/v1/song:
+  /api/v1/login:
     post:
       produces:
       - application/json
@@ -71,13 +38,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Song'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/model.User'
+        "401":
+          description: Unauthorized
           schema:
             type: string
-      summary: Create song
-  /api/v1/song/{id}:
+      summary: Perform login
+  /api/v1/register:
     post:
       produces:
       - application/json
@@ -85,26 +52,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Song'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
           schema:
             type: string
-      summary: Get single song
-    put:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Song'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Update song
-  /api/v1/songs:
+      summary: Register user
+  /api/v1/user:
     get:
       produces:
       - application/json
@@ -113,29 +67,14 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Song'
+              $ref: '#/definitions/model.User'
             type: array
-        "500":
-          description: Internal Server Error
+        "403":
+          description: Forbidden
           schema:
             type: string
-      summary: Get all songs
-    post:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.Song'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Create multiple songs at once
-  /api/v1/songs/updated/{time}:
+      summary: Get information of current user
+  /api/v1/validate:
     get:
       produces:
       - application/json
@@ -144,11 +83,11 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Song'
+              $ref: '#/definitions/model.Validation'
             type: array
-        "500":
-          description: Internal Server Error
+        "403":
+          description: Forbidden
           schema:
             type: string
-      summary: Get updated songs
+      summary: Validate token
 swagger: "2.0"
