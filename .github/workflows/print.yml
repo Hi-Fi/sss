@@ -5,6 +5,7 @@ on:
     paths:
       - "print/**"
       - ".github/workflows/print.yml"
+      - ".github/workflows/go_cloud_run.yml"
   push:
     branches:
       - main
