@@ -8,16 +8,31 @@ on:
 jobs:
   gcr-cleaner:
     runs-on: 'ubuntu-latest'
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
+    # see https://github.com/google-github-actions/auth#setting-up-workload-identity-federation
+
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # tag=v1.0.0
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CLEANUP_SERVICE_ACCOUNT }}
+
       - name: Login to GAR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # tag=v2.1.0
         with:
           registry: europe-north1-docker.pkg.dev
-          username: _json_key
-          password: ${{ secrets.GCP_SA_KEY }}
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
 
       # remove all images that are not tagged
       - uses: 'docker://us-docker.pkg.dev/gcr-cleaner/gcr-cleaner/gcr-cleaner-cli'
         with:
           args: >-
             -repo=europe-north1-docker.pkg.dev/sitsitsit-dev/sss
+            -recursive=true

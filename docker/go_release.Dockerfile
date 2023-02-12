@@ -2,7 +2,7 @@
 # STEP 1 get ca-certificates
 ############################
 
-FROM alpine:3.6 as alpine
+FROM alpine:3.17 as alpine
 
 RUN apk add -U --no-cache ca-certificates
 

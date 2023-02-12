@@ -2,50 +2,62 @@ name: Stop Review
 on:
   pull_request:
     types: [closed]
+  workflow_dispatch: # allows for manual invocation
+    inputs:
+      prNumber:
+        required: true
+        description: PR number that has created environment that needs to be cleaned up
+        type: string
 
 env:
   IMAGE_NAME_PREFIX: europe-north1-docker.pkg.dev/sitsitsit-dev/sss/
+  PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.prNumber || env.PR_NUMBER }}
 
 jobs:
   stop_review:
-    if:  github.actor != 'dependabot[bot]'
+    if:  github.actor != 'renovate[bot]'
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     name: Stop Review
     steps:
       - name: Authenticate to GCP
         id: auth
-        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # tag=v1.0.0
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.CLEANUP_SERVICE_ACCOUNT }}
 
       - name: Untag PR environment images
         run: |
-          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}print:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
-          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}auth:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
-          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}core:pr-${{ github.event.pull_request.number }} -q || echo "Nothing to untag"
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}print:pr-${{ env.PR_NUMBER }} -q || echo "Nothing to untag"
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}auth:pr-${{ env.PR_NUMBER }} -q || echo "Nothing to untag"
+          gcloud artifacts docker tags delete ${IMAGE_NAME_PREFIX}core:pr-${{ env.PR_NUMBER }} -q || echo "Nothing to untag"
 
       - name: Remove review revisions
         run: |
-          gcloud run revisions list --region europe-north1 --format json |  jq -r '.[] | select(.metadata.annotations."client.knative.dev/user-image" | contains("${{ github.event.pull_request.number }}")) | .metadata.name' | xargs -n1 gcloud run revisions delete
-          gcloud app versions delete pr-${{ github.event.pull_request.number }} -q
+          gcloud run revisions list --region europe-north1 --format json |  jq -r '.[] | select(.metadata.annotations."client.knative.dev/user-image" | contains("pr-${{ env.PR_NUMBER }}")) | .metadata.name' | xargs -n1 gcloud run revisions delete --region europe-north1 -q
+          gcloud app versions delete pr-${{ env.PR_NUMBER }} -q
 
       - name: Disable frontend review environment
-        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
+        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment: PR-${{ github.event.pull_request.number }}
+          environment: PR-${{ env.PR_NUMBER }}
           onlyRemoveDeployments: true
 
       - name: Disable print review environment
-        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
+        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment: PR-${{ github.event.pull_request.number }}-print
+          environment: PR-${{ env.PR_NUMBER }}-print
           onlyRemoveDeployments: true
 
       - name: Disable core review environment
-        uses: strumwolf/delete-deployment-environment@45c821e46baa405e25410700fe2e9643929706a0 # tag=v2.0.1
+        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment: PR-${{ github.event.pull_request.number }}-core
+          environment: PR-${{ env.PR_NUMBER }}-core
           onlyRemoveDeployments: true

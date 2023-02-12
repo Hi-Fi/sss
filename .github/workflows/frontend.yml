@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
           node-version: '16'
           cache: 'yarn'
@@ -47,14 +47,14 @@ jobs:
 
   deploy-pr:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    if: github.event_name == 'pull_request' && github.actor != 'renovate[bot]'
     needs: test-build
     environment:
       name: PR-${{ github.event.pull_request.number }}
       url: ${{ steps.deploy_review.outputs.url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
         with:
           fetch-depth: 0
 
@@ -89,7 +89,7 @@ jobs:
           echo "REACT_APP_AUTH_API_BASE_URL=https://pr-${{ github.event.pull_request.number }}---auth-edzfduyf6q-lz.a.run.app" >> $GITHUB_ENV
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
           node-version: '16'
           cache: 'yarn'
@@ -102,13 +102,13 @@ jobs:
 
       - name: Authenticate to GCP
         id: auth
-        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # tag=v1.0.0
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-appengine@1220a282a2655267c86ae5377412a30c56ecfb0b # v1.1.0
         with:
           working_directory: ./frontend
           version: pr-${{ github.event.pull_request.number }}
@@ -123,10 +123,10 @@ jobs:
       url: ${{ steps.deploy_prod.outputs.url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
           node-version: '16'
           cache: 'yarn'
@@ -139,13 +139,13 @@ jobs:
 
       - name: Authenticate to GCP
         id: auth
-        uses: google-github-actions/auth@8d125895b958610ec414ca4dae010257eaa814d3 # tag=v0
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # tag=v1.0.0
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-appengine@c0374ce7602000a1b1dbcf28f7a4ab4361464b5f # tag=v0.8.0
+        uses: google-github-actions/deploy-appengine@1220a282a2655267c86ae5377412a30c56ecfb0b # v1.1.0
         with:
           working_directory: ./frontend
           version: ${{ github.sha }}

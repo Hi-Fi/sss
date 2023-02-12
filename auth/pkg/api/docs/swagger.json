@@ -4,21 +4,21 @@
         "contact": {}
     },
     "paths": {
-        "/api/v1/song": {
+        "/api/v1/login": {
             "post": {
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create song",
+                "summary": "Perform login",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Song"
+                            "$ref": "#/definitions/model.User"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -26,41 +26,21 @@
                 }
             }
         },
-        "/api/v1/song/{id}": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update song",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Song"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
+        "/api/v1/register": {
             "post": {
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get single song",
+                "summary": "Register user",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Song"
+                            "$ref": "#/definitions/model.User"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "type": "string"
                         }
@@ -68,47 +48,24 @@
                 }
             }
         },
-        "/api/v1/songs": {
+        "/api/v1/user": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get all songs",
+                "summary": "Get information of current user",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Song"
+                                "$ref": "#/definitions/model.User"
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create multiple songs at once",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Song"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "type": "string"
                         }
@@ -116,24 +73,24 @@
                 }
             }
         },
-        "/api/v1/songs/updated/{time}": {
+        "/api/v1/validate": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get updated songs",
+                "summary": "Validate token",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Song"
+                                "$ref": "#/definitions/model.Validation"
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "type": "string"
                         }
@@ -143,97 +100,46 @@
         }
     },
     "definitions": {
-        "model.Maker": {
+        "model.User": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Melody": {
-            "type": "object",
-            "properties": {
-                "melody": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Song": {
-            "type": "object",
-            "properties": {
-                "arrangers": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Maker"
-                    }
-                },
-                "composers": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Maker"
-                    }
-                },
                 "creator": {
                     "type": "string"
                 },
                 "dateCreated": {
                     "type": "string"
                 },
-                "deleted": {
-                    "type": "boolean"
-                },
-                "extraInfo": {
+                "email": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
+                "isAdmin": {
+                    "type": "boolean"
+                },
                 "lastUpdated": {
                     "type": "string"
-                },
-                "lyricists": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Maker"
-                    }
-                },
-                "melody": {
-                    "$ref": "#/definitions/model.Melody"
                 },
                 "modifier": {
                     "type": "string"
                 },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Tag"
-                    }
-                },
-                "title": {
+                "password": {
                     "type": "string"
                 },
-                "verses": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Verse"
-                    }
-                }
-            }
-        },
-        "model.Tag": {
-            "type": "object",
-            "properties": {
-                "tag": {
+                "token": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "model.Verse": {
+        "model.Validation": {
             "type": "object",
             "properties": {
-                "lyrics": {
-                    "type": "string"
+                "valid": {
+                    "type": "boolean"
                 }
             }
         }
