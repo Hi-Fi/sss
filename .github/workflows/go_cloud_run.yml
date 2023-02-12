@@ -90,6 +90,7 @@ jobs:
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
           tag: ${{env.IMAGE_TAG}}
           region: europe-north1
+          no_traffic: true
           env_vars: |
             JWT_SECRET_KEY=testsecret
 

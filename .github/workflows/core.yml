@@ -5,6 +5,7 @@ on:
     paths:
       - "core/**"
       - ".github/workflows/core.yml"
+      - ".github/workflows/go_cloud_run.yml"
   push:
     branches:
       - main
