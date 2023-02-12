@@ -11,15 +11,17 @@ on:
 
 env:
   IMAGE_NAME_PREFIX: europe-north1-docker.pkg.dev/sitsitsit-dev/sss/
-  PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.prNumber || env.PR_NUMBER }}
+  PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.prNumber || github.event.pull_request.number }}
 
 jobs:
   stop_review:
     if:  github.actor != 'renovate[bot]'
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
+      deployments: write
+
     name: Stop Review
     steps:
       - name: Authenticate to GCP
@@ -38,7 +40,7 @@ jobs:
 
       - name: Remove review revisions
         run: |
-          gcloud run revisions list --region europe-north1 --format json |  jq -r '.[] | select(.metadata.annotations."client.knative.dev/user-image" | contains("pr-${{ env.PR_NUMBER }}")) | .metadata.name' | xargs -n1 gcloud run revisions delete --region europe-north1 -q
+          gcloud run revisions list --region europe-north1 --format json |  jq -r '.[] | select(.metadata.annotations."client.knative.dev/user-image" | contains("pr-${{ env.PR_NUMBER }}")) | .metadata.name' | xargs --no-run-if-empty -n1 gcloud run revisions delete --region europe-north1 -q
           gcloud app versions delete pr-${{ env.PR_NUMBER }} -q
 
       - name: Disable frontend review environment
