@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Authenticate to GCP
         id: auth
-        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d # tag=v1.0.0
+        uses: google-github-actions/auth@3a3c4c57d294ef65efaaee4ff17b22fa88dd3c69 # v1.3.0
         with:
           token_format: access_token
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -44,21 +44,21 @@ jobs:
           gcloud app versions delete pr-${{ env.PR_NUMBER }} -q
 
       - name: Disable frontend review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@195215d2c5602aee6fb4b9cf0853970decca9e7a # v2.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}
           onlyRemoveDeployments: true
 
       - name: Disable print review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@195215d2c5602aee6fb4b9cf0853970decca9e7a # v2.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}-print
           onlyRemoveDeployments: true
 
       - name: Disable core review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@195215d2c5602aee6fb4b9cf0853970decca9e7a # v2.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}-core
