@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Set up Node
         uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
@@ -54,7 +54,7 @@ jobs:
       url: ${{ steps.deploy_review.outputs.url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
@@ -123,7 +123,7 @@ jobs:
       url: ${{ steps.deploy_prod.outputs.url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Set up Node
         uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
