@@ -1,8 +1,6 @@
 # https://cloud.google.com/appengine/docs/standard/python/getting-started/hosting-a-static-website
 
-runtime: python27
-api_version: 1
-threadsafe: true
+runtime: python39
 
 handlers:
 - url: /static/(.*)
