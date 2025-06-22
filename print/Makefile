@@ -34,12 +34,12 @@ debug: ${GOPATH}/bin/dlv
 
 build-linux-amd64:
 	rm -rf bin/linux
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/application .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -o bin/linux/application .
 	cp -r fonts bin/linux/fonts
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
-	go build -v -i -o bin/$(OPERATOR_NAME) .
+	go build -v -o bin/$(OPERATOR_NAME) .
 
 build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
