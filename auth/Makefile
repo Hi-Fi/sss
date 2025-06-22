@@ -35,7 +35,7 @@ build-linux-amd64:
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
-	go build -v -i -o bin/$(OPERATOR_NAME) .
+	go build -v -o bin/$(OPERATOR_NAME) .
 
 build-image: build-linux-amd64
 	docker build -t $(IMAGE):latest .
