@@ -31,7 +31,7 @@ run: ${GOPATH}/bin/gin
 
 build-linux-amd64:
 	rm -rf bin/linux
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -i -o bin/linux/application .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -o bin/linux/application .
 
 build:
 	rm -f bin/$(OPERATOR_NAME)
