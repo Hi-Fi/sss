@@ -84,7 +84,7 @@ jobs:
 
       - name: Deploy review
         id: deploy_review
-        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
+        uses: google-github-actions/deploy-cloudrun@9c5864eab7354d2e132307e685a2272655932799 # v2.7.3
         with:
           service: ${{ inputs.application-name }}
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
@@ -118,7 +118,7 @@ jobs:
 
       - name: Deploy production
         id: deploy_prod
-        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
+        uses: google-github-actions/deploy-cloudrun@9c5864eab7354d2e132307e685a2272655932799 # v2.7.3
         with:
           service: ${{ inputs.application-name }}
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
@@ -129,7 +129,7 @@ jobs:
 
       - name: Move traffic to new revision
         id: migrate_traffic_prod
-        uses: google-github-actions/deploy-cloudrun@194392f9d796cd42b2617a231eec28e08f9e27e1 # tag=v1.0.0
+        uses: google-github-actions/deploy-cloudrun@9c5864eab7354d2e132307e685a2272655932799 # v2.7.3
         with:
           region: europe-north1
           service: ${{ inputs.application-name }}
