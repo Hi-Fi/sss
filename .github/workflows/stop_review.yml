@@ -44,21 +44,21 @@ jobs:
           gcloud app versions delete pr-${{ env.PR_NUMBER }} -q
 
       - name: Disable frontend review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@a4825dd9648c57da8437a4885c3fcad58beac69c # v3.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}
           onlyRemoveDeployments: true
 
       - name: Disable print review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@a4825dd9648c57da8437a4885c3fcad58beac69c # v3.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}-print
           onlyRemoveDeployments: true
 
       - name: Disable core review environment
-        uses: strumwolf/delete-deployment-environment@3cb547f8ec03ee6c0473d90cce57c74c688c2510 # v2.2.3
+        uses: strumwolf/delete-deployment-environment@a4825dd9648c57da8437a4885c3fcad58beac69c # v3.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}-core
