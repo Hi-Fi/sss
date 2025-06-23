@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/hi-fi/sss/auth/pkg/model"
 	"github.com/hi-fi/sss/auth/pkg/orm"
 	"go.opentelemetry.io/otel"
