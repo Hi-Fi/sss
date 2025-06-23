@@ -97,5 +97,10 @@
       "versioning": "loose",
       "allowedVersions": "1.19-alpine"
     }
+  ],
+  postUpdateOptions: [
+    "gomodTidy",
+    "gomodUpdateImportPaths",
+    "gomodMassage"
   ]
 }
