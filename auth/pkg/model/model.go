@@ -32,7 +32,7 @@ type Claims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	IsAdmin  bool   `json:"isAdmin"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 type Token struct {
