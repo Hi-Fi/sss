@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/datastore"
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type User struct {
@@ -32,7 +32,7 @@ type Claims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	IsAdmin  bool   `json:"isAdmin"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 type Token struct {

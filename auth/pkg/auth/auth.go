@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/hi-fi/sss/auth/pkg/model"
 	"github.com/hi-fi/sss/auth/pkg/orm"
 	"go.opentelemetry.io/otel"
@@ -78,9 +78,10 @@ func generateJwtToken(ctx context.Context, user model.User) (token model.Token, 
 		Username: user.Username,
 		Email:    user.Email,
 		IsAdmin:  user.IsAdmin,
-		StandardClaims: jwt.StandardClaims{
-			// In JWT, the expiry time is expressed as unix milliseconds
-			ExpiresAt: expirationTime.Unix(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: &jwt.NumericDate{
+				Time: expirationTime,
+			},
 		},
 	}
 
