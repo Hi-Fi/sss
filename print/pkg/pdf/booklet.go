@@ -7,6 +7,7 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"go.opentelemetry.io/otel"
 )
 
@@ -15,13 +16,14 @@ var bookletTracer = otel.GetTracerProvider().Tracer("booklet")
 func makePrintableBooklet(ctx context.Context, pages *bytes.Buffer) (printablePages bytes.Buffer, err error) {
 	_, span := bookletTracer.Start(ctx, "makePrintableBooklet")
 	defer span.End()
-	config := pdfcpu.NewDefaultConfiguration()
+	config := model.NewDefaultConfiguration()
 	pageCount, _ := api.PageCount(bytes.NewReader(pages.Bytes()), config)
 	// Add empty pages to make leaflet to be printable
 	if pageCount%4 > 0 {
 		for i := 0; i < (4 - pageCount%4); i++ {
 			printablePages.Reset()
-			err := api.InsertPages(bytes.NewReader(pages.Bytes()), &printablePages, []string{fmt.Sprintf("%d", pageCount)}, false, config)
+			pageConfig := pdfcpu.DefaultPageConfiguration()
+			err := api.InsertPages(bytes.NewReader(pages.Bytes()), &printablePages, []string{fmt.Sprintf("%d", pageCount)}, false, pageConfig, config)
 			if err != nil {
 				fmt.Printf("Error at InsertPages: %v\n", err)
 			}
@@ -37,7 +39,7 @@ func makePrintableBooklet(ctx context.Context, pages *bytes.Buffer) (printablePa
 	}
 	*pages = printablePages
 	printablePages.Reset()
-	nupConfig, err := pdfcpu.PDFGridConfig(1, 2, "")
+	nupConfig, err := pdfcpu.PDFGridConfig(1, 2, "", config)
 	if err != nil {
 		fmt.Printf("Error at PDFGridConfig: %v\n", err)
 	}
