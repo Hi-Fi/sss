@@ -27,7 +27,7 @@ ensure:
 	go mod tidy
 
 run: ${GOPATH}/bin/gin
-	${GOPATH}/bin/gin -i -p 5000 main.go
+	${GOPATH}/bin/gin -i -p 5001 main.go
 
 debug: ${GOPATH}/bin/dlv
 	${GOPATH}/bin/dlv attach `pgrep -f /go/bin/gin` --headless --listen=:2345 --api-version=2
