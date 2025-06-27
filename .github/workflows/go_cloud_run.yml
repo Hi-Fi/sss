@@ -102,7 +102,7 @@ jobs:
       contents: 'read'
       id-token: 'write'
     environment:
-      name: Production-auth
+      name: Production-${{ inputs.application-name }}
       url: ${{ steps.deploy_prod.outputs.url }}
     steps:
       - name: Checkout
@@ -124,13 +124,7 @@ jobs:
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
           region: europe-north1
           suffix: ${{env.IMAGE_TAG}}
+          tag: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}
+          tag_traffic: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}=100
           env_vars: |
             JWT_SECRET_KEY=${{ secrets.DEV_JWT_SECRET_KEY }}
-
-      - name: Move traffic to new revision
-        id: migrate_traffic_prod
-        uses: google-github-actions/deploy-cloudrun@9c5864eab7354d2e132307e685a2272655932799 # v2.7.3
-        with:
-          region: europe-north1
-          service: ${{ inputs.application-name }}
-          revision_traffic: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}=100
