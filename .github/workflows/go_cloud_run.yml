@@ -124,7 +124,6 @@ jobs:
           image: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
           region: europe-north1
           suffix: ${{env.IMAGE_TAG}}
-          tag: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}
-          tag_traffic: ${{ inputs.application-name }}-${{env.IMAGE_TAG}}=100
+          revision_traffic: LATEST=100
           env_vars: |
             JWT_SECRET_KEY=${{ secrets.DEV_JWT_SECRET_KEY }}
