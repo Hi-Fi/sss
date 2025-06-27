@@ -37,7 +37,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build && gcloud app deploy -q"
+    "deploy": "react-scripts build && gcloud app deploy -q",
+    "lint": "biome format",
+    "lint:fix": "biome format --write"
   },
   "browserslist": {
     "production": [
@@ -52,7 +54,6 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "eslint-plugin-react": "^7.24.0"
+    "@biomejs/biome": "2.0.6"
   }
 }
