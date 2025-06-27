@@ -63,3 +63,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: PR-${{ env.PR_NUMBER }}-core
           onlyRemoveDeployments: true
+
+      - name: Disable auth review environment
+        uses: strumwolf/delete-deployment-environment@a4825dd9648c57da8437a4885c3fcad58beac69c # v3.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: PR-${{ env.PR_NUMBER }}-auth
+          onlyRemoveDeployments: true
