@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import { ThemeProvider, createTheme  } from '@mui/material/styles';
 import { Provider } from 'react-redux';
@@ -18,9 +17,11 @@ const store = configureStore(loadFromLocalStorage());
 store.subscribe(() => saveToLocalStorage(store.getState()))
 
 const theme = createTheme();
+const container = document.getElementById('root');
+const root = createRoot(container);
 
 
-ReactDOM.render(
+root.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <Header />
@@ -38,4 +39,4 @@ ReactDOM.render(
       <Backdrop />
       <Modal />
       </ThemeProvider>
-  </Provider>, document.getElementById('root'));
+  </Provider>);
