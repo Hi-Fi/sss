@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from '@mui/styles';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -12,7 +12,7 @@ import LeafletInfo from '../pages/LeafletInfo';
 
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     openTab: state.tabs.openTab
   };
 }
@@ -43,7 +43,7 @@ LeafletTabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme?.palette?.background?.paper,
   },
 });
 
