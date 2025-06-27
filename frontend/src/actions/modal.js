@@ -1,44 +1,41 @@
 /*eslint no-unused-vars: [2, { "args": "none" }]*/
 
-import { closeTab } from './tabs'
-export const OPEN_MODAL = 'OPEN_MODAL';
-export const CLOSE_MODAL = 'CLOSE_MODAL';
+import { closeTab } from "./tabs";
+export const OPEN_MODAL = "OPEN_MODAL";
+export const CLOSE_MODAL = "CLOSE_MODAL";
 
 // Types
-export const ERROR_MODAL = 'error';
-export const INFO_MODAL = 'info';
-export const CUSTOM_MODAL = 'custom';
+export const ERROR_MODAL = "error";
+export const INFO_MODAL = "info";
+export const CUSTOM_MODAL = "custom";
 
-export const openCustomModal = (title, content) => (
-  {
-    type: OPEN_MODAL,
-    data: {
-      type: CUSTOM_MODAL,
-      title: title,
-      custom: content
-    }
-  }
-)
+export const openCustomModal = (title, content) => ({
+	type: OPEN_MODAL,
+	data: {
+		type: CUSTOM_MODAL,
+		title: title,
+		custom: content,
+	},
+});
 
 export const openModal = (type, title, text, id) => {
-  return {
-    type: OPEN_MODAL,
-    data: {
-      title: title,
-      text: text,
-      type: type,
-      id: id
-    }
-  }
-}
-
+	return {
+		type: OPEN_MODAL,
+		data: {
+			title: title,
+			text: text,
+			type: type,
+			id: id,
+		},
+	};
+};
 
 export function closeModal(id) {
-  return async function closeModal(dispatch, getState) {
-    id && dispatch(closeTab(id))
-    dispatch({
-      type: CLOSE_MODAL,
-      id: id
-    })
-  }
+	return async function closeModal(dispatch, getState) {
+		id && dispatch(closeTab(id));
+		dispatch({
+			type: CLOSE_MODAL,
+			id: id,
+		});
+	};
 }

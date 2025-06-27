@@ -1,19 +1,24 @@
-import React from 'react';
-import {PropTypes} from 'prop-types'
+import React from "react";
+import { PropTypes } from "prop-types";
 
 var closeStyle = {
-    color: 'red',
-    float: 'right',
-    paddingLeft: '10px'
-}
+	color: "red",
+	float: "right",
+	paddingLeft: "10px",
+};
 
 export default function TabLabel(props) {
-    return <div>{props.name} <div style={closeStyle} onClick={props.closeFunction}>X</div>
-        </div>;
+	return (
+		<div>
+			{props.name}{" "}
+			<div style={closeStyle} onClick={props.closeFunction}>
+				X
+			</div>
+		</div>
+	);
 }
 
 TabLabel.propTypes = {
-    name: PropTypes.string,
-    closeFunction: PropTypes.func
-}
-
+	name: PropTypes.string,
+	closeFunction: PropTypes.func,
+};
