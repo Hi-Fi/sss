@@ -2,7 +2,7 @@ module github.com/hi-fi/sss/print
 
 go 1.23.0
 
-toolchain go1.24.6
+toolchain go1.25.0
 
 require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.29.0
