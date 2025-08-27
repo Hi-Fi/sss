@@ -11,7 +11,7 @@ require (
 	github.com/hi-fi/sss v0.0.0-20230211202919-a99aef19b957
 	github.com/pdfcpu/pdfcpu v0.11.0
 	github.com/phpdave11/gofpdf v1.4.2
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.62.0
 	go.opentelemetry.io/otel v1.37.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.37.0
