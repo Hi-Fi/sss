@@ -5,6 +5,7 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend.yml"
+    types: [labeled]
   push:
     branches:
       - main
