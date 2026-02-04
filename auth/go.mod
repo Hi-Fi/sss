@@ -2,7 +2,7 @@ module github.com/hi-fi/sss/auth
 
 go 1.24.0
 
-toolchain go1.25.3
+toolchain go1.25.7
 
 require (
 	cloud.google.com/go/datastore v1.20.0
