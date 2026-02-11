@@ -2,7 +2,7 @@ module github.com/hi-fi/sss
 
 go 1.24.0
 
-toolchain go1.25.3
+toolchain go1.26.0
 
 require (
 	cloud.google.com/go/datastore v1.20.0
