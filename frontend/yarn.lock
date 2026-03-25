@@ -1081,59 +1081,59 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@biomejs/biome@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/biome/-/biome-2.2.5.tgz#291df1137404843537dd50eaa0174c12c0681d82"
-  integrity sha512-zcIi+163Rc3HtyHbEO7CjeHq8DjQRs40HsGbW6vx2WI0tg8mYQOPouhvHSyEnCBAorfYNnKdR64/IxO7xQ5faw==
+"@biomejs/biome@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/biome/-/biome-2.4.9.tgz#bb08645962f43e45c86a1f695393065bdbe3409b"
+  integrity sha512-wvZW92FrwitTcacvCBT8xdAbfbxWfDLwjYMmU3djjqQTh7Ni4ZdiWIT/x5VcZ+RQuxiKzIOzi5D+dcyJDFZMsA==
   optionalDependencies:
-    "@biomejs/cli-darwin-arm64" "2.2.5"
-    "@biomejs/cli-darwin-x64" "2.2.5"
-    "@biomejs/cli-linux-arm64" "2.2.5"
-    "@biomejs/cli-linux-arm64-musl" "2.2.5"
-    "@biomejs/cli-linux-x64" "2.2.5"
-    "@biomejs/cli-linux-x64-musl" "2.2.5"
-    "@biomejs/cli-win32-arm64" "2.2.5"
-    "@biomejs/cli-win32-x64" "2.2.5"
+    "@biomejs/cli-darwin-arm64" "2.4.9"
+    "@biomejs/cli-darwin-x64" "2.4.9"
+    "@biomejs/cli-linux-arm64" "2.4.9"
+    "@biomejs/cli-linux-arm64-musl" "2.4.9"
+    "@biomejs/cli-linux-x64" "2.4.9"
+    "@biomejs/cli-linux-x64-musl" "2.4.9"
+    "@biomejs/cli-win32-arm64" "2.4.9"
+    "@biomejs/cli-win32-x64" "2.4.9"
 
-"@biomejs/cli-darwin-arm64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.2.5.tgz#2a181f4b0daef11e24b96eaac9dd7866125b2524"
-  integrity sha512-MYT+nZ38wEIWVcL5xLyOhYQQ7nlWD0b/4mgATW2c8dvq7R4OQjt/XGXFkXrmtWmQofaIM14L7V8qIz/M+bx5QQ==
+"@biomejs/cli-darwin-arm64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.4.9.tgz#530047a71e7af0a2c7b841b739640701466be407"
+  integrity sha512-d5G8Gf2RpH5pYwiHLPA+UpG3G9TLQu4WM+VK6sfL7K68AmhcEQ9r+nkj/DvR/GYhYox6twsHUtmWWWIKfcfQQA==
 
-"@biomejs/cli-darwin-x64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.2.5.tgz#0ecfa984d8b76dda4771b95cf1d796d79c257a18"
-  integrity sha512-FLIEl73fv0R7dI10EnEiZLw+IMz3mWLnF95ASDI0kbx6DDLJjWxE5JxxBfmG+udz1hIDd3fr5wsuP7nwuTRdAg==
+"@biomejs/cli-darwin-x64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.4.9.tgz#9c33f16413007e6bb15e1a933e95fdb219737a34"
+  integrity sha512-LNCLNgqDMG7BLdc3a8aY/dwKPK7+R8/JXJoXjCvZh2gx8KseqBdFDKbhrr7HCWF8SzNhbTaALhTBoh/I6rf9lA==
 
-"@biomejs/cli-linux-arm64-musl@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.2.5.tgz#264e632302e61c0b34c13d3d92b6f9b8fb5e1e97"
-  integrity sha512-5Ov2wgAFwqDvQiESnu7b9ufD1faRa+40uwrohgBopeY84El2TnBDoMNXx6iuQdreoFGjwW8vH6k68G21EpNERw==
+"@biomejs/cli-linux-arm64-musl@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.4.9.tgz#5ac8b95066f27303ec67db28a28a27f733c1bece"
+  integrity sha512-8RCww5xnPn2wpK4L/QDGDOW0dq80uVWfppPxHIUg6mOs9B6gRmqPp32h1Ls3T8GnW8Wo5A8u7vpTwz4fExN+sw==
 
-"@biomejs/cli-linux-arm64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.2.5.tgz#acc71fb62fb6d022766042fb004da47439bd1b24"
-  integrity sha512-5DjiiDfHqGgR2MS9D+AZ8kOfrzTGqLKywn8hoXpXXlJXIECGQ32t+gt/uiS2XyGBM2XQhR6ztUvbjZWeccFMoQ==
+"@biomejs/cli-linux-arm64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.4.9.tgz#212ce65a0257e5426f3d76ce64bc1eb948b7430f"
+  integrity sha512-4adnkAUi6K4C/emPRgYznMOcLlUqZdXWM6aIui4VP4LraE764g6Q4YguygnAUoxKjKIXIWPteKMgRbN0wsgwcg==
 
-"@biomejs/cli-linux-x64-musl@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.2.5.tgz#03df0646ed4e26631ef3e1fcb4fc527e45345b86"
-  integrity sha512-AVqLCDb/6K7aPNIcxHaTQj01sl1m989CJIQFQEaiQkGr2EQwyOpaATJ473h+nXDUuAcREhccfRpe/tu+0wu0eQ==
+"@biomejs/cli-linux-x64-musl@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.4.9.tgz#9320d57d4b7e19e4a626c5374859c237a423c433"
+  integrity sha512-5TD+WS9v5vzXKzjetF0hgoaNFHMcpQeBUwKKVi3JbG1e9UCrFuUK3Gt185fyTzvRdwYkJJEMqglRPjmesmVv4A==
 
-"@biomejs/cli-linux-x64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64/-/cli-linux-x64-2.2.5.tgz#2740f260da9518554219ed07729ec0fdd8104135"
-  integrity sha512-fq9meKm1AEXeAWan3uCg6XSP5ObA6F/Ovm89TwaMiy1DNIwdgxPkNwxlXJX8iM6oRbFysYeGnT0OG8diCWb9ew==
+"@biomejs/cli-linux-x64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64/-/cli-linux-x64-2.4.9.tgz#04de18a92aa523c7bad67ed30670a065bf56d2bc"
+  integrity sha512-L10na7POF0Ks/cgLFNF1ZvIe+X4onLkTi5oP9hY+Rh60Q+7fWzKDDCeGyiHUFf1nGIa9dQOOUPGe2MyYg8nMSQ==
 
-"@biomejs/cli-win32-arm64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.2.5.tgz#75db880f3bb6c481435f0f602093b1ced9b2327e"
-  integrity sha512-xaOIad4wBambwJa6mdp1FigYSIF9i7PCqRbvBqtIi9y29QtPVQ13sDGtUnsRoe6SjL10auMzQ6YAe+B3RpZXVg==
+"@biomejs/cli-win32-arm64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.4.9.tgz#ee25e827490a0813b643d86ff705831aa5e7b315"
+  integrity sha512-aDZr0RBC3sMGJOU10BvG7eZIlWLK/i51HRIfScE2lVhfts2dQTreowLiJJd+UYg/tHKxS470IbzpuKmd0MiD6g==
 
-"@biomejs/cli-win32-x64@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.2.5.tgz#f0f3a85c5fb7954661fe454ef2df998205df1570"
-  integrity sha512-F/jhuXCssPFAuciMhHKk00xnCAxJRS/pUzVfXYmOMUp//XW7mO6QeCjsjvnm8L4AO/dG2VOB0O+fJPiJ2uXtIw==
+"@biomejs/cli-win32-x64@2.4.9":
+  version "2.4.9"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.4.9.tgz#f4b58d82c3221e36f51ce415b1b72fb4f2eb3478"
+  integrity sha512-NS4g/2G9SoQ4ktKtz31pvyc/rmgzlcIDCGU/zWbmHJAqx6gcRj2gj5Q/guXhoWTzCUaQZDIqiCQXHS7BcGYc0w==
 
 "@csstools/normalize.css@*":
   version "12.0.0"
