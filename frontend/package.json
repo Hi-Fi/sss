@@ -14,7 +14,7 @@
     "@fortawesome/react-fontawesome": "^3.0.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/lab": "^5.0.0-alpha.75",
-    "@mui/material": "^7.0.0",
+    "@mui/material": "^9.0.0",
     "@mui/styles": "^6.0.0",
     "@reduxjs/toolkit": "^2.8.2",
     "file-saver": "^2.0.5",
@@ -30,7 +30,7 @@
     "redux": "^5.0.1",
     "redux-promise": "^0.6.0",
     "typeface-roboto": "1.1.13",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
